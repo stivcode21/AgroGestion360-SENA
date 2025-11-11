@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  position: relative;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+}
+.title {
+  height: fit-content;
+  width: fit-content;
+  font-weight: 900;
+  font-size: 30px;
+  color: #342020;
+}
+
+.strong {
+  color: #15803d;
+}
+
+.line {
+  position: absolute;
+  bottom: 15px;
+  left: 45%;
+  height: 4px;
+  width: 100px;
+  background-color: #15803d;
+}
