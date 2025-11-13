@@ -1,57 +1,9 @@
-.container {
-  width: 100%;
-  height: 100vh;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  overflow: hidden;
-  display: flex;
-  background-image: url("/public/wallpaper.jpg");
-}
-
-.shappe {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  padding-right: 35%;
-  animation: slideInRight 1s ease-out forwards;
-  z-index: 0;
-}
-
-.marcaAgua {
-  position: absolute;
-  top: -10px;
-  left: 2px;
-  width: 570px;
-  height: 620px;
-  opacity: 10%;
-}
-
-.flexbox {
-  height: 100%;
-  width: 100%;
-  display: flex;
-}
-
-.modal {
-  width: 420px;
-  height: 460px;
-  background-color: #ffffff;
-  border: 2px solid #14522d;
-  box-shadow: 0 4px 10px #00000077;
-  position: relative;
-  z-index: 10;
-  left: 5%;
-  bottom: -15%;
+.header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  animation: slideInRight 0.7s ease-out forwards;
-  border-radius: 15px;
-  padding: 20px 20px;
+  justify-content: center;
+  height: 70px;
 }
 
 li::marker {
@@ -68,14 +20,6 @@ li::marker {
 
 .item {
   font-weight: 700;
-}
-
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 70px;
 }
 
 .boxButtons {
@@ -114,31 +58,4 @@ footer {
   color: #333;
   font-size: 14px;
   padding: 0 10px;
-}
-
-@media (width <= 1000px) {
-  .shappe {
-    padding-right: 10%;
-  }
-}
-
-@media (width <= 768px) {
-  .shappe {
-    padding-right: 0;
-  }
-}
-
-@keyframes slideInRight {
-  0% {
-    opacity: 0;
-    transform: translateX(-140px);
-  }
-  70% {
-    opacity: 1;
-    transform: translateX(-6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
