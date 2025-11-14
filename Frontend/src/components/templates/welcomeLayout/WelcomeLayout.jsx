@@ -9,7 +9,13 @@ const WelcomeLayout = ({ children, isWelcome }) => {
           className={`${styles.shappe} ${!isWelcome && styles.shappeReverse}`}
           alt=""
         />
-        <img src="/public/marca-agua.png" className={styles.marcaAgua} alt="" />
+        <img
+          src="/public/marca-agua.png"
+          className={`${
+            isWelcome ? styles.marcaAgua : styles.marcaAguaReverse
+          }`}
+          alt=""
+        />
       </figure>
 
       <section
