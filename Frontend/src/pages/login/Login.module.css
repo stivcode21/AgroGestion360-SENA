@@ -3,18 +3,45 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 70px;
+  height: 50px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 18px;
+  color: #15803d;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.containerInput {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-weight: 700;
+  color: #222;
+}
+
+.input {
+  width: 260px;
+  padding: 10px 4px;
+  font-size: 20px;
+  border-radius: 10px;
+  border: 2px solid #032e15;
 }
 
 footer {
   text-align: center;
   color: #333;
-  font-size: 14px;
+  font-size: 12px;
   padding: 0 10px;
-}
-
-.title {
-  font-weight: 700;
-  font-size: 20px;
-  color: #15803d;
 }
