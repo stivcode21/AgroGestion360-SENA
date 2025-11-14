@@ -4,6 +4,7 @@ import Logo from "@/components/atoms/logo/Logo";
 import WelcomeLayout from "../../components/templates/welcomeLayout/WelcomeLayout";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../../components/templates/button/Button";
 
 const Welcome = () => {
   const [isWelcome, setIsWelcome] = useState(true);
@@ -33,22 +34,18 @@ const Welcome = () => {
       </section>
 
       <nav className={styles.boxButtons} aria-label="Acciones principales">
-        <button
-          type="button"
-          className={styles.button}
-          onClick={() => toggleSection(isWelcome)}
-        >
+        <Button onClick={() => toggleSection(isWelcome)}>
           <span aria-hidden="true">
             <Lock />
           </span>
           iniciar sesión
-        </button>
-        <button type="button" className={styles.outline}>
+        </Button>
+        <Button type="secondary">
           <span aria-hidden="true">
             <InfoIcon />
           </span>
           info sistema
-        </button>
+        </Button>
       </nav>
 
       <footer className={styles.footer}>

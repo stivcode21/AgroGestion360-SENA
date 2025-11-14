@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 70px;
+  height: 50px;
 }
 
 li::marker {
@@ -30,23 +30,6 @@ li::marker {
   gap: 10px;
 }
 
-button {
-  background-color: #15803d;
-  border: 2px solid #14522d;
-  color: #fff;
-  border-radius: 13px;
-  height: 50px;
-  width: 190px;
-  font-size: 15px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  gap: 10px;
-  cursor: pointer;
-}
-
 .outline {
   background-color: transparent;
   border: 2px solid #333;
@@ -56,6 +39,6 @@ button {
 footer {
   text-align: center;
   color: #333;
-  font-size: 14px;
+  font-size: 12px;
   padding: 0 10px;
 }
