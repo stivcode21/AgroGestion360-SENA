@@ -5,7 +5,30 @@
   font-family: "Poppins", sans-serif;
 }
 
+:root {
+  --transition: 0.15s ease;
+  --transition-low: 0.3s ease;
+  --transition-very-low: 0.5s ease;
+  --dynamic-transition: 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  --dynamic-medium-transition: 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  --dynamic-fast-transition: 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
 a {
   color: #000000;
   text-decoration: none;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body.light-mode {
+  /* SURFACE */
+  --surface-primary: #f6f6fb;
+}
+
+body.dark-mode {
+  /* SURFACE */
+  --surface-primary: #0a0b15;
 }
