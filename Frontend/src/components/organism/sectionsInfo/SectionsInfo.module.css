@@ -1,0 +1,47 @@
+/* |---------------------------------About us-----------------------------------------| */
+
+.text {
+  font-weight: 500;
+}
+
+.flexbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+  height: 100%;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #333;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: #000000;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+}
+
+.description {
+  text-align: center;
+  font-size: 13px;
+  color: #333;
+}
+
+/* |---------------------------------Features-----------------------------------------| */
