@@ -1,0 +1,194 @@
+.accordion {
+  display: flex;
+  flex-direction: column;
+  width: 94%;
+}
+
+.accordionItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.accordionHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  height: 50px;
+  position: relative;
+  background: rgb(255, 255, 255);
+  outline: none;
+  border: none;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.accordionHeader > span {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+}
+
+.accordionHeader:active {
+  transform: scale(1);
+  opacity: 0.6;
+}
+
+.accordionHeader .icon {
+  min-width: 50px;
+  height: 100%;
+  border: 1px solid #333;
+  outline: 3px solid transparent;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  transition: border var(--dynamic-fast-transition);
+}
+
+.accordionHeader .icon path {
+  stroke: var(--text-primary);
+}
+
+.accordionHeader .title {
+  font-size: 24px;
+  transition: var(--dynamic-fast-transition);
+  text-align: left;
+}
+
+.accordionHeader .arrow {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+}
+
+.arrow::before {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #eee;
+  border: 1px solid #ccc;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+  transition: transform var(--dynamic-fast-transition);
+}
+
+.arrow svg {
+  transition: var(--dynamic-fast-transition);
+  opacity: 0.3;
+}
+
+.arrow path {
+  stroke: #000000;
+  transition: var(--dynamic-fast-transition);
+}
+
+.accordionHeader:hover .arrow::before {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.accordionItem.open .arrow svg {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+.description {
+  padding: 5px 30px 20px 70px;
+  position: relative;
+  transition: var(--dynamic-fast-transition);
+}
+
+.description::before,
+.description::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  border-radius: 5px;
+}
+
+.description::before {
+  width: 1px;
+  left: 25px;
+  height: 100%;
+  background: #14522d;
+}
+
+.accordionItem:last-child .description::before {
+  content: none;
+}
+
+.description::after {
+  width: 3px;
+  left: 24px;
+  height: 0;
+  background: #14522d;
+}
+
+.description > * {
+  transform: translateY(-50px);
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform var(--dynamic-fast-transition);
+}
+
+/* OPEN */
+.accordionItem.open .title {
+  color: #14522d;
+}
+
+.accordionItem.open .icon,
+.accordionItem.completed .icon {
+  outline-color: #14522d;
+  border-color: transparent;
+}
+
+.accordionItem.open .icon path,
+.accordionItem.completed .icon path {
+  stroke: #14522d;
+  stroke-width: 2;
+}
+
+.accordionItem.open .description {
+  padding-bottom: 40px;
+}
+
+.accordionItem.open .description > * {
+  opacity: 1;
+  transform: translateY(0);
+  height: max-content;
+  pointer-events: all;
+}
+
+/* COMPLETED */
+.accordionItem.completed .description::after {
+  height: 100%;
+  transition: height var(--dynamic-medium-transition);
+}
+
+/* MEDIA QUERIES */
+@media (width <=768px) {
+  .arrow::before {
+    display: none;
+  }
+}
+
+@media (width <=768px) {
+  .accordionHeader h3 {
+    font-size: 18px;
+    line-height: 140%;
+  }
+
+  .description {
+    padding: 15px 0 20px 70px;
+  }
+}
