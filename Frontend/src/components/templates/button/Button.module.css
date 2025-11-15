@@ -14,6 +14,7 @@
   font-weight: 600;
   gap: 10px;
   cursor: pointer;
+  overflow: hidden;
   transition: all ease-in-out 1ms;
 }
 
@@ -23,21 +24,17 @@
   inset: 0;
   border-radius: 10px;
   background-color: #ffffff;
+  transform: scaleX(0); /* empieza desde el centro */
+  transform-origin: center; /* se expande hacia los costados */
   opacity: 0;
-  transition: opacity 0.1s ease-in;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .button:hover::before {
-  content: "";
-  position: absolute;
+  transform: scaleX(1); /* se expande horizontalmente */
   opacity: 0.2;
-  display: block;
-  left: 0;
-  height: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  background-color: #ffffff;
 }
 
 .button:active {
@@ -50,7 +47,7 @@
 }
 
 .secondary {
-  background-color: transparent;
+  background-color: #eee;
   border: 2px solid #333;
   color: #333;
 }
