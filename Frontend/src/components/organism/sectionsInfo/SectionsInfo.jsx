@@ -3,8 +3,8 @@ import styles from "./SectionsInfo.module.css";
 
 export const AboutUs = () => {
   return (
-    <section>
-      <p className={styles.text}>
+    <section className={styles.about_container}>
+      <p className={styles.about_text}>
         Agrogestión360 nace como un proyecto creado con la visión de hacer más
         fácil y organizado el manejo de una finca. Es un sistema que permite a
         los dueños tener control total de sus actividades en un solo lugar:
@@ -17,7 +17,7 @@ export const AboutUs = () => {
         herramienta pensada para evolucionar junto al campo.
       </p>
       <br />
-      <p className={styles.text}>
+      <p className={styles.about_text}>
         Nuestro objetivo es brindar una herramienta confiable que apoye a los
         productores en la toma de decisiones, optimice su tiempo y facilite el
         crecimiento de sus fincas. Creemos en la innovación al servicio del
@@ -25,14 +25,16 @@ export const AboutUs = () => {
         día trabajan por alimentar al mundo.
       </p>
 
-      <section className={styles.flexbox}>
+      <section className={styles.about_flexbox}>
         {aboutInfo.map((item, i) => (
-          <article className={styles.box} key={i}>
-            <i className={styles.icon}>
+          <article className={styles.about_box} key={i}>
+            <i className={styles.about_icon}>
               <img src={item.svg} alt={`svg ${i}`} aria-hidden="true" />
             </i>
-            <h3 className={styles.title}>{item.title}</h3>
-            <p className={styles.description}>{item.shortDescription}</p>
+            <h3 className={styles.about_title}>{item.title}</h3>
+            <p className={styles.about_description} about_>
+              {item.shortDescription}
+            </p>
           </article>
         ))}
       </section>
@@ -40,8 +42,31 @@ export const AboutUs = () => {
   );
 };
 
+// [...Array(6)].map((_, i) => (
+
 // |---------------------------------Features-----------------------------------------|
+import { featureInfo } from "../../../data/accordionData";
 
 export const Features = () => {
-  return <p>hola mundo</p>;
+  return (
+    <article className={styles.feature_container}>
+      {featureInfo.map((item, i) => (
+        <section className={styles.feature_card} key={i}>
+          <header className={styles.feature_header}>
+            <i className={styles.feature_icon}>
+              {typeof item.svg === "string" ? (
+                <img src={item.svg} alt={`svg ${i}`} aria-hidden="true" />
+              ) : (
+                item.svg
+              )}
+            </i>
+          </header>
+          <section className={styles.feature_description}>
+            <h3 className={styles.feature_title}>{item.title}</h3>
+            <p className={styles.feature_text}>{item.description}</p>
+          </section>
+        </section>
+      ))}
+    </article>
+  );
 };
