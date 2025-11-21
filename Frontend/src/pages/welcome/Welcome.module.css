@@ -8,14 +8,14 @@
 
 li::marker {
   color: #15803d;
-  font-size: 1.5em;
+  font-size: 1.1em;
 }
 
 .list {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .item {
