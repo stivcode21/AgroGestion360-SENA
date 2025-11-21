@@ -1,5 +1,6 @@
 import {
   AboutUs,
+  Faq,
   Features,
 } from "../components/organism/sectionsInfo/SectionsInfo";
 import {
@@ -32,7 +33,7 @@ export const options = [
   {
     title: "Preguntas frecuentes",
     icon: <MessageCircleQuestionMark />,
-    description: <p>preguntas</p>,
+    description: <Faq />,
   },
 ];
 
@@ -86,5 +87,49 @@ export const featureInfo = [
     svg: notes,
     title: "Mantenimiento",
     description: "Control de gastos y registro de mantenimiento",
+  },
+];
+
+export const faq = [
+  {
+    title: "¿Qué es Agrogestión360?",
+    description:
+      "Es una plataforma digital diseñada para ayudar a los productores a gestionar de forma organizada y sencilla las diferentes actividades de su finca: ganadería, porcicultura, piscicultura, inventarios, personal, ingresos y ventas, todo en un mismo lugar.",
+  },
+  {
+    title: "¿Qué puedo hacer con Agrogestión360?",
+    description:
+      "Puedes registrar y controlar tu ganado, cerdos o peces, llevar inventarios de insumos, organizar la información de tus trabajadores, gestionar ventas, ingresos y recibir notificaciones importantes sobre las actividades de tu finca.",
+  },
+  {
+    title: "¿Necesito internet para usar Agrogestión360?",
+    description:
+      "Actualmente se requiere conexión a internet para ingresar al sistema y sincronizar los datos. Sin embargo, estamos trabajando en funciones offline.",
+  },
+  {
+    title: "¿En qué dispositivos funciona Agrogestión360?",
+    description:
+      "Funciona en computadores, tablets y celulares con conexión a internet, lo que te permite consultar la información de tu finca desde cualquier lugar.",
+  },
+  {
+    title: "¿Necesito conocimientos técnicos para usar la aplicación?",
+    description:
+      "No. Agrogestión360 está diseñada para ser práctica y fácil de usar. Además, ofrecemos soporte y guías para que saques el máximo provecho de la plataforma.",
+  },
+  {
+    title: "¿Tendrán nuevas funciones en el futuro?",
+    description:
+      "Sí. Esta es la versión 1.0, pero el proyecto seguirá creciendo con actualizaciones, mejoras y nuevas herramientas pensadas en las necesidades de los productores.",
+  },
+  {
+    title:
+      "¿Puedo usar la aplicación si tengo poco conocimiento de tecnología?",
+    description:
+      "Claro que sí. La plataforma está diseñada para ser intuitiva y contamos con tutoriales y asistencia personalizada.",
+  },
+  {
+    title: "¿Cómo puedo obtener soporte si tengo un problema?",
+    description:
+      "Puedes comunicarte con nuestro equipo de soporte a través del chat integrado, correo electrónico o WhatsApp.",
   },
 ];
