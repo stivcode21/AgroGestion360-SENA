@@ -25,19 +25,17 @@ export const AboutUs = () => {
         día trabajan por alimentar al mundo.
       </p>
 
-      <section className={styles.about_flexbox}>
+      <article className={styles.about_flexbox}>
         {aboutInfo.map((item, i) => (
-          <article className={styles.about_box} key={i}>
+          <section className={styles.about_box} key={i}>
             <i className={styles.about_icon}>
               <img src={item.svg} alt={`svg ${i}`} aria-hidden="true" />
             </i>
             <h3 className={styles.about_title}>{item.title}</h3>
-            <p className={styles.about_description} about_>
-              {item.shortDescription}
-            </p>
-          </article>
+            <p className={styles.about_description}>{item.shortDescription}</p>
+          </section>
         ))}
-      </section>
+      </article>
     </section>
   );
 };
@@ -45,7 +43,7 @@ export const AboutUs = () => {
 // [...Array(6)].map((_, i) => (
 
 // |---------------------------------Features-----------------------------------------|
-import { featureInfo } from "../../../data/accordionData";
+import { featureInfo } from "@/data/accordionData";
 
 export const Features = () => {
   return (
@@ -65,6 +63,22 @@ export const Features = () => {
             <h3 className={styles.feature_title}>{item.title}</h3>
             <p className={styles.feature_text}>{item.description}</p>
           </section>
+        </section>
+      ))}
+    </article>
+  );
+};
+
+// |---------------------------------Faq-----------------------------------------|
+import { faq } from "@/data/accordionData";
+
+export const Faq = () => {
+  return (
+    <article className={styles.faq_container}>
+      {faq.map((item, i) => (
+        <section key={i}>
+          <h3 className={styles.faq_title}>{item.title}</h3>
+          <p className={styles.faq_description}>{item.description}</p>
         </section>
       ))}
     </article>
