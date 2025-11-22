@@ -27,9 +27,7 @@ const Login = () => {
 
         <Button type="primary">
           iniciar sesión
-          <span aria-hidden="true">
-            <ArrowRight />
-          </span>
+          <ArrowRight />
         </Button>
       </form>
       <footer className={styles.footer}>

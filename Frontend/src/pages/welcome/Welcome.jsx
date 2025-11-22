@@ -40,15 +40,11 @@ const Welcome = () => {
 
         <nav className={styles.boxButtons} aria-label="Acciones principales">
           <Button onClick={() => toggleSection(isWelcome)}>
-            <span aria-hidden="true">
-              <Lock />
-            </span>
+            <Lock />
             iniciar sesión
           </Button>
           <Button type="secondary" onClick={() => setIsOpenModal(!isOpenModal)}>
-            <span aria-hidden="true">
-              <InfoIcon />
-            </span>
+            <InfoIcon />
             info sistema
           </Button>
         </nav>
