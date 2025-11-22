@@ -58,7 +58,7 @@
 .modal {
   width: 420px;
   height: 460px;
-  background-color: #ffffff;
+  background-color: var(--surface-primary);
   border: 2px solid #14522d;
   box-shadow: 0 4px 10px #00000077;
   position: relative;

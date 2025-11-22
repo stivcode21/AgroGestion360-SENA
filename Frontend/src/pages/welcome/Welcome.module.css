@@ -7,7 +7,7 @@
 }
 
 li::marker {
-  color: #15803d;
+  color: var(--verde-primary);
   font-size: 1.1em;
 }
 
@@ -32,13 +32,13 @@ li::marker {
 
 .outline {
   background-color: transparent;
-  border: 2px solid #333;
-  color: #333;
+  border: 2px solid var(--verde-secundary);
+  color: var(--verde-secundary);
 }
 
 footer {
   text-align: center;
-  color: #333;
+  color: var(--verde-secundary);
   font-size: 12px;
   padding: 0 10px;
 }

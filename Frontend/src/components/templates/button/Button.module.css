@@ -1,6 +1,6 @@
 .button {
   position: relative;
-  color: #fff;
+  color: var(--text-tertiary);
   border-radius: 13px;
   height: 50px;
   width: fit-content;
@@ -23,7 +23,7 @@
   position: absolute;
   inset: 0;
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: var(--text-tertiary);
   transform: scaleX(0); /* empieza desde el centro */
   transform-origin: center; /* se expande hacia los costados */
   opacity: 0;
@@ -42,16 +42,17 @@
 }
 
 .primary {
-  background-color: #15803d;
-  border: 2px solid #14522d;
+  background-color: var(--verde-primary);
+  border: 2px solid var(--verde-900);
 }
 
 .secondary {
-  background-color: #eee;
-  border: 2px solid #333;
-  color: #333;
+  background-color: #fff;
+  border: 2px solid var(--text-secundary);
+  color: var(--text-primary);
 }
 
 .secondary:hover {
-  border: 2px solid #666;
+  color: var(--text-secundary);
+  border: 2px solid #777;
 }

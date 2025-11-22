@@ -27,7 +27,7 @@
 .about_icon {
   width: 100px;
   height: 100px;
-  border: 1px solid #333;
+  border: 1px solid var(--text-secundary);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -35,7 +35,7 @@
 }
 
 .about_title {
-  color: #000000;
+  color: var(--text-primary);
   font-weight: 700;
   font-size: 16px;
   text-align: center;
@@ -44,7 +44,7 @@
 .about_description {
   text-align: center;
   font-size: 13px;
-  color: #333;
+  color: var(--text-secundary);
 }
 
 /* |---------------------------------Features-----------------------------------------| */
@@ -86,7 +86,7 @@
 }
 
 .feature_icon {
-  background-color: #bbf7d0;
+  background-color: var(--verde-200);
   width: 55px;
   height: 55px;
   border-radius: 100%;
