@@ -15,11 +15,11 @@
   width: fit-content;
   font-weight: 900;
   font-size: 30px;
-  color: #342020;
+  color: var(--text-coffee);
 }
 
 .strong {
-  color: #15803d;
+  color: var(--verde-primary);
 }
 
 .line {
@@ -28,5 +28,5 @@
   left: 45%;
   height: 4px;
   width: 100px;
-  background-color: #15803d;
+  background-color: var(--verde-primary);
 }
