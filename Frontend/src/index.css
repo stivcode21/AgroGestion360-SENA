@@ -24,8 +24,18 @@ html {
 }
 
 body.light-mode {
-  /* SURFACE */
-  --surface-primary: #f6f6fb;
+  --surface-primary: #ffffff;
+  --surface-secundary: #f2f4f7;
+
+  --verde-primary: #15803d;
+  --verde-dark: #133e23;
+  --verde-900: #14522d;
+  --verde-200: #bbf7d0;
+
+  --text-primary: #000000;
+  --text-secundary: #333333;
+  --text-tertiary: #ffffff;
+  --text-coffee: #342020;
 }
 
 body.dark-mode {
