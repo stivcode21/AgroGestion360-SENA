@@ -28,7 +28,17 @@
 
 .label {
   font-weight: 700;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 4px;
   color: var(--text-secundary);
+}
+
+.icon svg {
+  width: 20px;
+  height: 20px;
+  color: var(--verde-primary);
 }
 
 .input {
