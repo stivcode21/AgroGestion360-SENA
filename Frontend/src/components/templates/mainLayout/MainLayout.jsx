@@ -1,7 +1,36 @@
+import { useEffect } from "react";
+import Sidebar from "@/components/molecules/sidebar/Sidebar";
 import styles from "./MainLayout.module.css";
+import Header from "../../molecules/header/Header";
+import { useSidebarStore } from "@/store/sidebarStore";
 
-const MainLayout = () => {
-  return <div>MainLayout</div>;
+const MainLayout = ({ children }) => {
+  const { setCollapsed } = useSidebarStore();
+
+  // Colapsar automáticamente en pantallas pequeñas, expandir en desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [setCollapsed]);
+
+  return (
+    <section className={styles.container}>
+      <Sidebar />
+      <main className={styles.main}>
+        <Header />
+        {children}
+      </main>
+    </section>
+  );
 };
 
 export default MainLayout;
