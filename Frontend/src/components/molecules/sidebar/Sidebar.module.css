@@ -13,12 +13,13 @@
 
 .iconCollapsed {
   position: absolute;
+  z-index: 10;
+  cursor: pointer;
   right: 24px;
   top: 14px;
   width: 22px;
   height: 22px;
   color: var(--text-secundary);
-  cursor: pointer;
 }
 
 .iconCollapsed:hover {
@@ -33,7 +34,7 @@
 }
 
 .containerSections {
-  margin-top: 20px;
+  margin-top: 10px;
   width: 100%;
 }
 
@@ -125,6 +126,6 @@
   .collapsed {
     width: 80px;
     padding: 8px;
-    position: fixed;
+    position: relative;
   }
 }
