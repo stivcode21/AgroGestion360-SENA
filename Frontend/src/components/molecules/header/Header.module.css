@@ -1,0 +1,87 @@
+.header {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
+  border-bottom: solid 1px var(--color-border);
+}
+
+.containerTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.containerTitle h1 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.containerTitle span {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secundary);
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  color: var(--text-secundary);
+}
+
+.item {
+  cursor: pointer;
+}
+
+.item:hover {
+  color: var(--verde-primary);
+  scale: 1.1;
+  transition: var(--transition-fast);
+}
+
+.line {
+  margin-top: 4px;
+  height: 40px;
+  border-left: solid 1px var(--text-secundary);
+}
+
+.navbar {
+  display: flex;
+  gap: 20px;
+}
+
+.containerUser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.description {
+  text-align: right;
+}
+
+.description h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.description span {
+  color: var(--verde-primary);
+  font-weight: 600;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: contain;
+  border: 1px solid var(--color-border);
+}
