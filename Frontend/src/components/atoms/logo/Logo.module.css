@@ -10,12 +10,28 @@
   width: 70px;
   height: 70px;
 }
+
+.logoSmall {
+  width: 50px;
+  height: 50px;
+  margin-top: 36px;
+}
+
+.logoSmall2 {
+  width: 60px;
+  height: 60px;
+}
+
 .title {
   height: fit-content;
   width: fit-content;
   font-weight: 900;
   font-size: 30px;
   color: var(--text-coffee);
+}
+
+.titleSmall {
+  font-size: 20px;
 }
 
 .strong {
@@ -29,4 +45,10 @@
   height: 4px;
   width: 100px;
   background-color: var(--verde-primary);
+}
+
+.line2 {
+  bottom: 14px;
+  left: 42%;
+  height: 2px;
 }
