@@ -1,20 +1,39 @@
-import { Database, LayoutDashboard, Users } from "lucide-react";
+import { Database, LayoutDashboard, LogIn, Users } from "lucide-react";
 
 export const sidebarData = [
   {
     title: "Dashboard",
     icon: <LayoutDashboard />,
     path: "/dashboard",
+    description: "",
   },
   {
     title: "Inventario",
     icon: <Database />,
     path: "/inventario",
+    description: "Gestiona los insumos de tu inventario",
+  },
+  {
+    title: "Reportes",
+    icon: (
+      <svg
+        fill="currentColor"
+        width="26"
+        height="26"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M6,13H2a1,1,0,0,0-1,1v8a1,1,0,0,0,1,1H6a1,1,0,0,0,1-1V14A1,1,0,0,0,6,13ZM5,21H3V15H5ZM22,9H18a1,1,0,0,0-1,1V22a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V10A1,1,0,0,0,22,9ZM21,21H19V11h2ZM14,1H10A1,1,0,0,0,9,2V22a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V2A1,1,0,0,0,14,1ZM13,21H11V3h2Z" />
+      </svg>
+    ),
+    path: "/reportes",
+    description: "Visualiza y genera reportes detallados",
   },
   {
     title: "Trabajadores",
     icon: <Users />,
     path: "/trabajadores",
+    description: "Administra la información de los trabajadores",
   },
   {
     title: "Actividades",
@@ -36,6 +55,7 @@ export const sidebarData = [
       </svg>
     ),
     path: "/actividades",
+    description: "Registra y supervisa las actividades agrícolas",
   },
   {
     title: "Ganaderia",
@@ -57,6 +77,7 @@ export const sidebarData = [
       </svg>
     ),
     path: "/ganaderia",
+    description: "Administra el ganado y su bienestar",
   },
   {
     title: "Porcicultura",
@@ -103,5 +124,11 @@ export const sidebarData = [
       </svg>
     ),
     path: "/porcicultura",
+    description: "Gestiona la cría y el bienestar de los cerdos",
+  },
+  {
+    title: "Cerrar Sesion",
+    icon: <LogIn />,
+    description: "Stivcode, Fernando",
   },
 ];
