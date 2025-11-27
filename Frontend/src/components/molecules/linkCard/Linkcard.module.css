@@ -1,0 +1,96 @@
+.linkcard {
+  max-width: 24rem;
+  min-width: 21rem;
+  height: 134px;
+  position: relative;
+  background-color: var(--surface-primary);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  box-shadow: 0 4px 6px rgba(80, 80, 80, 0.1);
+  cursor: pointer;
+  gap: 8px;
+}
+
+.linkcard:hover {
+  scale: 1.01;
+  transition: var(--transition);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.linkcard:active {
+  scale: 0.99;
+  transition: var(--transition);
+}
+
+.subtitle {
+  width: fit-content;
+  padding: 4px 12px;
+  color: var(--text-secundary);
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: linear-gradient(
+    94deg,
+    rgba(255, 255, 255, 1) 20%,
+    rgba(230, 233, 237, 1) 100%
+  );
+}
+
+.subtitle h1 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.info {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.number {
+  font-weight: 600;
+  font-size: 32px;
+  color: var(--verde-primary);
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.1rem;
+  color: var(--text-secundary);
+  font-weight: 600;
+}
+
+.icon {
+  width: 26px;
+  height: 26px;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.linkcard:hover .arrow > svg {
+  stroke: var(--verde-primary);
+  transition: var(--transition-low) 0.3s ease-in-out;
+  transform: translateX(5px);
+}
+
+.arrow > svg {
+  transition: transform var(--transition-low) 0.3s ease-in-out;
+}
+
+.arrow {
+  position: absolute;
+  color: var(--text-secundary);
+  bottom: 4px;
+  right: 16px;
+}
