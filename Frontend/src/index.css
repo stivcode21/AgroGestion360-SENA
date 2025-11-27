@@ -19,6 +19,13 @@ a {
   text-decoration: none;
 }
 
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
 html {
   scroll-behavior: auto;
 }
@@ -31,6 +38,9 @@ body.light-mode {
   --verde-dark: #133e23;
   --verde-900: #14522d;
   --verde-200: #bbf7d0;
+
+  --color-hover: #e9eaef;
+  --color-border: #cccccc;
 
   --text-primary: #000000;
   --text-secundary: #333333;
