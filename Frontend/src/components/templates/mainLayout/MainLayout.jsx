@@ -5,7 +5,7 @@ import Header from "../../molecules/header/Header";
 import { useSidebarStore } from "@/store/sidebarStore";
 
 const MainLayout = ({ children }) => {
-  const { setCollapsed } = useSidebarStore();
+  const { setCollapsed, isCollapsed } = useSidebarStore();
 
   // Colapsar automáticamente en pantallas pequeñas, expandir en desktop
   useEffect(() => {
@@ -25,7 +25,7 @@ const MainLayout = ({ children }) => {
   return (
     <section className={styles.container}>
       <Sidebar />
-      <main className={styles.main}>
+      <main className={`${styles.main} ${isCollapsed && styles.collapsed}`}>
         <Header />
         {children}
       </main>
