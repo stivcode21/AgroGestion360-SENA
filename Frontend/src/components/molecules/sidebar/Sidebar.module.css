@@ -1,7 +1,10 @@
 .sidebar {
   width: 280px;
   height: 100%;
-  position: relative;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
   overflow: hidden;
   z-index: 10;
   padding: 24px;
@@ -48,7 +51,7 @@
 }
 
 .listContainer {
-  height: 79vh;
+  height: calc(100vh - 140px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
