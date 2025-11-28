@@ -4,11 +4,11 @@ import { useSidebarStore } from "@/store/sidebarStore";
 import { Bell, Moon, Settings } from "lucide-react";
 
 const Header = () => {
-  const { currentSection } = useSidebarStore();
+  const { currentSection, isCollapsed } = useSidebarStore();
   const currentPage = sidebarData.find((item) => item.path === currentSection);
   console.log(currentPage);
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isCollapsed && styles.collapsed}`}>
       <section className={styles.containerTitle}>
         <h1>{currentPage.title}</h1>
         <span>Lunes, 24 Octubre 2025</span>
