@@ -1,0 +1,49 @@
+.toggle {
+  position: fixed;
+  top: 14px;
+  left: 16px;
+  z-index: 30;
+}
+
+.toggle svg {
+  width: 28px;
+  height: 28px;
+}
+
+.toggle:hover svg {
+  color: var(--verde-primary);
+  scale: 1.1;
+  transition: var(--transition-fast);
+}
+
+.close {
+  color: var(--verde-primary);
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  margin-top: 60px;
+  background-color: #fcfcfcca;
+  border-radius: 0 0 8px 0;
+  backdrop-filter: blur(8px);
+  border-bottom: solid 1px var(--color-border);
+  border-right: solid 1px var(--color-border);
+  padding: 20px;
+  transform: translateY(-12px);
+  opacity: 0;
+  animation: slideDown var(--dynamic-medium-transition) forwards;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
