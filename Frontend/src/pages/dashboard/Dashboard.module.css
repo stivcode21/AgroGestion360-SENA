@@ -73,6 +73,7 @@
 @media (width <= 1150px) {
   .content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
   }
   .container {
     flex-direction: column;
