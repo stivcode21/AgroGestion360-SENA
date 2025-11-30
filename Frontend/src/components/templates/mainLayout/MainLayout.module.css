@@ -10,8 +10,14 @@
   flex-direction: column;
   background-color: #fcfcfc;
   margin-left: 280px;
+  margin-top: 60px;
 }
 
 .collapsed {
   margin-left: 80px;
+}
+
+.NavbarMobile {
+  margin-left: 0;
+  margin-top: 60px;
 }
