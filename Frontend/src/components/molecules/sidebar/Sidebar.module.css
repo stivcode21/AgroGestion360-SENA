@@ -155,17 +155,3 @@
   opacity: 0.05;
   pointer-events: none;
 }
-
-@media (width <= 768px) {
-  .sidebar {
-    width: 260px;
-    position: fixed;
-    height: 100vh;
-  }
-
-  .collapsed {
-    width: 80px;
-    padding: 8px;
-    position: relative;
-  }
-}

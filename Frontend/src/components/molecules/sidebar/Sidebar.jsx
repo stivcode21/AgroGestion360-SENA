@@ -3,21 +3,15 @@ import Logo from "@/components/atoms/logo/Logo";
 import styles from "./Sidebar.module.css";
 import { sidebarData } from "@/data/sidebarData";
 import { useSidebarStore } from "@/store/sidebarStore";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import cowMarcage from "@/assets/img/cowMarcaAgua.png";
 import { useEffect } from "react";
+import NavList from "@/components/molecules/navList/NavList";
 
 const Sidebar = () => {
   const { currentSection, setCurrentSection, isCollapsed, toggleCollapsed } =
     useSidebarStore();
-
-  const navigate = useNavigate();
   const location = useLocation();
-
-  const handleSection = (path) => {
-    setCurrentSection(path);
-    navigate(path);
-  };
 
   const exitSecion = () => {};
 
@@ -41,22 +35,9 @@ const Sidebar = () => {
 
         <h3 className={styles.subtitle}>{isCollapsed ? "" : "Secciones"}</h3>
         <nav className={styles.listContainer}>
-          <ul className={styles.list}>
-            {sidebarData.slice(0, 7).map((item, i) => (
-              <li
-                className={`${styles.item} ${
-                  currentSection === item.path ? styles.active : ""
-                }`}
-                key={i}
-                onClick={() => handleSection(item.path)}
-              >
-                {item.icon}
-                {isCollapsed ? "" : item.title}
-              </li>
-            ))}
-          </ul>
+          <NavList />
           {sidebarData.slice(7, 8).map((item, i) => (
-            <>
+            <div>
               <button
                 className={`${styles.item} ${styles.exit}`}
                 key={i}
@@ -66,7 +47,7 @@ const Sidebar = () => {
                 {isCollapsed ? "" : item.title}
               </button>
               <footer className={styles.footer}>{item.description}</footer>
-            </>
+            </div>
           ))}
         </nav>
       </section>
