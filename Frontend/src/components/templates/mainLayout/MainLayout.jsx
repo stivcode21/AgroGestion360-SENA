@@ -1,31 +1,33 @@
 import { useEffect } from "react";
 import Sidebar from "@/components/molecules/sidebar/Sidebar";
 import styles from "./MainLayout.module.css";
-import Header from "../../molecules/header/Header";
+import Header from "@/components/molecules/header/Header";
+import NavbarMobile from "@/components/molecules/navbarMobile/NavbarMobile";
 import { useSidebarStore } from "@/store/sidebarStore";
 
 const MainLayout = ({ children }) => {
-  const { setCollapsed, isCollapsed } = useSidebarStore();
+  const { isCollapsed, isDesktop, setIsDesktop } = useSidebarStore();
 
   // Colapsar automáticamente en pantallas pequeñas, expandir en desktop
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 768) {
-        setCollapsed(true);
-      } else {
-        setCollapsed(false);
-      }
-    };
-
-    handleResize();
+    const handleResize = () => setIsDesktop(window.innerWidth > 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [setCollapsed]);
+  }, [setIsDesktop]);
 
   return (
     <section className={styles.container}>
-      <Sidebar />
-      <main className={`${styles.main} ${isCollapsed && styles.collapsed}`}>
+      {isDesktop ? <Sidebar /> : <NavbarMobile />}
+
+      <main
+        className={`${styles.main} ${
+          isDesktop
+            ? isCollapsed
+              ? styles.collapsed
+              : ""
+            : styles.NavbarMobile
+        }`}
+      >
         <Header />
         {children}
       </main>
