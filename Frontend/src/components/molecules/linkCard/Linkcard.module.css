@@ -1,7 +1,6 @@
 .linkcard {
-  max-width: 24rem;
-  min-width: 21rem;
-  height: 134px;
+  flex: 1;
+  height: 140px;
   position: relative;
   background-color: var(--surface-primary);
   border: 1px solid #ccc;
@@ -69,8 +68,7 @@
 }
 
 .icon {
-  width: 26px;
-  height: 26px;
+  margin-top: 2px;
 }
 
 .icon svg {
@@ -93,4 +91,50 @@
   color: var(--text-secundary);
   bottom: 4px;
   right: 16px;
+}
+
+@media (width <= 1000px) {
+  .number {
+    font-weight: 700;
+    font-size: 26px;
+  }
+
+  .description {
+    font-size: 13px;
+    line-height: 0.8rem;
+  }
+}
+
+@media (width <= 768px) {
+  .linkcard {
+    min-width: 11rem;
+    padding: 14px;
+    gap: 6px;
+  }
+  .number {
+    font-weight: 700;
+    font-size: 26px;
+  }
+
+  .description {
+    font-size: 11px;
+    line-height: 0.8rem;
+  }
+
+  .subtitle {
+    padding: 1px 14px;
+    gap: 8px;
+  }
+
+  .subtitle h1 {
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .icon {
+    margin-top: 4px;
+  }
+  .icon svg {
+    width: 22px;
+    height: 22px;
+  }
 }
