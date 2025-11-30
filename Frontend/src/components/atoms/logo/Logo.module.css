@@ -52,3 +52,9 @@
   left: 42%;
   height: 2px;
 }
+
+@media (width <= 1200px) {
+  .title {
+    font-size: 18px;
+  }
+}
