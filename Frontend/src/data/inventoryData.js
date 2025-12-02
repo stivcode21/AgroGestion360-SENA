@@ -1,0 +1,111 @@
+export const inventoryItems = [
+  {
+    id: "prd-01",
+    name: "Cuido para Vacas",
+    brand: "Intacol",
+    code: "H12492",
+    quantity: 14,
+    type: "Alimento",
+    price: 98000,
+    image:
+      "https://i0.wp.com/www.solla.com/wp-content/uploads/2022/02/masleche18.png?fit=391%2C527&ssl=1",
+  },
+  {
+    id: "prd-02",
+    name: "Pala",
+    brand: "Corona",
+    code: "H00471",
+    quantity: 2,
+    type: "Herramienta",
+    price: 19500,
+    image:
+      "https://dtisas.com.co/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTU3NjM0MywicHVyIjoiYmxvYl9pZCJ9fQ==--a03cb752ebae079a8769927058004f2f38a66af6/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJqcGciLCJyZXNpemVfdG9fZml0IjpbODAwLDgwMF19LCJwdXIiOiJ2YXJpYXRpb24ifX0=--1420d7fd3d20057726f0ef3c0043db24ca0403be/_Ferreteria_DTI_Pala%20Redonda%20%234%20Vaquero%202@3x-20.jpg?locale=es",
+  },
+  {
+    id: "prd-03",
+    name: "Fumigador de mochila",
+    brand: "Truper",
+    code: "R02191",
+    quantity: 2,
+    type: "Herramienta",
+    price: 139000,
+    image: "https://media.falabella.com/sodimacCO/576573/thumbnail",
+  },
+  {
+    id: "prd-04",
+    name: "Alambre de púas",
+    brand: "Ganadero",
+    code: "A11223",
+    quantity: 6,
+    type: "Cercados",
+    price: 78500,
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-05",
+    name: "Botas de caucho",
+    brand: "AgroPlus",
+    code: "B90210",
+    quantity: 12,
+    type: "Indumentaria",
+    price: 52000,
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoFH8U8t1PJsR8gjINrw-FyFK3btauwh1UHA&s",
+  },
+  {
+    id: "prd-06",
+    name: "Guantes nitrilo",
+    brand: "SafeFarm",
+    code: "G34002",
+    quantity: 30,
+    type: "Indumentaria",
+    price: 9500,
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-07",
+    name: "Kit manguera",
+    brand: "RiegoMax",
+    code: "M66221",
+    quantity: 4,
+    type: "Riego",
+    price: 68900,
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-08",
+    name: "Bomba sumergible",
+    brand: "AquaFarm",
+    code: "P90912",
+    quantity: 1,
+    type: "Riego",
+    price: 249000,
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-09",
+    name: "Vitaminas bovinas",
+    brand: "NutriVet",
+    code: "V44120",
+    quantity: 9,
+    type: "Suplemento",
+    price: 43000,
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-10",
+    name: "Semillas de pasto",
+    brand: "GreenField",
+    code: "S22019",
+    quantity: 15,
+    type: "Siembra",
+    price: 68000,
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+];
