@@ -4,10 +4,10 @@ import Linkcard from "@/components/molecules/linkCard/LinkCard";
 import { sidebarData } from "@/data/sidebarData";
 import { useSidebarStore } from "@/store/sidebarStore";
 import { useNavigate } from "react-router-dom";
-import CardStats from "../../components/atoms/cardStats/CardStats";
+import CardStats from "@/components/atoms/cardStats/CardStats";
 import { DollarSign, Trophy } from "lucide-react";
 
-const items = [{}, {}, {}, {}, {}];
+const workers = [{}, {}, {}, {}, {}];
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
             <CardStats title="Top trabajadores" icon={<Trophy />}>
               <div className={styles.containerTop}>
-                {items.map((_, index) => (
+                {workers.map((_, index) => (
                   <article key={index} className={styles.userTop}>
                     <span className={styles.top}>{index + 1}</span>
                     <figure>
