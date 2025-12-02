@@ -1,18 +1,11 @@
 .button {
   position: relative;
   color: var(--text-tertiary);
-  border-radius: 13px;
-  height: 50px;
-  width: fit-content;
-  min-width: 180px;
-  padding: 0 14px;
   font-size: 15px;
-  text-transform: uppercase;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  gap: 10px;
   cursor: pointer;
   overflow: hidden;
   transition: all ease-in-out 1ms;
@@ -42,17 +35,47 @@
 }
 
 .primary {
+  width: fit-content;
+  min-width: 180px;
+  text-transform: uppercase;
+  gap: 10px;
+  height: 50px;
+  padding: 0 14px;
   background-color: var(--verde-primary);
   border: 2px solid var(--verde-900);
+  border-radius: 13px;
 }
 
 .secondary {
+  width: fit-content;
+  min-width: 180px;
+  gap: 10px;
+  height: 50px;
+  text-transform: uppercase;
+  padding: 0 14px;
   background-color: #fff;
   border: 2px solid var(--text-secundary);
   color: var(--text-primary);
+  border-radius: 13px;
 }
 
 .secondary:hover {
   color: var(--text-secundary);
   border: 2px solid #777;
+}
+
+.three {
+  width: fit-content;
+  padding: 10px 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  gap: 4px;
+  border-radius: 10px;
+  background-color: var(--verde-primary);
+  border: 1px solid var(--border-button);
+}
+
+.three svg {
+  width: 20px;
+  height: 20px;
 }
