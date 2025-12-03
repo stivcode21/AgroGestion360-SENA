@@ -1,4 +1,4 @@
-export const inventoryItems = [
+﻿export const inventoryItems = [
   {
     id: "prd-01",
     name: "Cuido para Vacas",
@@ -7,6 +7,11 @@ export const inventoryItems = [
     quantity: 14,
     type: "Alimento",
     price: 98000,
+    unit: "10kg",
+    createdAt: "12-03-24",
+    updatedAt: "25-09-25",
+    description:
+      "Este cuido de vacas tiene gran cantidad de vitaminas y proteinas, perfecto para las vacas lecheras",
     image:
       "https://i0.wp.com/www.solla.com/wp-content/uploads/2022/02/masleche18.png?fit=391%2C527&ssl=1",
   },
@@ -33,7 +38,7 @@ export const inventoryItems = [
   },
   {
     id: "prd-04",
-    name: "Alambre de púas",
+    name: "Alambre de pǧas",
     brand: "Ganadero",
     code: "A11223",
     quantity: 6,
