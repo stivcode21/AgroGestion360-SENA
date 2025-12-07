@@ -26,6 +26,11 @@ button {
   background: none;
 }
 
+button:active {
+  scale: 0.98;
+  transition: var(--dynamic-fast-transition);
+}
+
 html {
   scroll-behavior: auto;
 }
