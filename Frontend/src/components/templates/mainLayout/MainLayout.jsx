@@ -4,6 +4,8 @@ import styles from "./MainLayout.module.css";
 import Header from "@/components/molecules/header/Header";
 import NavbarMobile from "@/components/molecules/navbarMobile/NavbarMobile";
 import { useSidebarStore } from "@/store/sidebarStore";
+import DetailsModal from "../detailsModal/DetailsModal";
+import ProductDetails from "@/components/organism/productDetails/ProductDetails";
 
 const MainLayout = ({ children }) => {
   const { isCollapsed, isDesktop, setIsDesktop } = useSidebarStore();
@@ -17,6 +19,10 @@ const MainLayout = ({ children }) => {
 
   return (
     <section className={styles.container}>
+      <DetailsModal>
+        <ProductDetails />
+      </DetailsModal>
+
       {isDesktop ? <Sidebar /> : <NavbarMobile />}
 
       <main
