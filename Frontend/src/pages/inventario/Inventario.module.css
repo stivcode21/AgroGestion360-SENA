@@ -30,12 +30,13 @@
 .actions {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
 }
 
 .search {
-  flex: 1;
   display: flex;
+  width: 80%;
   align-items: center;
   gap: 0.5rem;
   border: 1px solid var(--color-border, #dfe3e8);
@@ -67,27 +68,39 @@
   border-radius: 10px;
   background: #ffffff;
   color: var(--text-secundary);
-  font-weight: 600;
+  font-weight: 500;
   transition: background var(--transition, 0.15s ease);
+}
+
+.filter svg {
+  width: 18px;
+  height: 18px;
 }
 
 .filter:hover {
   background: var(--color-hover, #f5f6f8);
 }
 
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border, #dfe3e8);
+  border-radius: 10px;
+  background: var(--surface-primary);
+  overflow-x: auto;
+}
+
 .table {
   width: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--color-border, #dfe3e8);
-  background: #ffffff;
+  min-width: 820px;
+  min-height: 460px;
 }
 
 .tableHead {
   display: grid;
   grid-template-columns: 2.2fr 1fr 1fr 1.3fr 1fr 0.35fr;
   padding: 0.9rem 1rem;
-  background: var(--color-hover, #f7f8fb);
+  background: var(--surface-secundary);
   font-weight: 600;
   color: var(--text-secundary);
   font-size: 0.95rem;
@@ -165,7 +178,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #ffffff;
+  background: var(--surface-primary);
   color: #444;
   transition: background var(--transition, 0.15s ease);
 }
@@ -205,15 +218,24 @@
 }
 
 @media (max-width: 900px) {
-  .tableHead,
-  .row {
-    grid-template-columns: 2fr 1fr 0.8fr 1fr 1fr 0.5fr;
-    padding: 0.75rem;
+  .card {
+    width: 27rem;
+    flex: 1rlh;
   }
 
-  .actions {
-    flex-direction: column;
-    align-items: stretch;
+  .table {
+    min-width: 650px;
+  }
+
+  .tableHead,
+  .row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr;
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .productBrand {
+    font-size: 0.7rem;
   }
 
   .filter {
