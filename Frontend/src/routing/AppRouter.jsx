@@ -8,8 +8,19 @@ import Actividades from "@/pages/actividades/Actividades";
 import Ganaderia from "@/pages/ganaderia/Ganaderia";
 import Porcicultura from "@/pages/porcicultura/Porcicultura";
 import Reportes from "@/pages/reportes/Reportes";
+import { useEffect } from "react";
+import { useAuthStore } from "@/store/authStore";
+import { useNavigate } from "react-router-dom";
 
 const AppRouter = () => {
+  // const navigate = useNavigate();
+  // const { isLogin, setIsLogin } = useAuthStore();
+
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     navigate("/dashboard")
+  //   } else
+  // }, []);
   return (
     <Routes>
       <Route path="/" element={<Welcome />} />
