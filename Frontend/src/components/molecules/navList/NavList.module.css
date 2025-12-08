@@ -20,6 +20,10 @@
   transition: all ease-in-out 0.1s;
 }
 
+.itemMobile {
+  padding: 8px 64px;
+}
+
 .item::before {
   content: "";
   position: absolute;

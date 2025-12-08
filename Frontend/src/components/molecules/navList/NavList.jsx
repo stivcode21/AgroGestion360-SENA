@@ -3,7 +3,7 @@ import { useSidebarStore } from "@/store/sidebarStore";
 import { useNavigate } from "react-router-dom";
 import styles from "./NavList.module.css";
 
-const NavList = () => {
+const NavList = ({ isMobile = false }) => {
   const { currentSection, setCurrentSection, isCollapsed } = useSidebarStore();
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ const NavList = () => {
           key={item.path || i}
           className={`${styles.item} ${
             currentSection === item.path ? styles.active : ""
-          }`}
+          } ${isMobile && styles.itemMobile}`}
           onClick={() => handleSection(item.path)}
         >
           {item.icon}
