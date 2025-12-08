@@ -6,9 +6,11 @@ import NavbarMobile from "@/components/molecules/navbarMobile/NavbarMobile";
 import { useSidebarStore } from "@/store/sidebarStore";
 import DetailsModal from "../detailsModal/DetailsModal";
 import ProductDetails from "@/components/organism/productDetails/ProductDetails";
+import { useModalStore } from "@/store/modalStore";
 
 const MainLayout = ({ children }) => {
   const { isCollapsed, isDesktop, setIsDesktop } = useSidebarStore();
+  const { isOpenModal } = useModalStore();
 
   // Colapsar automáticamente en pantallas pequeñas, expandir en desktop
   useEffect(() => {
@@ -19,9 +21,11 @@ const MainLayout = ({ children }) => {
 
   return (
     <section className={styles.container}>
-      <DetailsModal>
-        <ProductDetails />
-      </DetailsModal>
+      {isOpenModal && (
+        <DetailsModal>
+          <ProductDetails />
+        </DetailsModal>
+      )}
 
       {isDesktop ? <Sidebar /> : <NavbarMobile />}
 
