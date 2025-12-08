@@ -11,6 +11,7 @@ import {
   Search,
 } from "lucide-react";
 import { inventoryItems } from "@/data/inventoryData";
+import { useModalStore } from "@/store/modalStore";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -19,6 +20,13 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 });
 
 const Inventario = () => {
+  const { setIsOpenModal, setSelectProduct } = useModalStore();
+
+  const OpenModal = (id) => {
+    setIsOpenModal(true);
+    setSelectProduct(id);
+  };
+
   return (
     <MainLayout>
       <section className={styles.page}>
@@ -77,6 +85,7 @@ const Inventario = () => {
                     <button
                       type="button"
                       className={styles.iconButton}
+                      onClick={() => OpenModal(item.id)}
                       aria-label={`Ver detalles de ${item.name}`}
                     >
                       <Eye />
