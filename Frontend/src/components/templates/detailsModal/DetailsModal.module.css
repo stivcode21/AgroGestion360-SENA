@@ -45,17 +45,16 @@
   width: 40px;
   height: 40px;
   padding: 5px;
-  color: #4b5563;
+  color: #111827;
 }
 
 .btn:hover {
   background: var(--surface-secundary);
-  color: #111827;
   scale: 1.1;
 }
 
 .btn:hover svg {
-  color: #111827;
+  color: #4b5563;
 }
 
 @keyframes fadeIn {
