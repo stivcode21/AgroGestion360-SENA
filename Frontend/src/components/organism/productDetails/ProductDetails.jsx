@@ -1,71 +1,111 @@
-import { Pencil, Trash } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
+import { inventoryItems } from "@/data/inventoryData";
 import styles from "./ProductDetails.module.css";
+import { useModalStore } from "@/store/modalStore";
+
+const currencyFormatter = new Intl.NumberFormat("es-CO", {
+  style: "currency",
+  currency: "COP",
+  maximumFractionDigits: 0,
+});
 
 const ProductDetails = () => {
+  const { selectProduct } = useModalStore();
+  const product = inventoryItems.find((item) => item.id === selectProduct);
+
+  if (!product) {
+    return (
+      <div className={styles.container}>
+        <p className={styles.empty}>No se encontraron datos del producto.</p>
+      </div>
+    );
+  }
+
+  const {
+    code,
+    name,
+    brand,
+    type,
+    quantity,
+    unit,
+    price,
+    registeredAt,
+    updatedAt,
+    description,
+    image,
+  } = product;
+
+  const formattedPrice = currencyFormatter.format(price || 0);
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.productCode}>H12492</h2>
+      <h2 className={styles.productCode}>{code}</h2>
+
+      <header className={styles.header}>
+        <h3 className={styles.sectionTitle}>Detalles</h3>
+
+        <div className={styles.actions}>
+          <button type="button" className={styles.action}>
+            <Trash2 className={styles.icon} />
+            <span>Eliminar</span>
+          </button>
+          <button type="button" className={styles.action}>
+            <Pencil className={styles.icon} />
+            <span>Editar</span>
+          </button>
+        </div>
+      </header>
 
       <section className={styles.section}>
-        <header className={styles.header}>
-          <h3 className={styles.sectionTitle}>Detalles</h3>
-          <div className={styles.actions}>
-            <button type="button" className={styles.action}>
-              <Trash />
-              <span>Eliminar</span>
-            </button>
-            <button type="button" className={styles.action}>
-              <Pencil />
-              <span>Editar</span>
-            </button>
-          </div>
-        </header>
-
         <div className={styles.detailCard}>
           <div className={styles.row}>
             <span className={styles.label}>Nombre</span>
-            <span className={styles.value}>Cuido para vacas</span>
+            <span className={styles.value}>{name}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Marca</span>
-            <span className={styles.value}>Intacol</span>
+            <span className={styles.value}>{brand}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Tipo</span>
-            <span className={styles.value}>Alimento</span>
+            <span className={styles.value}>{type}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Cantidad</span>
-            <span className={styles.value}>14</span>
+            <span className={styles.value}>{quantity}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>U/medida</span>
-            <span className={styles.value}>10kg</span>
+            <span className={styles.value}>{unit || "N/A"}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Precio unitario</span>
-            <span className={styles.value}>$98.000</span>
+            <span className={styles.value}>{formattedPrice}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Fecha registro</span>
-            <span className={styles.value}>12-03-24</span>
+            <span className={styles.value}>{registeredAt || "--"}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Ultima actualizacion</span>
-            <span className={styles.value}>25-09-25</span>
+            <span className={styles.value}>{updatedAt || "--"}</span>
           </div>
           <div className={`${styles.row} ${styles.descriptionRow}`}>
             <span className={styles.label}>Descripcion</span>
             <p className={styles.description}>
-              Este cuido de vacas tiene gran cantidad de vitaminas y proteinas,
-              perfecto para las vacas lecheras
+              {description ||
+                "Sin descripcion. Agrega detalles para este producto."}
             </p>
           </div>
           <div className={`${styles.row} ${styles.imageRow}`}>
             <span className={styles.label}>Imagen</span>
             <div className={styles.imageWrapper}>
               <div className={styles.imageCard}>
-                <span className={styles.imageBadge}>Italganador</span>
+                {image ? (
+                  <img src={image} alt={name} loading="lazy" />
+                ) : (
+                  <span className={styles.imageBadge}>Sin imagen</span>
+                )}
               </div>
             </div>
           </div>

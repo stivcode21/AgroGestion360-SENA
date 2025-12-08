@@ -15,35 +15,34 @@
 .productCode {
   font-size: 1.6rem;
   font-weight: 700;
-  letter-spacing: 0.3px;
-  margin-top: 2px;
+  letter-spacing: 0.2px;
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: 14px;
-  color: #4b5563;
 }
 
 .action {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   padding: 8px 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: inherit;
   background: none;
+  color: #111827;
   border: none;
   border-radius: 10px;
-  transition: var(--dynamic-fast-transition);
+  transition: background var(--transition, 0.15s ease),
+    color var(--transition, 0.15s ease);
 }
 
 .action:hover {
   background: var(--surface-secundary);
-  color: #111827;
+  color: #4b5563;
 }
 
 .icon {
@@ -55,19 +54,18 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .sectionTitle {
   font-size: 1.3rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .detailCard {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -76,7 +74,7 @@
   grid-template-columns: 1fr 1.4fr;
   padding: 12px 16px;
   align-items: center;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .row:last-child {
@@ -86,13 +84,13 @@
 .label {
   font-weight: 600;
   font-size: 0.95rem;
-  color: #888;
+  color: #888888;
 }
 
 .value {
   font-weight: 600;
   font-size: 0.98rem;
-  color: #1f2937;
+  color: #121820;
 }
 
 .descriptionRow {
@@ -102,7 +100,7 @@
 .description {
   margin: 0;
   font-weight: 500;
-  color: #374151;
+  color: #121820;
   line-height: 1.5;
 }
 
@@ -119,20 +117,18 @@
 
 .imageCard {
   width: 150px;
-  aspect-ratio: 3 / 4;
   border-radius: 14px;
-  background: radial-gradient(
-      circle at 30% 20%,
-      #53f793 0%,
-      #1baa58 40%,
-      #0f7a3b 100%
-    ),
-    linear-gradient(135deg, #0f7a3b, #1baa58);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.16);
+  border: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.imageCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .imageBadge {
@@ -148,6 +144,12 @@
 
 .meta {
   font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.empty {
+  margin: 0;
+  padding: 12px 0;
   color: #6b7280;
 }
 
