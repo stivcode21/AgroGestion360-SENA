@@ -1,12 +1,17 @@
-﻿export const inventoryItems = [
+export const inventoryItems = [
   {
     id: "prd-01",
     name: "Cuido para Vacas",
     brand: "Intacol",
     code: "H12492",
     quantity: 14,
+    unit: "10kg",
     type: "Alimento",
     price: 98000,
+    registeredAt: "12-03-24",
+    updatedAt: "25-09-25",
+    description:
+      "Cuido completo con vitaminas y proteinas para vacas lecheras, ideal para mejorar la produccion de leche.",
     image:
       "https://i0.wp.com/www.solla.com/wp-content/uploads/2022/02/masleche18.png?fit=391%2C527&ssl=1",
   },
@@ -16,8 +21,13 @@
     brand: "Corona",
     code: "H00471",
     quantity: 2,
+    unit: "Unidad",
     type: "Herramienta",
     price: 19500,
+    registeredAt: "10-01-24",
+    updatedAt: "02-06-25",
+    description:
+      "Pala redonda de acero templado para labores de excavacion y mezcla en la finca.",
     image:
       "https://dtisas.com.co/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTU3NjM0MywicHVyIjoiYmxvYl9pZCJ9fQ==--a03cb752ebae079a8769927058004f2f38a66af6/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJqcGciLCJyZXNpemVfdG9fZml0IjpbODAwLDgwMF19LCJwdXIiOiJ2YXJpYXRpb24ifX0=--1420d7fd3d20057726f0ef3c0043db24ca0403be/_Ferreteria_DTI_Pala%20Redonda%20%234%20Vaquero%202@3x-20.jpg?locale=es",
   },
@@ -27,18 +37,28 @@
     brand: "Truper",
     code: "R02191",
     quantity: 2,
+    unit: "20L",
     type: "Herramienta",
     price: 139000,
+    registeredAt: "05-02-24",
+    updatedAt: "18-05-25",
+    description:
+      "Fumigador de mochila resistente a quimicos, incluye lanza ajustable y boquillas.",
     image: "https://media.falabella.com/sodimacCO/576573/thumbnail",
   },
   {
     id: "prd-04",
-    name: "Alambre de pǧas",
+    name: "Alambre de pgas",
     brand: "Ganadero",
     code: "A11223",
     quantity: 6,
+    unit: "Rollo 250m",
     type: "Cercados",
     price: 78500,
+    registeredAt: "23-11-23",
+    updatedAt: "30-08-25",
+    description:
+      "Alambre galvanizado para cerramientos, alta resistencia a la corrosion.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
@@ -48,8 +68,13 @@
     brand: "AgroPlus",
     code: "B90210",
     quantity: 12,
+    unit: "Par",
     type: "Indumentaria",
     price: 52000,
+    registeredAt: "17-12-23",
+    updatedAt: "04-04-25",
+    description:
+      "Botas de caucho con suela antideslizante para zonas humedas y lodosas.",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoFH8U8t1PJsR8gjINrw-FyFK3btauwh1UHA&s",
   },
@@ -59,8 +84,13 @@
     brand: "SafeFarm",
     code: "G34002",
     quantity: 30,
+    unit: "Caja x 50",
     type: "Indumentaria",
     price: 9500,
+    registeredAt: "08-10-23",
+    updatedAt: "12-02-25",
+    description:
+      "Guantes desechables de nitrilo para manejo de insumos y proteccion sanitaria.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
@@ -70,8 +100,13 @@
     brand: "RiegoMax",
     code: "M66221",
     quantity: 4,
+    unit: "Kit 20m",
     type: "Riego",
     price: 68900,
+    registeredAt: "14-09-23",
+    updatedAt: "20-01-25",
+    description:
+      "Kit de manguera reforzada con conectores rapidos para riego localizado.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
@@ -81,8 +116,13 @@
     brand: "AquaFarm",
     code: "P90912",
     quantity: 1,
+    unit: "Unidad",
     type: "Riego",
     price: 249000,
+    registeredAt: "01-07-23",
+    updatedAt: "11-03-25",
+    description:
+      "Bomba sumergible de 1.5HP para abastecimiento de bebederos y riego por aspersion.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
@@ -92,8 +132,13 @@
     brand: "NutriVet",
     code: "V44120",
     quantity: 9,
+    unit: "Frasco 1L",
     type: "Suplemento",
     price: 43000,
+    registeredAt: "19-05-23",
+    updatedAt: "22-08-25",
+    description:
+      "Suplemento vitaminico para refuerzo inmunologico del ganado.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
@@ -103,8 +148,61 @@
     brand: "GreenField",
     code: "S22019",
     quantity: 15,
+    unit: "Bulto 25kg",
     type: "Siembra",
     price: 68000,
+    registeredAt: "03-08-23",
+    updatedAt: "15-07-25",
+    description:
+      "Semilla de pasto mejorado para praderas, alta germinacion y rendimiento.",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-11",
+    name: "Sal mineralizada",
+    brand: "VetSal",
+    code: "M55931",
+    quantity: 18,
+    unit: "Bulto 40kg",
+    type: "Suplemento",
+    price: 41000,
+    registeredAt: "21-01-24",
+    updatedAt: "30-09-25",
+    description:
+      "Mezcla mineral para suplementacion diaria, mejora conversion y ganancia de peso.",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-12",
+    name: "Bebedero plastico",
+    brand: "AgroTank",
+    code: "B77214",
+    quantity: 7,
+    unit: "Unidad",
+    type: "Ganaderia",
+    price: 89000,
+    registeredAt: "09-04-24",
+    updatedAt: "26-08-25",
+    description:
+      "Bebedero de 150 litros con valvula flotador para suministro constante de agua.",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+  },
+  {
+    id: "prd-13",
+    name: "Concentrado terneros",
+    brand: "NutriCampo",
+    code: "C88301",
+    quantity: 20,
+    unit: "40kg",
+    type: "Alimento",
+    price: 125000,
+    registeredAt: "27-02-24",
+    updatedAt: "19-09-25",
+    description:
+      "Concentrado iniciador para terneros con alto contenido proteico y prebioticos.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
