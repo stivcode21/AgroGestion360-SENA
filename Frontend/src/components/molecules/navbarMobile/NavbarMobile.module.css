@@ -21,17 +21,17 @@
 }
 
 .navbar {
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
   margin-top: 60px;
   background-color: #fcfcfcca;
-  border-radius: 0 0 8px 0;
   backdrop-filter: blur(8px);
   border-bottom: solid 1px var(--color-border);
-  border-right: solid 1px var(--color-border);
-  padding: 20px;
+  box-shadow: 0 4px 10px #0000004a;
+  padding: 20px 100px;
   transform: translateY(-12px);
   opacity: 0;
   animation: slideDown var(--dynamic-medium-transition) forwards;

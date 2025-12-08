@@ -13,7 +13,7 @@ const NavbarMobile = () => {
       </button>
       {isOpen && (
         <nav className={styles.navbar}>
-          <NavList />
+          <NavList isMobile={true} />
         </nav>
       )}
     </>
