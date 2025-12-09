@@ -7,15 +7,21 @@ import { useSidebarStore } from "@/store/sidebarStore";
 import DetailsModal from "../detailsModal/DetailsModal";
 import ProductDetails from "@/components/organism/productDetails/ProductDetails";
 import { useModalStore } from "@/store/modalStore";
+import { useLocation } from "react-router-dom";
+import WokerDetails from "@/components/organism/wokerDetails/WokerDetails";
 
 const MainLayout = ({ children }) => {
   const { isCollapsed, isDesktop, setIsDesktop } = useSidebarStore();
   const { isOpenModal } = useModalStore();
 
-  // Colapsar automáticamente en pantallas pequeñas, expandir en desktop
+  const location = useLocation();
+  const isInventoryDetails = location.pathname === "/inventario";
+
+  // Colapsar automaticamente en pantallas peque�as, expandir en desktop
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth > 768);
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, [setIsDesktop]);
 
@@ -23,7 +29,7 @@ const MainLayout = ({ children }) => {
     <section className={styles.container}>
       {isOpenModal && (
         <DetailsModal>
-          <ProductDetails />
+          {isInventoryDetails ? <ProductDetails /> : <WokerDetails />}
         </DetailsModal>
       )}
 

@@ -57,6 +57,12 @@
   color: #4b5563;
 }
 
+@media (width<= 768px) {
+  .modal {
+    width: 96%;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
