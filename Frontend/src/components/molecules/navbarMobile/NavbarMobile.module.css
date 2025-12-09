@@ -2,7 +2,7 @@
   position: fixed;
   top: 14px;
   left: 16px;
-  z-index: 30;
+  z-index: 20;
 }
 
 .toggle svg {
