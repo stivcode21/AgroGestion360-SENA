@@ -15,7 +15,7 @@ export const workersData = [
     notes:
       "Este fumigador viene recomendado de la tia carmela que es muy bueno dice la viejita",
     avatar:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&auto=format&fit=crop&q=60",
+      "https://www.colombiainforma.info/wp-content/uploads/2020/03/WhatsApp-Image-2020-03-27-at-3.15.06-PM-scaled.jpeg",
   },
   {
     id: "wrk-02",
@@ -48,7 +48,7 @@ export const workersData = [
     activities: 28,
     notes: "Especialista en revisiones sanitarias y planes de vacunaci�n.",
     avatar:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&auto=format&fit=crop&q=60",
+      "https://www.colombiainforma.info/wp-content/uploads/2020/03/WhatsApp-Image-2020-03-27-at-3.15.06-PM-scaled.jpeg",
   },
   {
     id: "wrk-04",
@@ -82,7 +82,7 @@ export const workersData = [
     activities: 17,
     notes: "Coordina compras y manejo de inventarios.",
     avatar:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&auto=format&fit=crop&q=60",
+      "https://www.colombiainforma.info/wp-content/uploads/2020/03/WhatsApp-Image-2020-03-27-at-3.15.06-PM-scaled.jpeg",
   },
   {
     id: "wrk-06",
@@ -99,6 +99,6 @@ export const workersData = [
     activities: 23,
     notes: "Apoya labores de riego y cercado.",
     avatar:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&auto=format&fit=crop&q=60",
+      "https://radionacional-v3.s3.amazonaws.com/s3fs-public/node/article/field_image/grandpa-455978_1280_0.jpg",
   },
 ];
