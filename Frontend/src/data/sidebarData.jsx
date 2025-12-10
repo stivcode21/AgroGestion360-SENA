@@ -131,4 +131,8 @@ export const sidebarData = [
     icon: <LogIn />,
     description: "Stivcode, Fernando",
   },
+  {
+    title: "Inventario",
+    path: "/inventario/registrar",
+  },
 ];
