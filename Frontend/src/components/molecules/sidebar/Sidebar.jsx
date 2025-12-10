@@ -16,8 +16,13 @@ const Sidebar = () => {
   const exitSecion = () => {};
 
   useEffect(() => {
-    // Mantiene la secciÃ³n activa sincronizada con la ruta actual
-    if (location.pathname !== currentSection) {
+    // Mantiene la sección activa sincronizada con la ruta actual, salvo en rutas excluidas
+    const skipPaths = ["/inventario/registrar", "/inventario/editar"];
+    const shouldSkip = skipPaths.some((path) =>
+      location.pathname.startsWith(path)
+    );
+
+    if (!shouldSkip && location.pathname !== currentSection) {
       setCurrentSection(location.pathname);
     }
   }, [location.pathname, currentSection, setCurrentSection]);
@@ -37,10 +42,9 @@ const Sidebar = () => {
         <nav className={styles.listContainer}>
           <NavList />
           {sidebarData.slice(7, 8).map((item, i) => (
-            <div>
+            <div key={i}>
               <button
                 className={`${styles.item} ${styles.exit}`}
-                key={i}
                 onClick={() => exitSecion(item.path)}
               >
                 {item.icon}
