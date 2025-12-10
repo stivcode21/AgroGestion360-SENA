@@ -11,6 +11,8 @@ import Reportes from "@/pages/reportes/Reportes";
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useNavigate } from "react-router-dom";
+import ProductRegister from "@/pages/productRegister/ProductRegister";
+import ProductEdit from "@/pages/productEdit/ProductEdit";
 
 const AppRouter = () => {
   // const navigate = useNavigate();
@@ -27,6 +29,8 @@ const AppRouter = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/inventario" element={<Inventario />} />
+      <Route path="/inventario/registrar" element={<ProductRegister />} />
+      <Route path="/inventario/editar/:id" element={<ProductEdit />} />
       <Route path="/reportes" element={<Reportes />} />
       <Route path="/trabajadores" element={<Trabajadores />} />
       <Route path="/actividades" element={<Actividades />} />
