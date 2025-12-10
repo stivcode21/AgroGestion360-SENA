@@ -1,4 +1,4 @@
-import MainLayout from "@/components/templates/mainLayout/MainLayout";
+﻿import MainLayout from "@/components/templates/mainLayout/MainLayout";
 import styles from "./Inventario.module.css";
 import Button from "@/components/templates/button/Button";
 import { ChevronDown, Eye, Filter, Plus, Search } from "lucide-react";
@@ -7,6 +7,7 @@ import { useModalStore } from "@/store/modalStore";
 import TableLayout, {
   tableClasses as tableStyles,
 } from "@/components/templates/tableLayout/TableLayout";
+import { Link } from "react-router-dom";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -27,10 +28,12 @@ const Inventario = () => {
       <section className={styles.page}>
         <header className={styles.header}>
           <h1 className={styles.title}>Insumos</h1>
-          <Button type="three">
-            <Plus />
-            Agregar
-          </Button>
+          <Link to={`/inventario/registrar`}>
+            <Button type="three">
+              <Plus />
+              Agregar
+            </Button>
+          </Link>
         </header>
 
         <section className={styles.card}>
