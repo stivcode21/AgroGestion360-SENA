@@ -23,6 +23,7 @@ const AppRouter = () => {
   //     navigate("/dashboard")
   //   } else
   // }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Welcome />} />
