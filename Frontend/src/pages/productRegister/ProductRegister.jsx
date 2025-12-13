@@ -1,9 +1,12 @@
 import MainLayout from "@/components/templates/mainLayout/MainLayout";
 import styles from "./ProductRegister.module.css";
 import Button from "@/components/templates/button/Button";
-import { ArrowLeft, Camera, Save } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import FormInput from "@/components/atoms/formInput/FormInput";
+import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
+import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
 
 const inputFields = [
   { name: "name", label: "Nombre *", placeholder: "Ej. Fumigador mochila" },
@@ -50,76 +53,42 @@ const ProductRegister = () => {
   return (
     <MainLayout>
       <section className={styles.page}>
-        <header className={styles.header}>
-          <div className={styles.titleGroup}>
-            <Link to="/inventario" className={styles.back}>
-              <ArrowLeft />
-              <span>Volver</span>
-            </Link>
-          </div>
-        </header>
-
-        <section>
+        <button className={styles.titleGroup}>
+          <Link to="/inventario" className={styles.back}>
+            <ArrowLeft />
+            <span>Volver</span>
+          </Link>
+        </button>
+        <header>
           <h1 className={styles.title}>Registrar producto</h1>
-        </section>
+        </header>
 
         <section className={styles.card}>
           <h3 className={styles.sectionTitle}>Informacion</h3>
 
           <div className={styles.formLayout}>
-            <section className={styles.boxHeader}>
-              <div className={styles.uploadIconBox} onClick={handleImageClick}>
-                <figure className={styles.figure}>
-                  {previewUrl ? (
-                    <img
-                      src={previewUrl}
-                      alt="imagen-seleccionada"
-                      className={styles.imagenPreviu}
-                    />
-                  ) : (
-                    <Camera className={styles.cameraIcon} />
-                  )}
-                  <input
-                    type="file"
-                    name="foto"
-                    id="foto"
-                    accept="image/*"
-                    ref={inputRef}
-                    onChange={handleImageChange}
-                    style={{ display: "none" }}
-                  />
-                </figure>
-              </div>
-              <div className={styles.uploader}>
-                <div className={styles.uploadInfo}>
-                  <h4>Imagen</h4>
-                  <p>Min 400x400px, PNG o JPG</p>
-                </div>
-                <Button type="three" onClick={handleImageClick}>
-                  Seleccionar
-                </Button>
-              </div>
-            </section>
+            <ImagePicker
+              handleImageClick={handleImageClick}
+              handleImageChange={handleImageChange}
+              previewUrl={previewUrl}
+              inputRef={inputRef}
+            />
 
             <div className={styles.inputsGrid}>
               {inputFields.map((field) => (
-                <label key={field.name} className={styles.field}>
-                  <span className={styles.label}>{field.label}</span>
-                  <input
-                    className={styles.input}
-                    name={field.name}
-                    placeholder={field.placeholder}
-                  />
-                </label>
-              ))}
-              <label className={styles.field} style={{ gridColumn: "1 / -1" }}>
-                <span className={styles.label}>Descripcion</span>
-                <textarea
-                  className={styles.textarea}
-                  name="description"
-                  placeholder="Agrega una descripcion del producto"
+                <FormInput
+                  key={field.name}
+                  label={field.label}
+                  name={field.name}
+                  placeholder={field.placeholder}
                 />
-              </label>
+              ))}
+              <FormTextarea
+                label="Descripcion"
+                name="description"
+                placeholder="Agrega una descripcion del producto"
+                style={{ gridColumn: "1 / -1" }}
+              />
             </div>
           </div>
 

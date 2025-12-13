@@ -5,12 +5,6 @@
   padding: 1.5rem;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .titleGroup {
   display: flex;
   align-items: center;
@@ -64,95 +58,10 @@
   gap: 1rem 1.5rem;
 }
 
-.boxHeader {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.figure {
-  width: 94%;
-  height: 94%;
-  display: grid;
-  cursor: pointer;
-  place-items: center;
-  background: var(--surface-secundary);
-  border-radius: 12px;
-}
-
-.imagenPreviu {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-.cameraIcon {
-  width: 34px;
-  height: 34px;
-  color: var(--text-secundary);
-}
-
-.uploader {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: start;
-  justify-content: center;
-  min-height: 220px;
-}
-
-.uploadIconBox {
-  width: 180px;
-  height: 180px;
-  border-radius: 12px;
-  border: 1px dashed var(--color-border, #dfe3e8);
-  display: grid;
-  place-items: center;
-}
-
-.uploadInfo h4 {
-  font-size: 1.2rem;
-  color: var(--text-primary);
-}
-
-.uploadInfo p {
-  color: var(--text-secundary);
-  font-size: 0.9rem;
-}
-
 .inputsGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(260px, 1fr));
   gap: 1rem 1.2rem;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.label {
-  font-weight: 600;
-  color: var(--text-secundary);
-}
-
-.input,
-.textarea,
-.select {
-  width: 100%;
-  border: 1px solid var(--color-border, #dfe3e8);
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  background: var(--surface-primary);
-}
-
-.textarea {
-  min-height: 120px;
-  resize: vertical;
 }
 
 .footerActions {
