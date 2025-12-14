@@ -3,7 +3,7 @@ import Welcome from "@/pages/welcome/Welcome";
 import Login from "@/pages/login/Login";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import Inventario from "@/pages/inventario/Inventario";
-import Trabajadores from "@/pages/trabajadores/Trabajadores";
+import Workers from "../pages/workers/Workers";
 import Actividades from "@/pages/actividades/Actividades";
 import Ganaderia from "@/pages/ganaderia/Ganaderia";
 import Porcicultura from "@/pages/porcicultura/Porcicultura";
@@ -13,6 +13,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useNavigate } from "react-router-dom";
 import ProductRegister from "@/pages/productRegister/ProductRegister";
 import ProductEdit from "@/pages/productEdit/ProductEdit";
+import WorkerRegister from "@/pages/workerRegister/WorkerRegister";
 
 const AppRouter = () => {
   // const navigate = useNavigate();
@@ -33,7 +34,8 @@ const AppRouter = () => {
       <Route path="/inventario/registrar" element={<ProductRegister />} />
       <Route path="/inventario/editar/:id" element={<ProductEdit />} />
       <Route path="/reportes" element={<Reportes />} />
-      <Route path="/trabajadores" element={<Trabajadores />} />
+      <Route path="/trabajadores" element={<Workers />} />
+      <Route path="/trabajadores/registrar" element={<WorkerRegister />} />
       <Route path="/actividades" element={<Actividades />} />
       <Route path="/ganaderia" element={<Ganaderia />} />
       <Route path="/porcicultura" element={<Porcicultura />} />
