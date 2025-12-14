@@ -16,8 +16,12 @@ const Sidebar = () => {
   const exitSecion = () => {};
 
   useEffect(() => {
-    // Mantiene la sección activa sincronizada con la ruta actual, salvo en rutas excluidas
-    const skipPaths = ["/inventario/registrar", "/inventario/editar"];
+    // Mantiene la seccion activa sincronizada con la ruta actual, salvo en rutas excluidas
+    const skipPaths = [
+      "/inventario/registrar",
+      "/trabajadores/registrar",
+      "/inventario/editar",
+    ];
     const shouldSkip = skipPaths.some((path) =>
       location.pathname.startsWith(path)
     );
