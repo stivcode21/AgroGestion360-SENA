@@ -7,50 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/atoms/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-
-const inputFields = [
-  { name: "name", label: "Nombre completo *", placeholder: "Ej. pepito perez" },
-  { name: "age", label: "Edad *", placeholder: "Ej. 20", type: "number" },
-  {
-    name: "type_dni",
-    label: "Tipo de cedula",
-    placeholder: "Selecciona un tipo",
-    select: {
-      options: [
-        { label: "cedula de ciudania", value: "cc" },
-        { label: "pasaporte", value: "pasaporte " },
-      ],
-    },
-  },
-  {
-    name: "dni",
-    label: "Numero de cedula *",
-    placeholder: "Ej. 1023...",
-    type: "number",
-  },
-  {
-    name: "phone",
-    label: "Numero de celular *",
-    placeholder: "Ej. 313821...",
-    type: "number",
-  },
-  {
-    name: "address",
-    label: "Direccion *",
-    placeholder: "Ej. finca tres esquinas",
-  },
-  {
-    name: "phonefamily",
-    label: "numero familiar",
-    placeholder: "DD-MM-AA",
-    type: "number",
-  },
-];
-
-const fieldValidations = {
-  phone: { pattern: /^\d{10}$/, message: "Ingresa exactamente 10 dígitos" },
-  dni: { pattern: /^\d{6,12}$/, message: "6 a 12 números" },
-};
+import {
+  workerFieldValidations,
+  workerInputFields,
+} from "@/data/workerRegisterData";
 
 const WorkerRegister = () => {
   const inputRef = useRef(null);
@@ -78,10 +38,10 @@ const WorkerRegister = () => {
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    const rule = fieldValidations[name];
-    if (rule?.pattern && !rule.pattern.test(value)) {
+    const trimmedValue = value.trim();
+    const rule = workerFieldValidations[name];
+    if (rule?.pattern && !rule.pattern.test(trimmedValue)) {
       setErrors((prev) => ({ ...prev, [name]: rule.message }));
-      console.log(errors);
     } else {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -121,14 +81,14 @@ const WorkerRegister = () => {
             />
 
             <div className={styles.inputsGrid}>
-              {inputFields.map((field) => (
+              {workerInputFields.map((field) => (
                 <FormInput
                   key={field.name}
                   label={field.label}
                   name={field.name}
                   placeholder={field.placeholder}
                   select={field?.select}
-                  validation={fieldValidations[field.name]}
+                  validation={workerFieldValidations[field.name]}
                   error={errors[field.name]}
                   onBlur={handleBlur}
                   type={field?.type}
