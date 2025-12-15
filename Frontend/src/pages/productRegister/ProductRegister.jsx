@@ -7,21 +7,15 @@ import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/atoms/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-
-const inputFields = [
-  { name: "name", label: "Nombre *", placeholder: "Ej. Fumigador mochila" },
-  { name: "brand", label: "Marca *", placeholder: "Ej. Truper" },
-  { name: "type", label: "Tipo *", placeholder: "Selecciona un tipo" },
-  { name: "quantity", label: "Cantidad *", placeholder: "Ej. 10" },
-  { name: "unit", label: "Unidad de medida *", placeholder: "Ej. 20L" },
-  { name: "price", label: "Precio unitario *", placeholder: "Ej. 120000" },
-  { name: "expiration", label: "Fecha vencimiento", placeholder: "DD-MM-AA" },
-  { name: "supplier", label: "Proveedor", placeholder: "Ej. Agroinsumos S.A." },
-];
+import {
+  productFieldValidations,
+  productInputFields,
+} from "@/data/productRegisterData";
 
 const ProductRegister = () => {
   const inputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleImageClick = () => {
     // Relacionamos el input con la imagen
@@ -39,6 +33,17 @@ const ProductRegister = () => {
 
     const objectUrl = URL.createObjectURL(file);
     setPreviewUrl(objectUrl);
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const trimmedValue = value.trim();
+    const rule = productFieldValidations[name];
+    if (rule?.pattern && !rule.pattern.test(trimmedValue)) {
+      setErrors((prev) => ({ ...prev, [name]: rule.message }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   useEffect(() => {
@@ -75,12 +80,16 @@ const ProductRegister = () => {
             />
 
             <div className={styles.inputsGrid}>
-              {inputFields.map((field) => (
+              {productInputFields.map((field) => (
                 <FormInput
                   key={field.name}
                   label={field.label}
                   name={field.name}
                   placeholder={field.placeholder}
+                  validation={productFieldValidations[field.name]}
+                  error={errors[field.name]}
+                  onBlur={handleBlur}
+                  type={field?.type}
                 />
               ))}
               <FormTextarea
