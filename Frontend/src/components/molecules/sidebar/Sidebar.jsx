@@ -16,13 +16,14 @@ const Sidebar = () => {
   const exitSecion = () => {};
 
   useEffect(() => {
-    // Mantiene la seccion activa sincronizada con la ruta actual, salvo en rutas excluidas
-    const skipPaths = [
+    // Mantiene la seccion activa sincronizada con la ruta actual, salvo en rutas excluidas (formularios)
+    const skipPrefixes = [
       "/inventario/registrar",
+      "/inventario/editar/",
       "/trabajadores/registrar",
-      "/inventario/editar",
+      "/trabajadores/editar/",
     ];
-    const shouldSkip = skipPaths.some((path) =>
+    const shouldSkip = skipPrefixes.some((path) =>
       location.pathname.startsWith(path)
     );
 
