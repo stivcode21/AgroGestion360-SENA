@@ -6,7 +6,6 @@ import { Bell, Moon, Settings } from "lucide-react";
 const Header = () => {
   const { currentSection, isCollapsed, isDesktop } = useSidebarStore();
   const currentPage = sidebarData.find((item) => item.path === currentSection);
-  console.log(currentPage);
   return (
     <header className={`${styles.header} ${isCollapsed && styles.collapsed}`}>
       <section
