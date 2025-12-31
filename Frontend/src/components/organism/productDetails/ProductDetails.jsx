@@ -2,6 +2,7 @@ import { Trash2, Pencil } from "lucide-react";
 import { inventoryItems } from "@/data/inventoryData";
 import styles from "./ProductDetails.module.css";
 import { useModalStore } from "@/store/modalStore";
+import { Link } from "react-router-dom";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -10,8 +11,8 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 });
 
 const ProductDetails = () => {
-  const { selectProduct } = useModalStore();
-  const product = inventoryItems.find((item) => item.id === selectProduct);
+  const { selectProduct, setIsOpenModal } = useModalStore();
+  const product = inventoryItems.find((item) => item.code === selectProduct);
 
   if (!product) {
     return (
@@ -49,9 +50,15 @@ const ProductDetails = () => {
             <Trash2 className={styles.icon} />
             <span>Eliminar</span>
           </button>
-          <button type="button" className={styles.action}>
-            <Pencil className={styles.icon} />
-            <span>Editar</span>
+          <button
+            type="button"
+            className={styles.action}
+            onClick={() => setIsOpenModal(false)}
+          >
+            <Link to={`/inventario/editar/${code}`}>
+              <Pencil className={styles.icon} />
+              <span>Editar</span>
+            </Link>
           </button>
         </div>
       </header>

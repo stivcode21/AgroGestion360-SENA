@@ -48,7 +48,10 @@
 .icon {
   width: 18px;
   height: 18px;
-  stroke: currentColor;
+}
+
+.action span {
+  padding-left: 4px;
 }
 
 .section {
