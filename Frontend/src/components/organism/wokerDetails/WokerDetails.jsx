@@ -3,9 +3,10 @@ import styles from "../productDetails/ProductDetails.module.css";
 import styless from "./WokerDetails.module.css";
 import { workersData } from "@/data/workersData";
 import { useModalStore } from "@/store/modalStore";
+import { Link } from "react-router-dom";
 
 const WokerDetails = () => {
-  const { selectWoker } = useModalStore();
+  const { selectWoker, setIsOpenModal } = useModalStore();
   const worker = workersData.find((item) => item.id === selectWoker);
 
   if (!worker) {
@@ -52,9 +53,15 @@ const WokerDetails = () => {
             <Trash2 className={styles.icon} />
             <span>Eliminar</span>
           </button>
-          <button type="button" className={styles.action}>
-            <Pencil className={styles.icon} />
-            <span>Editar</span>
+          <button
+            type="button"
+            className={styles.action}
+            onClick={() => setIsOpenModal(false)}
+          >
+            <Link to={`/trabajadores/editar/${selectWoker}`}>
+              <Pencil className={styles.icon} />
+              <span>Editar</span>
+            </Link>
           </button>
         </div>
       </header>
