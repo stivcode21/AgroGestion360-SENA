@@ -2,7 +2,7 @@ export const workerInputFields = [
   { name: "name", label: "Nombre completo *", placeholder: "Ej. pepito perez" },
   { name: "age", label: "Edad *", placeholder: "Ej. 20", type: "number" },
   {
-    name: "type_dni",
+    name: "docType",
     label: "Tipo de cedula",
     placeholder: "Selecciona un tipo",
     select: {
@@ -13,10 +13,27 @@ export const workerInputFields = [
     },
   },
   {
-    name: "dni",
+    name: "document",
     label: "Numero de cedula *",
     placeholder: "Ej. 1023...",
     type: "number",
+  },
+  {
+    name: "status",
+    label: "Estado",
+    placeholder: "Selecciona un tipo",
+    select: {
+      options: [
+        { label: "Activo", value: "activo" },
+        { label: "Inhabilitado", value: "inhabilitado" },
+      ],
+    },
+  },
+  {
+    name: "role",
+    label: "Rol *",
+    placeholder: "Ej. fumigador",
+    type: "text",
   },
   {
     name: "phone",
@@ -30,7 +47,7 @@ export const workerInputFields = [
     placeholder: "Ej. finca tres esquinas",
   },
   {
-    name: "phonefamily",
+    name: "familyPhone",
     label: "numero familiar",
     placeholder: "DD-MM-AA",
     type: "number",
