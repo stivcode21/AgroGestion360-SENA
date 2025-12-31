@@ -71,7 +71,7 @@ const Inventario = () => {
                   <button
                     type="button"
                     className={tableStyles.actionButton}
-                    onClick={() => OpenModal(item.id)}
+                    onClick={() => OpenModal(item.code)}
                     aria-label={`Ver detalles de ${item.name}`}
                   >
                     <Eye />
