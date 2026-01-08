@@ -1,67 +1,49 @@
-# 🌾 AgroGestión  
-**Sistema integral para la administración de fincas ganaderas, porcinas, agrícolas y piscícolas.**
+# AgroGestion360
+Sistema integral para administracion de fincas ganaderas, porcinas, agricolas y piscicolas.
 
-AgroGestión es una plataforma diseñada para facilitar y centralizar la administración de actividades rurales, permitiendo a dueños y administradores controlar de forma eficiente procesos como inventarios, registros de animales, ventas, mantenimiento, trabajadores y reportes detallados.  
+## Vision general
+AgroGestion360 centraliza la gestion operativa de una finca en un solo lugar. El foco actual del repositorio es el frontend, con una base preparada para agregar un backend mas adelante.
 
-Este proyecto busca digitalizar la gestión diaria de una finca, ofreciendo herramientas claras, intuitivas y orientadas a la trazabilidad y control de la información.
+## Modulos funcionales (vista general)
+- Usuarios y autenticacion
+- Ganaderia
+- Porcicultura
+- Inventario de insumos
+- Actividades y mantenimiento
+- Trabajadores
+- Reportes
 
----
+## Stack
+- Frontend: React 19, Vite 7, React Router, Zustand, Lucide
+- Backend: carpeta `Backend/` en estado inicial (sin API definida)
 
-## 🚀 Objetivo del Proyecto
-Crear un sistema que permita gestionar, de manera segura y organizada:
+## Requisitos
+- Node.js (LTS recomendado) y npm
 
-- Administración de usuarios (Dueño y Administradores)  
-- Autenticación basada en roles y permisos  
-- Control de animales (ganado, porcinos, peces, etc.)  
-- Inventario de insumos agrícolas y alimenticios  
-- Mantenimiento y registro de trabajadores  
-- Reportes detallados y exportables  
-- Control de ventas, compras y estados de cada entidad  
+## Instalacion y uso (frontend)
+```bash
+cd Frontend
+npm install
+npm run dev
+```
 
----
+## Scripts utiles (frontend)
+- `npm run dev`: desarrollo local
+- `npm run build`: build de produccion
+- `npm run preview`: previsualizacion del build
+- `npm run lint`: lint del codigo
 
-## 🧩 Funcionalidades Principales
-
-### 1. Gestión de Administradores
-- Registro de nuevos administradores por parte del dueño.  
-- Inhabilitación de administradores manteniendo su historial.  
-- Actualización de datos personales.  
-- Cambio de credenciales del dueño con trazabilidad incluida.
-
-### 2. Gestión de Autenticación
-- Inicio de sesión según rol (Dueño / Administrador).  
-- Registro de sesiones, fecha, hora y permisos asignados.
-
-### 3. Informes y Análisis
-- Reportes detallados por área (ganadería, porcicultura, piscicultura, inventario, mantenimiento).  
-- Exportación en PDF o CSV.
-
-### 4. Módulo de Ganadería
-- Registro completo de animales, incluyendo origen, peso, salud y trazabilidad.  
-- Registro de vacunación con edición controlada y alertas.  
-- Registro de ventas con actualización automática de estado e inventario.
-
-### 5. Módulo de Porcicultura
-- Registro de cerdos por nacimiento, compra o existencia previa.  
-- Gestión de vacunación.  
-- Registro de ventas con control de inventario y facturación.
-
-### 6. Inventario de Insumos
-- Solicitudes de compra de insumos agrícolas.  
-- Solicitudes de compra de alimentos para animales.  
-- Registro de consumos por actividad.  
-- Visualización del inventario actual con alertas.
-
-### 7. Mantenimiento y Trabajadores
-- Registro y control de pagos a trabajadores.  
-- Registro de trabajos realizados con evidencia fotográfica.  
-- Gestión completa de información de trabajadores.  
-- Generación de formatos de pago en PDF.
-
----
-
-## 📂 Estructura de Documentación
-La documentación completa y detallada estará disponible en la carpeta:
-
+## Estructura del repositorio
 ```txt
-/documentation
+/Backend
+/Frontend
+/doc
+README.md
+PROYECTO.md
+```
+
+## Documentacion adicional
+- Detalles de arquitectura, componentes y flujo de la app: `PROYECTO.md`
+
+## Licencia
+No definida.
