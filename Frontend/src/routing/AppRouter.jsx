@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Welcome from "@/pages/welcome/Welcome";
 import Login from "@/pages/login/Login";
 import Dashboard from "@/pages/dashboard/Dashboard";
@@ -9,20 +9,33 @@ import Ganaderia from "@/pages/ganaderia/Ganaderia";
 import Porcicultura from "@/pages/porcicultura/Porcicultura";
 import Reportes from "@/pages/reportes/Reportes";
 import { useEffect } from "react";
-import { useAuthStore } from "@/store/authStore";
 import { useNavigate } from "react-router-dom";
 import ProductForm from "@/pages/productForm/ProductForm";
 import WorkerForm from "@/pages/workerForm/WorkerForm";
+import { checkAuth } from "../utils/auth";
 
 const AppRouter = () => {
-  // const navigate = useNavigate();
-  // const { isLogin, setIsLogin } = useAuthStore();
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const verifySession = async () => {
+      const loggedIn = await checkAuth();
+      const publicRoutes = ["/", "/login"];
+      const isPublic = publicRoutes.includes(location.pathname);
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     navigate("/dashboard")
-  //   } else
-  // }, []);
+      if (!loggedIn) {
+        if (!isPublic) {
+          navigate("/login", { replace: true });
+        }
+        return;
+      }
+
+      if (isPublic) {
+        navigate("/dashboard", { replace: true });
+      }
+    };
+    verifySession();
+  }, [location.pathname, navigate]);
 
   return (
     <Routes>
