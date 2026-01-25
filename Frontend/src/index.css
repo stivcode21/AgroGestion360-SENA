@@ -35,7 +35,7 @@ html {
   scroll-behavior: auto;
 }
 
-body.light-mode {
+body {
   --surface-primary: #ffffff;
   --surface-secundary: #f2f4f7;
 
@@ -53,8 +53,8 @@ body.light-mode {
   --text-tertiary: #ffffff;
   --text-coffee: #342020;
 }
-
+/* 
 body.dark-mode {
-  /* SURFACE */
+  
   --surface-primary: #0a0b15;
-}
+} */
