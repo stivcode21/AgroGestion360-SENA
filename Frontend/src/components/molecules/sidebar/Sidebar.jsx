@@ -3,17 +3,46 @@ import Logo from "@/components/atoms/logo/Logo";
 import styles from "./Sidebar.module.css";
 import { sidebarData } from "@/data/sidebarData";
 import { useSidebarStore } from "@/store/sidebarStore";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import cowMarcage from "@/assets/img/cowMarcaAgua.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NavList from "@/components/molecules/navList/NavList";
+import ActionModal from "@/components/templates/actionModal/ActionModal";
+import { buildApiUrl } from "../../../utils/apiBase";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const { currentSection, setCurrentSection, isCollapsed, toggleCollapsed } =
     useSidebarStore();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
-  const exitSecion = () => {};
+  const exitSecion = () => {
+    setIsLogoutOpen(true);
+  };
+
+  const handleLogoutConfirm = async () => {
+    try {
+      const res = await fetch(buildApiUrl("auth/logout"), {
+        method: "POST", // usamos POST para cerrar sesión
+        credentials: "include", // importante para que la cookie httpOnly se envíe
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(data.message);
+      navigate("/"); // redirige al inicio o login
+    } catch (error) {
+      console.error("Error en logout:", error);
+      toast.error("Error", "Ha ocurrido un error inesperado.");
+    }
+  };
 
   useEffect(() => {
     // Mantiene la seccion activa sincronizada con la ruta actual, salvo en rutas excluidas (formularios)
@@ -24,7 +53,7 @@ const Sidebar = () => {
       "/trabajadores/editar/",
     ];
     const shouldSkip = skipPrefixes.some((path) =>
-      location.pathname.startsWith(path)
+      location.pathname.startsWith(path),
     );
 
     if (!shouldSkip && location.pathname !== currentSection) {
@@ -50,7 +79,7 @@ const Sidebar = () => {
             <div key={i}>
               <button
                 className={`${styles.item} ${styles.exit}`}
-                onClick={() => exitSecion(item.path)}
+                onClick={() => exitSecion()}
               >
                 {item.icon}
                 {isCollapsed ? "" : item.title}
@@ -60,6 +89,15 @@ const Sidebar = () => {
           ))}
         </nav>
       </section>
+      <ActionModal
+        isOpen={isLogoutOpen}
+        variant="logout"
+        title="Quieres cerrar sesion"
+        highlight={sidebarData[7]?.description}
+        description="Esta accion te llevara a la pagina de inicio."
+        onCancel={() => setIsLogoutOpen(false)}
+        onConfirm={handleLogoutConfirm}
+      />
       {<img src={cowMarcage} alt="decorative" className={styles.decorative} />}
     </section>
   );
