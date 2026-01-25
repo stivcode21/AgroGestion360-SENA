@@ -1,0 +1,143 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(17, 24, 39, 0.55);
+  opacity: 0;
+  animation: fadeIn var(--dynamic-medium-transition) forwards;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transform: translateY(12px);
+  opacity: 0;
+  animation: popIn var(--dynamic-medium-transition) forwards;
+}
+
+.iconWrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--soft);
+  display: grid;
+  place-items: center;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.35;
+}
+
+.highlight {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.description {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.note {
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancelButton,
+.confirmButton {
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--dynamic-fast-transition);
+}
+
+.cancelButton {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.cancelButton:hover {
+  background: #e5e7eb;
+}
+
+.confirmButton {
+  background: var(--action);
+  color: #ffffff;
+}
+
+.confirmButton:hover {
+  filter: brightness(0.95);
+}
+
+@media (width <= 480px) {
+  .card {
+    padding: 18px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
