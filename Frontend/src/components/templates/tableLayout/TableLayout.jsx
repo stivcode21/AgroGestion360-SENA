@@ -1,18 +1,23 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./TableLayout.module.css";
 
-const TableLayout = ({ type, children }) => {
-  const isInventory = type === "Inventario";
+const TableLayout = ({ headers, columns, compactColumns, children }) => {
+  const resolvedHeaders = headers ?? [];
+  const resolvedColumns = columns;
+  const resolvedCompactColumns = compactColumns ?? columns;
 
   return (
-    <div className={styles.table}>
+    <div
+      className={styles.table}
+      style={{
+        "--table-columns": resolvedColumns,
+        "--table-columns-compact": resolvedCompactColumns,
+      }}
+    >
       <div className={styles.tableHead}>
-        <span>Nombre</span>
-        <span>{isInventory ? "Codigo" : "Rol"}</span>
-        <span>{isInventory ? "Cantidad" : "Estado"}</span>
-        <span>{isInventory ? "Tipo" : "Actividades"}</span>
-        <span>{isInventory ? "Precio uni" : "Celular"}</span>
-        <span></span>
+        {resolvedHeaders.map((header, index) => (
+          <span key={`${header}-${index}`}>{header}</span>
+        ))}
       </div>
 
       <ul className={styles.tableBody}>{children}</ul>
