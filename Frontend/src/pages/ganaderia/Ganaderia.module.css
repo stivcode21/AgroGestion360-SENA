@@ -1,17 +1,138 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   padding: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .title {
   font-size: 2rem;
-  font-weight: 700;
-  color: #111827;
+  font-weight: 600;
+  color: var(--text-secundary);
 }
 
-.description {
+.listCard {
+  background: var(--surface-primary, #ffffff);
+  border-radius: 12px;
+  border: 1px solid var(--color-border, #dfe3e8);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.search {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--color-border, #dfe3e8);
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  background: #ffffff;
+}
+
+.search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: var(--text-secundary);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  color: #666;
+}
+
+.listWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--surface-primary);
+}
+
+.animalThumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border, #e4e7eb);
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.animalThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.animalName {
+  font-weight: 600;
+  color: var(--text-secundary);
+}
+
+.animalTag {
+  font-size: 0.85rem;
   color: #6b7280;
-  font-size: 1rem;
+}
+
+.breed {
+  font-weight: 600;
+  color: var(--text-secundary);
+}
+
+.statusTag {
+  width: fit-content;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.sano {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.tratamiento {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.observacion {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.weight,
+.production,
+.lastCheck {
+  font-weight: 600;
+  color: var(--text-secundary);
+}
+
+
+@media (max-width: 900px) {
+  .page {
+    padding: 1.2rem;
+  }
 }
