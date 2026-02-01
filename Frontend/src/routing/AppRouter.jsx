@@ -12,6 +12,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductForm from "@/pages/productForm/ProductForm";
 import WorkerForm from "@/pages/workerForm/WorkerForm";
+import ActivityForm from "@/pages/activityForm/ActivityForm";
+import GanaderiaForm from "@/pages/ganaderiaForm/GanaderiaForm";
+import PorciculturaForm from "@/pages/porciculturaForm/PorciculturaForm";
 import { checkAuth } from "../utils/auth";
 
 const AppRouter = () => {
@@ -62,8 +65,32 @@ const AppRouter = () => {
         element={<WorkerForm title="Editar trabajador" />}
       />
       <Route path="/actividades" element={<Actividades />} />
+      <Route
+        path="/actividades/registrar"
+        element={<ActivityForm title="Registrar actividad" />}
+      />
+      <Route
+        path="/actividades/editar/:id"
+        element={<ActivityForm title="Editar actividad" />}
+      />
       <Route path="/ganaderia" element={<Ganaderia />} />
+      <Route
+        path="/ganaderia/registrar"
+        element={<GanaderiaForm title="Registrar animal" />}
+      />
+      <Route
+        path="/ganaderia/editar/:id"
+        element={<GanaderiaForm title="Editar animal" />}
+      />
       <Route path="/porcicultura" element={<Porcicultura />} />
+      <Route
+        path="/porcicultura/registrar"
+        element={<PorciculturaForm title="Registrar porcino" />}
+      />
+      <Route
+        path="/porcicultura/editar/:id"
+        element={<PorciculturaForm title="Editar porcino" />}
+      />
     </Routes>
   );
 };

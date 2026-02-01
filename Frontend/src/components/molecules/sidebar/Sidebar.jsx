@@ -8,7 +8,7 @@ import cowMarcage from "@/assets/img/cowMarcaAgua.png";
 import { useEffect, useState } from "react";
 import NavList from "@/components/molecules/navList/NavList";
 import ActionModal from "@/components/templates/actionModal/ActionModal";
-import { buildApiUrl } from "../../../utils/apiBase";
+import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
 
 const Sidebar = () => {
@@ -51,6 +51,12 @@ const Sidebar = () => {
       "/inventario/editar/",
       "/trabajadores/registrar",
       "/trabajadores/editar/",
+      "/actividades/registrar",
+      "/actividades/editar/",
+      "/ganaderia/registrar",
+      "/ganaderia/editar/",
+      "/porcicultura/registrar",
+      "/porcicultura/editar/",
     ];
     const shouldSkip = skipPrefixes.some((path) =>
       location.pathname.startsWith(path),
