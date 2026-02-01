@@ -20,9 +20,6 @@ const Header = () => {
             <Bell />
           </li>
           <li className={styles.item}>
-            <Moon />
-          </li>
-          <li className={styles.item}>
             <Settings />
           </li>
         </ul>
