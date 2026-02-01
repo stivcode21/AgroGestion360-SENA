@@ -50,7 +50,11 @@ const Inventario = () => {
           </div>
 
           <div className={styles.tableWrapper}>
-            <TableLayout type="Inventario">
+            <TableLayout
+              headers={["Nombre", "Codigo", "Cantidad", "Tipo", "Precio uni", ""]}
+              columns="2.3fr 1fr 0.7fr 0.8fr 0.7fr 0.25fr"
+              compactColumns="2fr 1fr 1fr 1fr 1fr 0.5fr"
+            >
               {inventoryItems.map((item) => (
                 <li key={item.id} className={tableStyles.row}>
                   <div className={tableStyles.itemInfo}>
