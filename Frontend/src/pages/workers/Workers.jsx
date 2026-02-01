@@ -44,7 +44,18 @@ const Workers = () => {
           </div>
 
           <div className={styles.tableWrapper}>
-            <TableLayout type="Trabajadores">
+            <TableLayout
+              headers={[
+                "Nombre",
+                "Rol",
+                "Estado",
+                "Actividades",
+                "Celular",
+                "",
+              ]}
+              columns="2.3fr 1fr 0.7fr 0.8fr 0.7fr 0.25fr"
+              compactColumns="2fr 1fr 1fr 1fr 1fr 0.5fr"
+            >
               {workersData.map((item) => (
                 <li key={item.id} className={tableStyles.row}>
                   <div className={tableStyles.itemInfo}>
