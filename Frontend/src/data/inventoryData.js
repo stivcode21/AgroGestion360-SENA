@@ -137,8 +137,7 @@ export const inventoryItems = [
     price: 43000,
     registeredAt: "19-05-23",
     updatedAt: "22-08-25",
-    description:
-      "Suplemento vitaminico para refuerzo inmunologico del ganado.",
+    description: "Suplemento vitaminico para refuerzo inmunologico del ganado.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
@@ -155,54 +154,6 @@ export const inventoryItems = [
     updatedAt: "15-07-25",
     description:
       "Semilla de pasto mejorado para praderas, alta germinacion y rendimiento.",
-    image:
-      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
-  },
-  {
-    id: "prd-11",
-    name: "Sal mineralizada",
-    brand: "VetSal",
-    code: "M55931",
-    quantity: 18,
-    unit: "Bulto 40kg",
-    type: "Suplemento",
-    price: 41000,
-    registeredAt: "21-01-24",
-    updatedAt: "30-09-25",
-    description:
-      "Mezcla mineral para suplementacion diaria, mejora conversion y ganancia de peso.",
-    image:
-      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
-  },
-  {
-    id: "prd-12",
-    name: "Bebedero plastico",
-    brand: "AgroTank",
-    code: "B77214",
-    quantity: 7,
-    unit: "Unidad",
-    type: "Ganaderia",
-    price: 89000,
-    registeredAt: "09-04-24",
-    updatedAt: "26-08-25",
-    description:
-      "Bebedero de 150 litros con valvula flotador para suministro constante de agua.",
-    image:
-      "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
-  },
-  {
-    id: "prd-13",
-    name: "Concentrado terneros",
-    brand: "NutriCampo",
-    code: "C88301",
-    quantity: 20,
-    unit: "40kg",
-    type: "Alimento",
-    price: 125000,
-    registeredAt: "27-02-24",
-    updatedAt: "19-09-25",
-    description:
-      "Concentrado iniciador para terneros con alto contenido proteico y prebioticos.",
     image:
       "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
   },
