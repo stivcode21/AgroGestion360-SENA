@@ -1,7 +1,7 @@
 import styles from "./Header.module.css";
 import { sidebarData } from "@/data/sidebarData";
 import { useSidebarStore } from "@/store/sidebarStore";
-import { Bell, Moon, Settings } from "lucide-react";
+import { Bell, Settings } from "lucide-react";
 
 const Header = () => {
   const { currentSection, isCollapsed, isDesktop } = useSidebarStore();
