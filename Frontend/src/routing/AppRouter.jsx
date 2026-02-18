@@ -20,25 +20,25 @@ import { checkAuth } from "../utils/auth";
 const AppRouter = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  useEffect(() => {
-    const verifySession = async () => {
-      const loggedIn = await checkAuth();
-      const publicRoutes = ["/", "/login"];
-      const isPublic = publicRoutes.includes(location.pathname);
+  // useEffect(() => {
+  //   const verifySession = async () => {
+  //     const loggedIn = await checkAuth();
+  //     const publicRoutes = ["/", "/login"];
+  //     const isPublic = publicRoutes.includes(location.pathname);
 
-      if (!loggedIn) {
-        if (!isPublic) {
-          navigate("/login", { replace: true });
-        }
-        return;
-      }
+  //     if (!loggedIn) {
+  //       if (!isPublic) {
+  //         navigate("/login", { replace: true });
+  //       }
+  //       return;
+  //     }
 
-      if (isPublic) {
-        navigate("/dashboard", { replace: true });
-      }
-    };
-    verifySession();
-  }, [location.pathname, navigate]);
+  //     if (isPublic) {
+  //       navigate("/dashboard", { replace: true });
+  //     }
+  //   };
+  //   verifySession();
+  // }, [location.pathname, navigate]);
 
   return (
     <Routes>
