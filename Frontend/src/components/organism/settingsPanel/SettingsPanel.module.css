@@ -1,0 +1,56 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  color: var(--text-secundary);
+  font-size: 0.95rem;
+}
+
+.card {
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  color: var(--verde-primary, #15803d);
+  font-weight: 500;
+}
+
+.formLayout {
+  display: grid;
+  gap: 1rem 1.5rem;
+}
+
+.inputsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 1rem 1.2rem;
+}
+
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 980px) {
+  .inputsGrid {
+    grid-template-columns: 1fr;
+  }
+}
