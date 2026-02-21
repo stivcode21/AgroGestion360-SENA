@@ -1,0 +1,76 @@
+.container {
+  width: 200px;
+  height: 300px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  box-sizing: border-box;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7a8088;
+  font-weight: 600;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.filterButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid var(--color-border, #dfe3e8);
+  background: #ffffff;
+  color: var(--text-secundary, #2e2e2e);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: left;
+  transition: transform var(--transition, 0.15s ease),
+    background var(--transition, 0.15s ease),
+    border-color var(--transition, 0.15s ease);
+}
+
+.filterButton svg {
+  width: 16px;
+  height: 16px;
+  color: #6a6f77;
+  flex-shrink: 0;
+}
+
+.filterButton:hover {
+  background: var(--color-hover, #f5f6f8);
+  border-color: #cfd6dd;
+  transform: translateY(-1px);
+}
+
+.filterButton:active {
+  transform: translateY(0);
+}

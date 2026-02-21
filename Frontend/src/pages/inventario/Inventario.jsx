@@ -8,6 +8,8 @@ import TableLayout, {
   tableClasses as tableStyles,
 } from "@/components/templates/tableLayout/TableLayout";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import FiltersBox from "../../components/molecules/filtersBox/FiltersBox";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -17,6 +19,7 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 
 const Inventario = () => {
   const { setIsOpenModal, setSelectProduct } = useModalStore();
+  const [state, setState] = useState(false);
 
   const OpenModal = (id) => {
     setIsOpenModal(true);
@@ -42,16 +45,28 @@ const Inventario = () => {
               <Search className={styles.icon} />
               <input type="text" placeholder="Buscar" />
             </div>
-            <button className={styles.filter} type="button">
+            <button
+              className={styles.filter}
+              type="button"
+              onClick={() => setState(!state)}
+            >
               <Filter />
               Filtros
               <ChevronDown />
             </button>
+            {state && <FiltersBox />}
           </div>
 
           <div className={styles.tableWrapper}>
             <TableLayout
-              headers={["Nombre", "Codigo", "Cantidad", "Tipo", "Precio uni", ""]}
+              headers={[
+                "Nombre",
+                "Codigo",
+                "Cantidad",
+                "Tipo",
+                "Precio uni",
+                "",
+              ]}
               columns="2.3fr 1fr 0.7fr 0.8fr 0.7fr 0.25fr"
               compactColumns="2fr 1fr 1fr 1fr 1fr 0.5fr"
             >
