@@ -132,7 +132,7 @@ export const sidebarData = [
     description: "Stivcode, Fernando",
   },
   {
-    title: "Inventario",
-    path: "/inventario/registrar",
+    title: "Configuraciones",
+    path: "/settings",
   },
 ];
