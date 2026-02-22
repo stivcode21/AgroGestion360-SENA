@@ -1,0 +1,162 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+
+.modal {
+  width: min(94vw, 420px);
+  max-height: 74vh;
+  overflow: hidden;
+  position: fixed;
+  top: 68px;
+  right: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 24px 55px rgba(15, 23, 42, 0.2);
+  display: flex;
+  flex-direction: column;
+  animation: popIn var(--dynamic-medium-transition);
+}
+
+.header {
+  padding: 0.85rem 0.9rem;
+  border-bottom: 1px solid #edf0f2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.iconWrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #eefbf2;
+  color: var(--verde-primary, #15803d);
+  display: grid;
+  place-items: center;
+}
+
+.title {
+  font-size: 0.98rem;
+  color: #111827;
+}
+
+.counter {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.72rem;
+  display: grid;
+  place-items: center;
+  padding: 0 0.35rem;
+}
+
+.closeButton {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: #374151;
+  display: grid;
+  place-items: center;
+}
+
+.closeButton:hover {
+  background: #f3f4f6;
+}
+
+.actions {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #edf0f2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  border-radius: 10px;
+  padding: 0.5rem 0.55rem;
+  font-size: 0.73rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.primaryButton {
+  background: #15803d;
+  color: #ffffff;
+}
+
+.primaryButton:hover {
+  filter: brightness(0.95);
+}
+
+.secondaryButton {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #e5e7eb;
+}
+
+.secondaryButton:hover {
+  background: #e5e7eb;
+}
+
+.list {
+  padding: 0.78rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.placeholder {
+  min-height: 150px;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.placeholderTitle {
+  font-size: 0.9rem;
+  color: #111827;
+  font-weight: 600;
+}
+
+.placeholderMessage {
+  color: #6b7280;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
