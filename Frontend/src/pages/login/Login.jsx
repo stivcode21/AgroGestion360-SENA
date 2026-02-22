@@ -1,7 +1,7 @@
 import WelcomeLayout from "@/components/templates/welcomeLayout/WelcomeLayout";
 import Logo from "@/components/atoms/logo/Logo";
 import styles from "./Login.module.css";
-import { ArrowRight, Lock, User } from "lucide-react";
+import { ArrowRight, Eye, EyeClosed, Lock, User } from "lucide-react";
 import Button from "@/components/templates/button/Button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { toggleLoader } = useLoader();
 
@@ -94,11 +95,19 @@ const Login = () => {
             Contraseña:
           </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             className={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className={styles.eyeButton}
+          >
+            {showPassword ? <Eye /> : <EyeClosed />}
+          </button>
         </div>
 
         <Button type="primary" onClick={handleSubmit}>

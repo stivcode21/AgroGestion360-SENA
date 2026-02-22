@@ -24,6 +24,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  position: relative;
 }
 
 .label {
@@ -54,4 +55,19 @@ footer {
   color: var(--text-secundary);
   font-size: 12px;
   padding: 0 10px;
+}
+
+.eyeButton {
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+}
+
+.eyeButton:hover {
+  scale: 1.1;
+  transition: all ease-in-out 120ms;
+}
+
+.eyeButton:active {
+  scale: 0.9;
 }
