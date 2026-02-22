@@ -47,7 +47,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
   color: var(--text-secundary);
 }
 
@@ -55,10 +55,36 @@
   cursor: pointer;
 }
 
+.iconButton {
+  position: relative;
+  margin-top: 2px;
+  color: inherit;
+}
+
+.badge {
+  min-width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+}
+
 .item:hover {
   color: var(--verde-primary);
   scale: 1.1;
-  transition: var(--transition-fast);
+  transition: var(--dynamic-fast-transition);
+}
+
+.item:active {
+  scale: 0.9;
 }
 
 .line {
