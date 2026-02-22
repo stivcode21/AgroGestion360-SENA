@@ -11,6 +11,9 @@ const FormInput = ({
   ...rest
 }) => {
   const { pattern } = validation;
+  // comprobar si el select es controlado (tiene prop value) o no, para evitar warning de React
+  const isControlledSelect =
+    select && Object.prototype.hasOwnProperty.call(rest, "value");
   const inputClassName = error
     ? `${styles.input} ${styles.inputError}`
     : styles.input;
@@ -23,7 +26,7 @@ const FormInput = ({
           className={inputClassName}
           name={name}
           id={name}
-          defaultValue=""
+          {...(!isControlledSelect ? { defaultValue: "" } : {})}
           aria-invalid={!!error}
           {...rest}
         >

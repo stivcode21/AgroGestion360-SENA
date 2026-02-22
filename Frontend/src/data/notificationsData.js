@@ -1,0 +1,42 @@
+export const notificationsData = [
+  {
+    id: "notif-1",
+    subject: "Compra de fertilizante NPK 15-15-15",
+    message: "Solicito aprobacion para 10 bultos de NPK para el lote norte.",
+    time: "Hace 3 min",
+    status: "pendiente",
+    read: false,
+  },
+  {
+    id: "notif-2",
+    subject: "Reposicion de alimento para terneros",
+    message: "Se aprobaron 25 bultos y ya fue enviada la orden a compras.",
+    time: "Hace 22 min",
+    status: "aprobada",
+    read: false,
+  },
+  {
+    id: "notif-3",
+    subject: "Compra de mangueras de riego",
+    message: "La solicitud fue rechazada por exceder el presupuesto mensual.",
+    time: "Hace 1 h",
+    status: "rechazada",
+    read: true,
+  },
+  {
+    id: "notif-4",
+    subject: "Repuestos para fumigadora principal",
+    message: "La solicitud esta en revision por parte del area administrativa.",
+    time: "Ayer",
+    status: "pendiente",
+    read: true,
+  },
+  {
+    id: "notif-5",
+    subject: "Botas de seguridad para cuadrilla",
+    message: "Solicitud aprobada. El pedido sera entregado en la semana.",
+    time: "Ayer",
+    status: "aprobada",
+    read: true,
+  },
+];
