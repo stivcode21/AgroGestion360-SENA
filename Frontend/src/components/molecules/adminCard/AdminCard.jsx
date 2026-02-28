@@ -1,4 +1,5 @@
-import { Ellipsis, Mail, Phone } from "lucide-react";
+import { Ellipsis, KeyRound, Mail, Phone, UserX } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./AdminCard.module.css";
 
 const statusClassMap = {
@@ -7,7 +8,24 @@ const statusClassMap = {
   busy: styles.statusBusy,
 };
 
-const AdminCard = ({ admin }) => {
+const AdminCard = ({ admin, onOpenCredentials }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!menuRef.current?.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <article className={styles.card}>
       <header className={styles.top}>
@@ -22,13 +40,43 @@ const AdminCard = ({ admin }) => {
             aria-hidden="true"
           />
         </figure>
-        <button
-          className={styles.menuButton}
-          type="button"
-          aria-label="Opciones"
-        >
-          <Ellipsis size={20} />
-        </button>
+        <div className={styles.menuWrap} ref={menuRef}>
+          <button
+            className={styles.menuButton}
+            type="button"
+            aria-label="Opciones"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+          >
+            <Ellipsis size={20} />
+          </button>
+
+          {isMenuOpen ? (
+            <div className={styles.dropdown}>
+              <button
+                type="button"
+                className={styles.dropdownItem}
+                onClick={() => {  
+                  onOpenCredentials?.({
+                    userId: admin.id,
+                    defaultUsername: admin.username,
+                  });
+                  setIsMenuOpen(false);
+                }}
+              >
+                <KeyRound size={14} />
+                Gestionar credenciales
+              </button>
+              <button
+                type="button"
+                className={styles.dropdownItem}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <UserX size={14} />
+                Inhabilitar
+              </button>
+            </div>
+          ) : null}
+        </div>
       </header>
 
       <section className={styles.identity}>
