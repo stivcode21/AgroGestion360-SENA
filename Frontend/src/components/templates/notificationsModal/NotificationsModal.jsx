@@ -2,6 +2,7 @@ import { Bell, CheckCheck, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import CardNotification from "@/components/molecules/cardNotification/CardNotification";
 import RequestCreate from "@/components/molecules/requestCreate/RequestCreate";
+import NotificationDetails from "@/components/organism/notificationDetails/NotificationDetails";
 import styles from "./NotificationsModal.module.css";
 
 const NotificationsModal = ({
@@ -11,10 +12,28 @@ const NotificationsModal = ({
   onMarkAllRead,
 }) => {
   const [stateContent, setStateContent] = useState("notifications");
+  const [currentDetailsId, setCurrentDetailsId] = useState(() =>
+    typeof window !== "undefined"
+      ? localStorage.getItem("currentDetails")
+      : null,
+  );
 
   const unreadCount = notifications.filter((item) => !item.read).length;
   const isCreateRequestView = stateContent === "createRequest";
+  const isDetailsView = stateContent === "details";
+  const isNotificationsView = stateContent === "notifications";
   const hasNotifications = notifications.length > 0;
+  const selectedNotification = notifications.find(
+    (item) => item.id === currentDetailsId,
+  );
+
+  const handleOpenDetails = (id) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("currentDetails", id);
+    }
+    setCurrentDetailsId(id);
+    setStateContent("details");
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -56,12 +75,12 @@ const NotificationsModal = ({
             className={styles.primaryButton}
             onClick={() =>
               setStateContent((prev) =>
-                prev === "createRequest" ? "notifications" : "createRequest",
+                prev === "notifications" ? "createRequest" : "notifications",
               )
             }
           >
             <Plus size={15} />
-            {isCreateRequestView ? "Ver bandeja" : "Nueva solicitud"}
+            {isNotificationsView ? "Nueva solicitud" : "Ver bandeja"}
           </button>
           <button
             type="button"
@@ -79,9 +98,18 @@ const NotificationsModal = ({
               onCancel={() => setStateContent("notifications")}
               onSubmitRequest={() => setStateContent("notifications")}
             />
+          ) : isDetailsView ? (
+            <NotificationDetails
+              notification={selectedNotification}
+              onBack={() => setStateContent("notifications")}
+            />
           ) : hasNotifications ? (
             notifications.map((item) => (
-              <CardNotification key={item.id} item={item} />
+              <CardNotification
+                key={item.id}
+                item={item}
+                onClick={handleOpenDetails}
+              />
             ))
           ) : (
             <div className={styles.placeholder}>
