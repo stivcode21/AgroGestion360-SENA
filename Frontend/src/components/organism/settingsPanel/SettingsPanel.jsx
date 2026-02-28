@@ -1,4 +1,4 @@
-import { Save } from "lucide-react";
+import { KeyRound, Save } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
@@ -10,7 +10,7 @@ import {
 } from "@/data/settingsProfileData";
 import styles from "./SettingsPanel.module.css";
 
-const SettingsPanel = () => {
+const SettingsPanel = ({ onOpenCredentials }) => {
   const inputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
@@ -61,11 +61,26 @@ const SettingsPanel = () => {
   return (
     <section className={styles.container}>
       <header className={styles.header}>
-        <h2 className={styles.title}>Mi perfil</h2>
-        <p className={styles.subtitle}>
-          Edita tu informacion personal. Recuerda guardar los cambios antes de
-          salir de esta seccion.
-        </p>
+        <div className={styles.headerContent}>
+          <h2 className={styles.title}>Mi perfil</h2>
+          <p className={styles.subtitle}>
+            Edita tu informacion personal. Recuerda guardar los cambios antes de
+            salir de esta seccion.
+          </p>
+        </div>
+        <button
+          type="button"
+          className={styles.credentialsButton}
+          onClick={() =>
+            onOpenCredentials?.({
+              userId: settingsProfileInitialValues.document,
+              defaultUsername: settingsProfileInitialValues.name,
+            })
+          }
+        >
+          <KeyRound size={16} />
+          Gestionar credenciales de acceso
+        </button>
       </header>
 
       <section className={styles.card}>

@@ -6,6 +6,13 @@
 
 .header {
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.headerContent {
+  display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
@@ -19,6 +26,25 @@
 .subtitle {
   color: var(--text-secundary);
   font-size: 0.95rem;
+}
+
+.credentialsButton {
+  border-radius: 10px;
+  border: 1px solid #cdeed9;
+  background: #f3fff7;
+  color: #166534;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.credentialsButton:hover {
+  border-color: #86efac;
+  background: #e7faef;
 }
 
 .card {
@@ -50,6 +76,15 @@
 }
 
 @media (max-width: 980px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .credentialsButton {
+    width: 100%;
+    justify-content: center;
+  }
+
   .inputsGrid {
     grid-template-columns: 1fr;
   }

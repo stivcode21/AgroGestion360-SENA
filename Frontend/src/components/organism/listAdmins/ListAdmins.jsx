@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Button from "@/components/templates/button/Button";
 import { Plus } from "lucide-react";
 
-const ListAdmins = () => {
+const ListAdmins = ({ onOpenCredentials }) => {
   return (
     <section className={styles.container}>
       <header className={styles.header}>
@@ -26,7 +26,11 @@ const ListAdmins = () => {
 
       <section className={styles.grid}>
         {adminsData.map((admin) => (
-          <AdminCard key={admin.id} admin={admin} />
+          <AdminCard
+            key={admin.id}
+            admin={admin}
+            onOpenCredentials={onOpenCredentials}
+          />
         ))}
       </section>
     </section>

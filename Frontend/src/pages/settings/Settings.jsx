@@ -11,8 +11,8 @@ const Settings = () => {
   const [activeView, setActiveView] = useState("settingsPanel");
   const [isCredentialsModalOpen, setIsCredentialsModalOpen] = useState(false);
   const [credentialsTarget, setCredentialsTarget] = useState({
-    userId: settingsProfileInitialValues.document,
-    defaultUsername: settingsProfileInitialValues.name,
+    userId: "",
+    defaultUsername: "",
   });
 
   const views = [
