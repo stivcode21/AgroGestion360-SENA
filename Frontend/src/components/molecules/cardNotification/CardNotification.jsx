@@ -58,9 +58,7 @@ const CardNotification = ({ item, onClick }) => {
         </footer>
       </section>
 
-      {!item.read ? (
-        <span className={styles.unread} aria-label="No leida"></span>
-      ) : null}
+      {!item.read ? <div className={styles.circle}></div> : null}
     </article>
   );
 };
