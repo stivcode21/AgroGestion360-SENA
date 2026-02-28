@@ -1,57 +1,58 @@
 import styles from "./Reportes.module.css";
 import MainLayout from "@/components/templates/mainLayout/MainLayout";
-import Button from "@/components/templates/button/Button";
 import {
-  BarChart3,
   Calendar,
   Download,
   FileText,
-  Filter,
   Package,
-  Search,
-  TrendingUp,
+  PiggyBank,
   Users,
 } from "lucide-react";
 
 const Reportes = () => {
+  const fixedPeriodLabel = "Ultimos 6 meses";
+
   const summaryCards = [
     {
-      label: "Reportes generados",
-      value: "28",
+      label: "Periodo de analisis",
+      value: fixedPeriodLabel,
       icon: <FileText />,
     },
     {
-      label: "Último período",
-      value: "30 días",
+      label: "Tipos de reportes",
+      value: "3 disponibles",
       icon: <Calendar />,
     },
     {
-      label: "Tendencia general",
-      value: "+8%",
-      icon: <TrendingUp />,
+      label: "Cobertura",
+      value: "Datos consolidados",
+      icon: <Package />,
     },
   ];
 
   const reports = [
     {
-      title: "Resumen general",
-      tag: "Mensual",
-      updated: "Actualizado hace 2 días",
-      description: "Producción, costos y estado de las actividades.",
-      icon: <BarChart3 />,
+      title: "Ventas de animales",
+      tag: fixedPeriodLabel,
+      updated: "Incluye todo el historial reciente",
+      description:
+        "Resumen de ventas por especie, cantidad vendida y monto total durante los ultimos 6 meses.",
+      icon: <PiggyBank />,
     },
     {
       title: "Inventario",
-      tag: "Semanal",
-      updated: "Actualizado recientemente",
-      description: "Entradas, salidas y stock crítico de insumos.",
+      tag: fixedPeriodLabel,
+      updated: "Incluye todo el historial reciente",
+      description:
+        "Consolidado de entradas, salidas y niveles de stock de insumos en los ultimos 6 meses.",
       icon: <Package />,
     },
     {
-      title: "Trabajadores",
-      tag: "Quincenal",
-      updated: "Actualizado hace 1 semana",
-      description: "Horas, pagos y rendimiento por equipo.",
+      title: "Pago nomina trabajadores",
+      tag: fixedPeriodLabel,
+      updated: "Incluye todo el historial reciente",
+      description:
+        "Detalle de pagos de nomina, costos por trabajador y totales del periodo de los ultimos 6 meses.",
       icon: <Users />,
     },
   ];
@@ -63,18 +64,8 @@ const Reportes = () => {
           <div>
             <h1 className={styles.title}>Reportes</h1>
             <p className={styles.subtitle}>
-              Visualiza, compara y exporta la información más relevante.
+              Genera y descarga reportes de los ultimos 6 meses.
             </p>
-          </div>
-          <div className={styles.headerActions}>
-            <Button type="secondary">
-              <Download />
-              Exportar
-            </Button>
-            <Button type="three">
-              <FileText />
-              Nuevo reporte
-            </Button>
           </div>
         </header>
 
@@ -91,11 +82,12 @@ const Reportes = () => {
         </section>
 
         <section className={styles.card}>
-          <div className={styles.toolbar}>
-            <div className={styles.search}>
-              <Search className={styles.icon} />
-              <input type="text" placeholder="Buscar reporte" />
-            </div>
+          <div className={styles.periodBanner}>
+            <Calendar />
+            <p>
+              Todos los reportes se generan automaticamente con informacion de
+              los <strong>ultimos 6 meses</strong>.
+            </p>
           </div>
 
           <div className={styles.reportsGrid}>
@@ -121,7 +113,7 @@ const Reportes = () => {
                     <Download />
                   </button>
                   <button className={styles.linkButton} type="button">
-                    Ver detalle
+                    Generar
                   </button>
                 </div>
               </article>
