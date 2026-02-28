@@ -25,12 +25,24 @@ const statusConfig = {
   },
 };
 
-const CardNotification = ({ item }) => {
+const CardNotification = ({ item, onClick }) => {
   const current = statusConfig[item.status] || statusConfig.pendiente;
   const StatusIcon = current.Icon;
+  const handleOpenDetails = () => onClick?.(item.id);
 
   return (
-    <article className={`${styles.card} ${current.cardClass}`}>
+    <article
+      className={`${styles.card} ${current.cardClass}`}
+      onClick={handleOpenDetails}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleOpenDetails();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+    >
       <span className={styles.iconWrap}>
         <StatusIcon size={15} className={current.color} />
       </span>
