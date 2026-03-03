@@ -57,6 +57,8 @@ const Sidebar = () => {
       "/ganaderia/editar/",
       "/porcicultura/registrar",
       "/porcicultura/editar/",
+      "/admin/registrar",
+      "/admin/editar/",
     ];
     const shouldSkip = skipPrefixes.some((path) =>
       location.pathname.startsWith(path),

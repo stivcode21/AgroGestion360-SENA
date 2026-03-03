@@ -87,7 +87,7 @@
   align-items: center;
   gap: 0.65rem;
   padding: 0.75rem 0.9rem;
-  border-radius: 12px;  
+  border-radius: 12px;
   background: #f0fdf4;
   color: #166534;
 }
@@ -126,7 +126,7 @@
   background: #f3f4f6;
   display: grid;
   place-items: center;
-  color: #4b5563;
+  color: #222;
   flex-shrink: 0;
 }
 
@@ -161,7 +161,8 @@
 
 .reportDate {
   font-size: 0.78rem;
-  color: #6b7280;
+  font-weight: 500;
+  color: #2d2f32;
 }
 
 .reportTitle {
@@ -187,7 +188,7 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  border: 1px solid var(--color-border, #dfe3e8);
+  border: 1px solid #57575c;
   background: #ffffff;
   display: grid;
   place-items: center;
@@ -197,7 +198,7 @@
 .iconButton svg {
   width: 16px;
   height: 16px;
-  color: #6b7280;
+  color: #2e2e30;
 }
 
 .iconButton:hover {

@@ -6,7 +6,7 @@
 
 .modal {
   width: min(94vw, 460px);
-  max-height: 74vh;
+  max-height: 80vh;
   overflow: hidden;
   position: fixed;
   top: 70px;
