@@ -1,16 +1,18 @@
-import { Ellipsis, KeyRound, Mail, Phone, UserX } from "lucide-react";
+import { Ellipsis, KeyRound, Mail, Pencil, Phone, UserX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./AdminCard.module.css";
 
-const statusClassMap = {
-  online: styles.statusOnline,
-  offline: styles.statusOffline,
-  busy: styles.statusBusy,
+const docTypeLabelMap = {
+  cc: "CC",
+  ce: "CE",
+  pasaporte: "Pasaporte",
 };
 
 const AdminCard = ({ admin, onOpenCredentials }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -35,10 +37,6 @@ const AdminCard = ({ admin, onOpenCredentials }) => {
             alt={`avatar de ${admin.name}`}
             className={styles.avatar}
           />
-          <span
-            className={`${styles.status} ${statusClassMap[admin.status] ?? styles.statusOffline}`}
-            aria-hidden="true"
-          />
         </figure>
         <div className={styles.menuWrap} ref={menuRef}>
           <button
@@ -55,7 +53,18 @@ const AdminCard = ({ admin, onOpenCredentials }) => {
               <button
                 type="button"
                 className={styles.dropdownItem}
-                onClick={() => {  
+                onClick={() => {
+                  navigate(`/admin/editar/${admin.id}`);
+                  setIsMenuOpen(false);
+                }}
+              >
+                <Pencil size={14} />
+                Editar
+              </button>
+              <button
+                type="button"
+                className={styles.dropdownItem}
+                onClick={() => {
                   onOpenCredentials?.({
                     userId: admin.id,
                     defaultUsername: admin.username,
@@ -86,7 +95,10 @@ const AdminCard = ({ admin, onOpenCredentials }) => {
 
       <section className={styles.description}>
         <p className={styles.name}>{admin.name}</p>
-        <p className={styles.edad}>{admin.edad}</p>
+        <p className={styles.edad}>{admin.age} años</p>
+        <p className={styles.document}>
+          {docTypeLabelMap[admin.docType] ?? "Documento"}: {admin.document}
+        </p>
       </section>
 
       <footer className={styles.contact}>
