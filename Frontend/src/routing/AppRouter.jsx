@@ -15,6 +15,7 @@ import WorkerForm from "@/pages/workerForm/WorkerForm";
 import ActivityForm from "@/pages/activityForm/ActivityForm";
 import GanaderiaForm from "@/pages/ganaderiaForm/GanaderiaForm";
 import PorciculturaForm from "@/pages/porciculturaForm/PorciculturaForm";
+import AdminForm from "@/pages/adminForm/AdminForm";
 import { checkAuth } from "../utils/auth";
 import Settings from "../pages/settings/Settings";
 
@@ -77,6 +78,10 @@ const AppRouter = () => {
         path="/porcicultura/registrar"
         element={<PorciculturaForm title="Registrar porcino" />}
       />
+      <Route
+        path="/admin/registrar"
+        element={<AdminForm title="Registrar administrador" />}
+      />
 
       {/* rutas dinamicas el id se obtiene de la url */}
       <Route
@@ -98,6 +103,10 @@ const AppRouter = () => {
       <Route
         path="/inventario/editar/:id"
         element={<ProductForm title="Editar Producto" />}
+      />
+      <Route
+        path="/admin/editar/:id"
+        element={<AdminForm title="Editar administrador" />}
       />
     </Routes>
   );
