@@ -114,6 +114,9 @@ const Login = () => {
           iniciar sesión
           <ArrowRight />
         </Button>
+        <a href="/aaaaa" className={styles.link}>
+          ¿olvidaste tu contraseña?
+        </a>
       </form>
       <footer className={styles.footer}>
         Accede como dueño o administrador según tus credenciales
