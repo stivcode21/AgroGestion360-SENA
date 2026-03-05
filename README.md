@@ -1,37 +1,45 @@
 # AgroGestion360
-Sistema integral para administracion de fincas ganaderas, porcinas, agricolas y piscicolas.
+Sistema para la gestion integral de fincas (ganaderia, porcicultura, inventario, actividades y administracion de personal).
 
 ## Vision general
-AgroGestion360 centraliza la gestion operativa de una finca en un solo lugar. El foco actual del repositorio es el frontend, con una base preparada para agregar un backend mas adelante.
+El repositorio contiene un frontend SPA en React y una base inicial de backend en PHP. El frontend ya integra autenticacion por sesion (cookie httpOnly), navegacion por rutas y modulos operativos por dominio.
 
-## Modulos funcionales (vista general)
-- Usuarios y autenticacion
+## Modulos funcionales
+- Autenticacion y control de sesion
+- Dashboard
+- Inventario
+- Reportes
+- Trabajadores
+- Actividades
 - Ganaderia
 - Porcicultura
-- Inventario de insumos
-- Actividades y mantenimiento
-- Trabajadores
-- Reportes
+- Configuraciones (perfil y administradores)
 
-## Stack
-- Frontend: React 19, Vite 7, React Router, Zustand, Lucide
-- Backend: carpeta `Backend/` en estado inicial (sin API definida)
+## Stack actual
+- Frontend: React 19, Vite 7, React Router DOM 7, Zustand, Lucide React, Recharts, react-hot-toast
+- Backend (base): PHP en `Backend/` (sin API productiva completa)
 
 ## Requisitos
-- Node.js (LTS recomendado) y npm
+- Node.js LTS
+- npm
 
-## Instalacion y uso (frontend)
+## Instalacion y ejecucion (Frontend)
 ```bash
 cd Frontend
 npm install
 npm run dev
 ```
 
-## Scripts utiles (frontend)
-- `npm run dev`: desarrollo local
+## Scripts utiles
+- `npm run dev`: servidor de desarrollo
 - `npm run build`: build de produccion
-- `npm run preview`: previsualizacion del build
-- `npm run lint`: lint del codigo
+- `npm run preview`: vista local del build
+- `npm run lint`: analisis estatico
+
+## Variable de entorno
+El frontend construye URLs con `VITE_API_BASE_URL`.
+Si no se define, usa por defecto:
+`http://localhost:3001/api`
 
 ## Estructura del repositorio
 ```txt
@@ -39,11 +47,11 @@ npm run dev
 /Frontend
 /doc
 README.md
-PROYECTO.md
 ```
 
 ## Documentacion adicional
-- Detalles de arquitectura, componentes y flujo de la app: `PROYECTO.md`
+- Documento tecnico detallado: `doc/PROYECTO.md`
+- Guia del frontend: `Frontend/README.md`
 
 ## Licencia
 No definida.
