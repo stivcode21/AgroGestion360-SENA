@@ -2,7 +2,7 @@ import { buildApiUrl } from "./apiBase";
 
 export const checkAuth = async () => {
   try {
-    const res = await fetch(buildApiUrl("auth/dashboard"), {
+    const res = await fetch(buildApiUrl("auth/verify"), {
       method: "GET",
       credentials: "include",
     });
@@ -10,7 +10,7 @@ export const checkAuth = async () => {
     if (!res.ok) return false;
 
     const data = await res.json();
-    return data?.user ? true : false;
+    return data;
   } catch (error) {
     return false;
   }
