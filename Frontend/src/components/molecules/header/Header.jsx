@@ -5,9 +5,12 @@ import { Bell, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getColombiaDate } from "@/utils/getColombiaDate";
 import { settingsProfileInitialValues } from "@/data/settingsProfileData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NotificationsModal from "@/components/templates/notificationsModal/NotificationsModal";
 import { notificationsData } from "@/data/notificationsData";
+import { checkAuth } from "@/utils/auth";
+import { useUserStore } from "@/store/userStore";
+import { buildApiUrl } from "@/utils/apiBase";
 
 const Header = () => {
   const { currentSection, isCollapsed, isDesktop } = useSidebarStore();
@@ -15,6 +18,7 @@ const Header = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState(notificationsData);
   const unreadCount = notifications.filter((item) => !item.read).length;
+  const { user, setUser } = useUserStore();
 
   const toggleNotifications = () => {
     setIsNotificationsOpen((prev) => !prev);
@@ -24,6 +28,30 @@ const Header = () => {
     // Marcar todas las notificaciones como leídas
     setNotifications((prev) => prev.map((item) => ({ ...item, read: true })));
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      const data = await checkAuth();
+      const user = data?.user;
+
+      const res = await fetch(buildApiUrl("auth/user"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo: user.email }),
+      });
+      const datauser = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+        return;
+      }
+
+      if (datauser?.user) {
+        setUser(datauser?.user);
+      }
+    };
+    getUser();
+  }, []);
 
   return (
     <header className={`${styles.header} ${isCollapsed && styles.collapsed}`}>
@@ -58,14 +86,14 @@ const Header = () => {
         <section className={styles.containerUser}>
           {isDesktop ? (
             <div className={styles.description}>
-              <h3>{settingsProfileInitialValues.name}</h3>
-              <span>{settingsProfileInitialValues.role}</span>
+              <h3>{user?.nombre_completo}</h3>
+              <span>{user?.id_rol === 1 ? "Dueño" : "Administrador"}</span>
             </div>
           ) : (
             ""
           )}
           <img
-            src={settingsProfileInitialValues.avatar}
+            src={user?.url_img || settingsProfileInitialValues.avatar}
             className={styles.avatar}
             alt="foto de perfil usuario"
           />
