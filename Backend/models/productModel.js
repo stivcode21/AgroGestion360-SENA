@@ -84,7 +84,21 @@ exports.createProduct = async (productData) => {
 
 exports.getProductById = async (id) => {
   const query = `
-    SELECT * FROM inventario WHERE id_insumo = $1
+    SELECT
+        i.id_insumo,
+        t.nombre AS tipo,
+        i.nombre,
+        i.marca,
+        i.cantidad,
+        i.fecha_registro,
+        i.fecha_vencimiento,
+        i.unidad_medida,
+        i.proveedor,
+        i.precio_unitario,
+        i.observaciones
+      FROM inventario i
+      JOIN tipo_insumo t
+      ON i.id_tipo = t.id_tipo WHERE i.id_insumo = $1
   `;
 
   const { rows } = await db.query(query, [id]);
