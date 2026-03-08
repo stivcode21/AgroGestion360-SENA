@@ -7,6 +7,7 @@ exports.getProductsPaginated = async (page) => {
   const productsQuery = `
       SELECT
         i.id_insumo,
+        i.id_tipo,
         t.nombre AS tipo,
         i.nombre,
         i.marca,
@@ -86,6 +87,7 @@ exports.getProductById = async (id) => {
   const query = `
     SELECT
         i.id_insumo,
+        i.id_tipo,
         t.nombre AS tipo,
         i.nombre,
         i.marca,
@@ -161,3 +163,5 @@ exports.deleteProduct = async (id) => {
   const { rows } = await db.query(query, [id]);
   return rows[0] || null;
 };
+
+

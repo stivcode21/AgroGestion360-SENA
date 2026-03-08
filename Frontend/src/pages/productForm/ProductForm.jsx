@@ -60,7 +60,7 @@ const ProductForm = ({ title }) => {
 
         setFormData({
           name: product.nombre ?? "",
-          type: String(product.tipo ?? ""),
+          type: String(product.id_tipo ?? ""),
           brand: product.marca ?? "",
           amount: String(product.cantidad ?? ""),
           expiration: formatDate(product.fecha_vencimiento),
@@ -135,7 +135,7 @@ const ProductForm = ({ title }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nombre: formData.name.trim(),
-          id_tipo: Number(formData.type), //el select devuelve un string, pero el backend espera un numero
+          id_tipo: Number(formData.type),
           marca: formData.brand || null,
           cantidad: Number(formData.amount),
           fecha_vencimiento: formData.expiration || null,
