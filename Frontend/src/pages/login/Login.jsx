@@ -10,7 +10,7 @@ import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -20,18 +20,18 @@ const Login = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     //validacion para no enviar vacio
-    if (!user.trim()) {
-      toast.error("Por favor, ingresa tu usuario.");
+    if (!email.trim()) {
+      toast.error("Por favor, ingresa tu correo electrónico.");
       return false;
     }
     if (!password.trim()) {
       toast.error("Por favor, ingresa tu contraseña.");
       return false;
     }
-    // if (!emailRegex.test(user)) {
-    //   toast.error("El user no cumple con el formato requerido");
-    //   return false;
-    // }
+    if (!emailRegex.test(email)) {
+      toast.error("El correo electrónico no cumple con el formato requerido");
+      return false;
+    }
 
     return true;
   };
@@ -46,11 +46,11 @@ const Login = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // importante para que guarde la cookie
-        body: JSON.stringify({ admin: user, password }),
+        body: JSON.stringify({ email: email, password }),
       });
 
       const data = await res.json();
-      console.log(data);
+
       if (!res.ok) {
         toast.error(data.message);
         return;
@@ -78,13 +78,13 @@ const Login = () => {
             <i className={styles.icon}>
               <User />
             </i>
-            Usuario:
+            Correo electronico:
           </label>
           <input
-            type="text"
+            type="email"
             className={styles.input}
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className={styles.containerInput}>

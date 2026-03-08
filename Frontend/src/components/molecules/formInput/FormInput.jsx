@@ -19,8 +19,8 @@ const FormInput = ({
     : styles.input;
 
   return (
-    <label className={styles.field} htmlFor={name}>
-      <span className={styles.label}>{label}</span>
+    <div className={styles.field} htmlFor={name}>
+      <label className={styles.label}>{label}</label>
       {select ? (
         <select
           className={inputClassName}
@@ -57,7 +57,7 @@ const FormInput = ({
         />
       )}
       {error && <small className={styles.error}>{error}</small>}
-    </label>
+    </div>
   );
 };
 

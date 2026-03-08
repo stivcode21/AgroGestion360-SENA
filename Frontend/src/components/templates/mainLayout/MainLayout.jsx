@@ -18,6 +18,7 @@ const MainLayout = ({ children }) => {
   const { isOpenModal } = useModalStore();
 
   const location = useLocation();
+  // dependinedo la ruta mapeamos componentes de detalle para mostrar en el modal
   const detailRoutes = [
     { path: "/inventario", component: ProductDetails },
     { path: "/trabajadores", component: WokerDetails },

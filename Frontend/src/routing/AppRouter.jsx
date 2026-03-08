@@ -16,7 +16,7 @@ import ActivityForm from "@/pages/activityForm/ActivityForm";
 import GanaderiaForm from "@/pages/ganaderiaForm/GanaderiaForm";
 import PorciculturaForm from "@/pages/porciculturaForm/PorciculturaForm";
 import AdminForm from "@/pages/adminForm/AdminForm";
-import { checkAuth } from "../utils/auth";
+import { checkAuth } from "@/utils/auth";
 import Settings from "../pages/settings/Settings";
 
 const AppRouter = () => {
@@ -25,7 +25,8 @@ const AppRouter = () => {
 
   useEffect(() => {
     const verifySession = async () => {
-      const loggedIn = await checkAuth();
+      const data = await checkAuth();
+      const loggedIn = data?.user ? true : false;
       const publicRoutes = ["/", "/login"];
       const isPublic = publicRoutes.includes(location.pathname);
 
