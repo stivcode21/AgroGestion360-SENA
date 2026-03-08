@@ -1,8 +1,8 @@
 import { Trash2, Pencil } from "lucide-react";
-import { inventoryItems } from "@/data/inventoryData";
 import styles from "./ProductDetails.module.css";
 import { useModalStore } from "@/store/modalStore";
 import { Link } from "react-router-dom";
+import { formatDate } from "@/utils/formatDate";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -12,9 +12,8 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 
 const ProductDetails = () => {
   const { selectProduct, setIsOpenModal } = useModalStore();
-  const product = inventoryItems.find((item) => item.code === selectProduct);
 
-  if (!product) {
+  if (!selectProduct) {
     return (
       <div className={styles.container}>
         <p className={styles.empty}>No se encontraron datos del producto.</p>
@@ -22,25 +21,13 @@ const ProductDetails = () => {
     );
   }
 
-  const {
-    code,
-    name,
-    brand,
-    type,
-    quantity,
-    unit,
-    price,
-    registeredAt,
-    updatedAt,
-    description,
-    image,
-  } = product;
-
-  const formattedPrice = currencyFormatter.format(price || 0);
+  const formattedPrice = currencyFormatter.format(
+    selectProduct.precio_unitario || 0,
+  );
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.productCode}>{code}</h2>
+      <h2 className={styles.productCode}>{selectProduct.id_insumo}</h2>
 
       <header className={styles.header}>
         <h3 className={styles.sectionTitle}>Detalles</h3>
@@ -55,7 +42,7 @@ const ProductDetails = () => {
             className={styles.action}
             onClick={() => setIsOpenModal(false)}
           >
-            <Link to={`/inventario/editar/${code}`}>
+            <Link to={`/inventario/editar/${selectProduct.id_insumo}`}>
               <Pencil className={styles.icon} />
               <span>Editar</span>
             </Link>
@@ -67,23 +54,31 @@ const ProductDetails = () => {
         <div className={styles.detailCard}>
           <div className={styles.row}>
             <span className={styles.label}>Nombre</span>
-            <span className={styles.value}>{name}</span>
+            <span className={styles.value}>{selectProduct.nombre}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Marca</span>
-            <span className={styles.value}>{brand}</span>
+            <span className={styles.value}>{selectProduct.marca}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Tipo</span>
-            <span className={styles.value}>{type}</span>
+            <span className={styles.value}>{selectProduct.tipo}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Cantidad</span>
-            <span className={styles.value}>{quantity}</span>
+            <span className={styles.value}>{selectProduct.cantidad}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>U/medida</span>
-            <span className={styles.value}>{unit || "N/A"}</span>
+            <span className={styles.value}>
+              {selectProduct.unidad_medida || "N/A"}
+            </span>
+          </div>
+          <div className={styles.row}>
+            <span className={styles.label}>Proveedor</span>
+            <span className={styles.value}>
+              {selectProduct.proveedor || "Ninguno"}
+            </span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Precio unitario</span>
@@ -91,16 +86,20 @@ const ProductDetails = () => {
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Fecha registro</span>
-            <span className={styles.value}>{registeredAt || "--"}</span>
+            <span className={styles.value}>
+              {formatDate(selectProduct.fecha_registro) || "--"}
+            </span>
           </div>
           <div className={styles.row}>
-            <span className={styles.label}>Ultima actualizacion</span>
-            <span className={styles.value}>{updatedAt || "--"}</span>
+            <span className={styles.label}>fecha vencimiento</span>
+            <span className={styles.value}>
+              {formatDate(selectProduct.fecha_vencimiento) || "--"}
+            </span>
           </div>
           <div className={`${styles.row} ${styles.descriptionRow}`}>
             <span className={styles.label}>Descripcion</span>
             <p className={styles.description}>
-              {description ||
+              {selectProduct.observaciones ||
                 "Sin descripcion. Agrega detalles para este producto."}
             </p>
           </div>
@@ -108,8 +107,12 @@ const ProductDetails = () => {
             <span className={styles.label}>Imagen</span>
             <div className={styles.imageWrapper}>
               <div className={styles.imageCard}>
-                {image ? (
-                  <img src={image} alt={name} loading="lazy" />
+                {selectProduct.url_img ? (
+                  <img
+                    src={selectProduct.url_img}
+                    alt={selectProduct.nombre}
+                    loading="lazy"
+                  />
                 ) : (
                   <span className={styles.imageBadge}>Sin imagen</span>
                 )}
