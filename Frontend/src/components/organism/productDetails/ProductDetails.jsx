@@ -3,6 +3,10 @@ import styles from "./ProductDetails.module.css";
 import { useModalStore } from "@/store/modalStore";
 import { Link } from "react-router-dom";
 import { formatDate } from "@/utils/formatDate";
+import { buildApiUrl } from "@/utils/apiBase";
+import toast from "react-hot-toast";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
+import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -11,7 +15,50 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 });
 
 const ProductDetails = () => {
-  const { selectProduct, setIsOpenModal } = useModalStore();
+  const { selectProduct, setSelectProduct, setIsOpenModal } = useModalStore();
+  const { toggleLoader } = useLoader();
+  const { openActionModal } = useActionModal();
+
+  const handleDeleteConfirm = async () => {
+    if (!selectProduct?.id_insumo) return;
+
+    try {
+      toggleLoader(true);
+      const res = await fetch(
+        buildApiUrl(`product/delete/${selectProduct.id_insumo}`),
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(data.message);
+      setSelectProduct(null);
+      setIsOpenModal(false);
+    } catch (error) {
+      console.error("Error al eliminar producto:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
+  };
+
+  const openDeleteModal = () => {
+    openActionModal({
+      variant: "delete",
+      title: "Quieres eliminar",
+      titleSuffix: "",
+      highlight: selectProduct?.nombre,
+      description: "Esta accion eliminara el producto permanentemente.",
+      onConfirm: handleDeleteConfirm,
+    });
+  };
 
   if (!selectProduct) {
     return (
@@ -33,7 +80,11 @@ const ProductDetails = () => {
         <h3 className={styles.sectionTitle}>Detalles</h3>
 
         <div className={styles.actions}>
-          <button type="button" className={styles.action}>
+          <button
+            type="button"
+            className={styles.action}
+            onClick={openDeleteModal}
+          >
             <Trash2 className={styles.icon} />
             <span>Eliminar</span>
           </button>
