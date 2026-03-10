@@ -3,30 +3,29 @@ import Logo from "@/components/atoms/logo/Logo";
 import styles from "./Sidebar.module.css";
 import { sidebarData } from "@/data/sidebarData";
 import { useSidebarStore } from "@/store/sidebarStore";
+import { useUserStore } from "@/store/userStore";
 import { useLocation, useNavigate } from "react-router-dom";
 import cowMarcage from "@/assets/img/cowMarcaAgua.png";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import NavList from "@/components/molecules/navList/NavList";
-import ActionModal from "@/components/templates/actionModal/ActionModal";
 import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
+import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 
 const Sidebar = () => {
   const { currentSection, setCurrentSection, isCollapsed, toggleCollapsed } =
     useSidebarStore();
   const location = useLocation();
   const navigate = useNavigate();
-  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-
-  const exitSecion = () => {
-    setIsLogoutOpen(true);
-  };
+  const { clearUser } = useUserStore();
+  const { openActionModal } = useActionModal();
+  const { user } = useUserStore();
 
   const handleLogoutConfirm = async () => {
     try {
       const res = await fetch(buildApiUrl("auth/logout"), {
-        method: "POST", // usamos POST para cerrar sesión
-        credentials: "include", // importante para que la cookie httpOnly se envíe
+        method: "POST",
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -36,16 +35,27 @@ const Sidebar = () => {
         return;
       }
 
+      clearUser();
       toast.success(data.message);
-      navigate("/"); // redirige al inicio o login
+      navigate("/");
     } catch (error) {
       console.error("Error en logout:", error);
       toast.error("Error", "Ha ocurrido un error inesperado.");
     }
   };
 
+  const exitSecion = () => {
+    openActionModal({
+      variant: "logout",
+      title: "Quieres cerrar sesion",
+      titleSuffix: "",
+      highlight: user?.nombre_completo,
+      description: "Esta accion te llevara a la pagina de inicio.",
+      onConfirm: handleLogoutConfirm,
+    });
+  };
+
   useEffect(() => {
-    // Mantiene la seccion activa sincronizada con la ruta actual, salvo en rutas excluidas (formularios)
     const skipPrefixes = [
       "/inventario/registrar",
       "/inventario/editar/",
@@ -87,7 +97,7 @@ const Sidebar = () => {
             <div key={i}>
               <button
                 className={`${styles.item} ${styles.exit}`}
-                onClick={() => exitSecion()}
+                onClick={exitSecion}
               >
                 {item.icon}
                 {isCollapsed ? "" : item.title}
@@ -97,18 +107,9 @@ const Sidebar = () => {
           ))}
         </nav>
       </section>
-      <ActionModal
-        isOpen={isLogoutOpen}
-        variant="logout"
-        title="Quieres cerrar sesion"
-        highlight={sidebarData[7]?.description}
-        description="Esta accion te llevara a la pagina de inicio."
-        onCancel={() => setIsLogoutOpen(false)}
-        onConfirm={handleLogoutConfirm}
-      />
       {<img src={cowMarcage} alt="decorative" className={styles.decorative} />}
     </section>
   );
-};
+};  
 
 export default Sidebar;
