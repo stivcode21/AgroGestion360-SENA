@@ -64,6 +64,7 @@ CREATE TABLE usuarios (
 CREATE TABLE trabajadores (
     id_trabajador INT PRIMARY KEY AUTO_INCREMENT,
     nombre_completo VARCHAR(50) NOT NULL,
+    url_img VARCHAR(300),
     id_tipo_documento INT NOT NULL,
     numero_documento VARCHAR(20) NOT NULL,
     celular VARCHAR(20) NOT NULL,
@@ -78,6 +79,7 @@ CREATE TABLE trabajadores (
 CREATE TABLE inventario (
     id_insumo INT PRIMARY KEY AUTO_INCREMENT,
     id_tipo INT NOT NULL,
+    url_img VARCHAR(300),
     nombre VARCHAR(50) NOT NULL,
     marca VARCHAR(50) ,
     cantidad INT NOT NULL,
@@ -92,6 +94,7 @@ CREATE TABLE inventario (
 
 CREATE TABLE ganaderia (
     id_animal INT PRIMARY KEY AUTO_INCREMENT,
+    url_img VARCHAR(300),
     fecha_ingreso DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_tipo INT NOT NULL,
     id_tipo_origen INT NOT NULL,
@@ -108,6 +111,7 @@ CREATE TABLE ganaderia (
 
 CREATE TABLE porcicultura (
     id_animal INT PRIMARY KEY AUTO_INCREMENT,
+    url_img VARCHAR(300),
     fecha_ingreso DATETIME DEFAULT CURRENT_TIMESTAMP,
     fecha_nacimiento DATETIME,
     peso_inicial DECIMAL(10,2) NOT NULL,
