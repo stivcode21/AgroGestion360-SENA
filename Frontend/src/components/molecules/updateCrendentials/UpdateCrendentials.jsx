@@ -3,48 +3,39 @@ import { Eye, EyeOff, KeyRound, X } from "lucide-react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import styles from "./UpdateCrendentials.module.css";
 
-const initialFormValues = {
-  username: "",
-  newPassword: "",
-  confirmPassword: "",
-};
-
-const UpdateCrendentials = ({
-  isOpen,
-  userId,
-  defaultUsername = "",
-  onClose,
-  onSubmit,
-}) => {
-  const [formData, setFormData] = useState({
-    ...initialFormValues,
-    username: defaultUsername,
-  });
+const UpdateCrendentials = ({ isOpen, userId, defaultUsername = "", onClose }) => {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const resetForm = () => {
+    setNewPassword("");
+    setConfirmPassword("");
+    setErrors({});
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
+  };
+
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        ...initialFormValues,
-        username: defaultUsername,
-      });
-      setErrors({});
-      setShowNewPassword(false);
-      setShowConfirmPassword(false);
+      resetForm();
     }
-  }, [isOpen, defaultUsername, userId]);
+  }, [isOpen, userId]);
 
   if (!isOpen) return null;
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name === "newPassword") {
+      setNewPassword(value);
+    }
+
+    if (name === "confirmPassword") {
+      setConfirmPassword(value);
+    }
 
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -52,29 +43,26 @@ const UpdateCrendentials = ({
   };
 
   const handleClose = () => {
-    setFormData({
-      ...initialFormValues,
-      username: defaultUsername,
-    });
-    setErrors({});
-    setShowNewPassword(false);
-    setShowConfirmPassword(false);
+    resetForm();
     onClose?.();
   };
 
-  const handleSubmit = (event) => {
+  const simulateUpdateCredentials = async ({ userId, username, newPassword }) => {
+    // Reemplaza esta simulacion por tu fetch PUT cuando conectes la API.
+    // Ejemplo: await fetch(buildApiUrl(`auth/editadmin/${userId}`), { method: "PUT", ... })
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    console.log("[SIMULACION PUT] Actualizar credenciales:", {
+      userId,
+      username,
+      newPassword,
+    });
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const nextErrors = {};
-    const trimmedUsername = formData.username.trim();
-    const newPassword = formData.newPassword;
-    const confirmPassword = formData.confirmPassword;
-
-    if (!trimmedUsername) {
-      nextErrors.username = "Campo obligatorio";
-    } else if (trimmedUsername.length < 3) {
-      nextErrors.username = "Minimo 3 caracteres";
-    }
+    const trimmedUsername = defaultUsername.trim();
 
     if (!newPassword) {
       nextErrors.newPassword = "Campo obligatorio";
@@ -93,7 +81,7 @@ const UpdateCrendentials = ({
       return;
     }
 
-    onSubmit?.({
+    await simulateUpdateCredentials({
       userId,
       username: trimmedUsername,
       newPassword,
@@ -128,25 +116,20 @@ const UpdateCrendentials = ({
           <p className={styles.userMeta}>
             ID usuario: <span className={styles.userId}>{userId}</span>
           </p>
+          <p className={styles.userMeta}>
+            Nombre de usuario:{" "}
+            <span className={styles.userId}>{defaultUsername}</span>
+          </p>
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          <FormInput
-            label="Cambiar username *"
-            name="username"
-            placeholder="Ej. juan_eduardo43"
-            value={formData.username}
-            onChange={handleChange}
-            error={errors.username}
-          />
-
           <div className={styles.passwordField}>
             <FormInput
               label="Nueva contrasena *"
               name="newPassword"
               placeholder="Minimo 8 caracteres"
               type={showNewPassword ? "text" : "password"}
-              value={formData.newPassword}
+              value={newPassword}
               onChange={handleChange}
               error={errors.newPassword}
             />
@@ -170,7 +153,7 @@ const UpdateCrendentials = ({
               name="confirmPassword"
               placeholder="Repite la contrasena"
               type={showConfirmPassword ? "text" : "password"}
-              value={formData.confirmPassword}
+              value={confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
             />
