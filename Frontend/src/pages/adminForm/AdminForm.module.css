@@ -94,6 +94,10 @@
   background: var(--surface-primary);
 }
 
+.inputError {
+  border-color: #dc2626;
+}
+
 .eyeButton {
   position: absolute;
   right: 14px;
@@ -107,6 +111,11 @@
 
 .eyeButton:active {
   scale: 0.9;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.8rem;
 }
 
 @media (max-width: 960px) {
