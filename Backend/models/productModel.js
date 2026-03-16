@@ -153,7 +153,7 @@ exports.updateProduct = async (id, productData) => {
   return rows[0] || null;
 };
 
-exports.deleteProduct = async (id) => {
+exports.deleteProductModel = async (id) => {
   const query = `
     DELETE FROM inventario
     WHERE id_insumo = $1
@@ -164,4 +164,68 @@ exports.deleteProduct = async (id) => {
   return rows[0] || null;
 };
 
+exports.filterProductsPaginatedModel = async (page, tipo, orden) => {
+  const limit = 10;
+  const offset = (page - 1) * limit;
 
+  let baseQuery = `
+    FROM inventario i
+    JOIN tipo_insumo t
+    ON i.id_tipo = t.id_tipo
+  `;
+
+  const values = [];
+  const condiciones = [];
+
+  if (tipo) {
+    values.push(tipo);
+    condiciones.push(`i.id_tipo = $${values.length}`);
+  }
+
+  if (condiciones.length > 0) {
+    baseQuery += ` WHERE ` + condiciones.join(" AND ");
+  }
+
+  let orderClause = ` ORDER BY i.id_insumo`;
+
+  if (orden === "recientes") {
+    orderClause = ` ORDER BY i.fecha_registro DESC`;
+  }
+
+  if (orden === "az") {
+    orderClause = ` ORDER BY i.nombre ASC`;
+  }
+
+  const productsQuery = `
+    SELECT
+      i.id_insumo,
+      i.id_tipo,
+      t.nombre AS tipo,
+      i.nombre,
+      i.marca,
+      i.cantidad,
+      i.fecha_registro,
+      i.fecha_vencimiento,
+      i.unidad_medida,
+      i.proveedor,
+      i.precio_unitario,
+      i.observaciones
+    ${baseQuery}
+    ${orderClause}
+    LIMIT $${values.length + 1} OFFSET $${values.length + 2}
+  `;
+
+  const countQuery = `
+    SELECT COUNT(*) AS total
+    ${baseQuery}
+  `;
+
+  const products = await db.query(productsQuery, [...values, limit, offset]);
+  const total = await db.query(countQuery, values);
+
+  return {
+    products: products.rows,
+    total: parseInt(total.rows[0].total, 10),
+    limit,
+  };
+};

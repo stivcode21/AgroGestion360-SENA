@@ -3,7 +3,8 @@ const {
   createProduct,
   getProductById,
   updateProduct,
-  deleteProduct,
+  deleteProductModel,
+  filterProductsPaginatedModel,
 } = require("../models/productModel");
 
 exports.listProducts = async (req, res) => {
@@ -26,7 +27,7 @@ exports.listProducts = async (req, res) => {
   }
 };
 
-exports.createProduct = async (req, res) => {
+exports.postProduct = async (req, res) => {
   try {
     const {
       nombre,
@@ -105,7 +106,7 @@ exports.editProduct = async (req, res) => {
       return res.status(404).json({ message: "Producto no encontrado." });
     }
 
-    // se pasan lo dos existentes y luego sobre escribimo con los datos del body
+    // se pasan los datos existentes y luego sobre escribimo con los datos del body
     const updated = await updateProduct(id, {
       ...existing,
       ...req.body,
@@ -130,7 +131,7 @@ exports.deleteProduct = async (req, res) => {
       return res.status(400).json({ message: "ID de producto invalido." });
     }
 
-    const deleted = await deleteProduct(id);
+    const deleted = await deleteProductModel(id);
 
     if (!deleted) {
       return res.status(404).json({ message: "Producto no encontrado." });
@@ -143,5 +144,25 @@ exports.deleteProduct = async (req, res) => {
   } catch (error) {
     console.error("Error al eliminar producto:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.filterProductsPaginated = async (req, res) => {
+  try {
+    const page = parseInt(req.params.page, 10) || 1;
+    const { tipo, orden } = req.query;
+
+    const result = await filterProductsPaginatedModel(page, tipo, orden);
+
+    res.json({
+      page,
+      limit: result.limit,
+      total: result.total,
+      totalPages: Math.ceil(result.total / result.limit),
+      data: result.products,
+    });
+  } catch (error) {
+    console.error("Error al filtrar productos:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
   }
 };
