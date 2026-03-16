@@ -10,7 +10,6 @@ const FormInput = ({
   error,
   ...rest
 }) => {
-  const { pattern } = validation;
   // comprobar si el select es controlado (tiene prop value) o no, para evitar warning de React
   const isControlledSelect =
     select && Object.prototype.hasOwnProperty.call(rest, "value");
@@ -50,7 +49,6 @@ const FormInput = ({
           name={name}
           id={name}
           placeholder={placeholder}
-          pattern={pattern}
           type={type}
           aria-invalid={!!error}
           {...rest}
