@@ -4,7 +4,6 @@ import SettingsPanel from "@/components/organism/settingsPanel/SettingsPanel";
 import ListAdmins from "@/components/organism/listAdmins/ListAdmins";
 import UpdateCrendentials from "@/components/molecules/updateCrendentials/UpdateCrendentials";
 import { UserRound, UsersRound } from "lucide-react";
-import { settingsProfileInitialValues } from "@/data/settingsProfileData";
 import styles from "./Settings.module.css";
 
 const Settings = () => {
@@ -24,7 +23,7 @@ const Settings = () => {
     },
   ];
 
-  const handleOpenCredentials = ({ userId, defaultUsername }) => {
+  const handleOpenCredentials = (userId, defaultUsername = "") => {
     setCredentialsTarget({ userId, defaultUsername });
     setIsCredentialsModalOpen(true);
   };
