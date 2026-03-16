@@ -1,8 +1,8 @@
 export const settingsProfileInputFields = [
   {
     name: "name",
-    label: "username *",
-    placeholder: "Ej. Pepito_Perez32",
+    label: "Nombre completo *",
+    placeholder: "Ej. Pepito Perez",
   },
   { name: "age", label: "Edad *", placeholder: "Ej. 28", type: "number" },
   {
@@ -11,9 +11,9 @@ export const settingsProfileInputFields = [
     placeholder: "Selecciona un tipo",
     select: {
       options: [
-        { label: "Cedula de ciudadania", value: "cc" },
-        { label: "Cedula de extranjeria", value: "ce" },
-        { label: "Pasaporte", value: "pasaporte" },
+        { label: "Cedula de ciudadania", value: "1" },
+        { label: "Cedula de extranjeria", value: "2" },
+        { label: "Pasaporte", value: "3" },
       ],
     },
   },
@@ -28,6 +28,18 @@ export const settingsProfileInputFields = [
     label: "Rol *",
     placeholder: "Ej. Administrador",
     type: "text",
+  },
+  {
+    name: "phone",
+    label: "Numero de celular *",
+    placeholder: "Ej. 313821...",
+    type: "number",
+  },
+  {
+    name: "email",
+    label: "Correo electronico *",
+    placeholder: "Ej. admin@agrogestion.com",
+    type: "email",
   },
 ];
 
@@ -119,32 +131,8 @@ export const settingsProfileFieldValidations = {
     pattern: /^\d{10}$/,
     message: "Ingresa exactamente 10 digitos",
   },
-  familyPhone: {
-    pattern: /^\d{10}$/,
-    message: "Telefono familiar de 10 digitos",
-  },
   email: {
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     message: "Correo electronico invalido",
   },
-  address: {
-    pattern: /^(?=.*\S).{4,}$/,
-    message: "Ingresa minimo 4 caracteres",
-  },
-};
-
-export const settingsProfileInitialValues = {
-  name: "Juan_Eduardo43",
-  avatar:
-    "https://i.pinimg.com/736x/70/32/3f/70323ffbb5122198b97cfa259c313678.jpg",
-  age: "34",
-  docType: "cc",
-  document: "1060212231",
-  status: "activo",
-  role: "Dueño",
-  phone: "3138211234",
-  familyPhone: "3001234567",
-  email: "juan.eduardo@agrogestion.com",
-  address: "Finca Tres Esquinas",
-  notes: "Perfil administrador principal del sistema.",
 };

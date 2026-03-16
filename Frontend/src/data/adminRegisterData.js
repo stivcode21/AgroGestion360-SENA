@@ -1,10 +1,5 @@
 export const adminInputFields = [
   {
-    name: "username",
-    label: "Username *",
-    placeholder: "Ej. juan_admin43",
-  },
-  {
     name: "name",
     label: "Nombre completo *",
     placeholder: "Ej. Juan Perez",
@@ -16,9 +11,9 @@ export const adminInputFields = [
     placeholder: "Selecciona un tipo",
     select: {
       options: [
-        { label: "Cedula de ciudadania", value: "cc" },
-        { label: "Cedula de extranjeria", value: "ce" },
-        { label: "Pasaporte", value: "pasaporte" },
+        { label: "Cedula de ciudadania", value: "1" },
+        { label: "Cedula de extranjeria", value: "2" },
+        { label: "Pasaporte", value: "3" },
       ],
     },
   },
@@ -27,11 +22,6 @@ export const adminInputFields = [
     label: "Numero de documento *",
     placeholder: "Ej. 1023...",
     type: "number",
-  },
-  {
-    name: "role",
-    label: "Rol *",
-    placeholder: "Ej. Administrador",
   },
   {
     name: "phone",
@@ -48,10 +38,6 @@ export const adminInputFields = [
 ];
 
 export const adminFieldValidations = {
-  username: {
-    pattern: /^[A-Za-z0-9_]{3,}$/,
-    message: "Usa letras, numeros o guion bajo (min 3)",
-  },
   name: {
     pattern: /^[A-Za-z\s]{3,}$/,
     message: "Solo letras y espacios (min 3 caracteres)",
@@ -63,10 +49,6 @@ export const adminFieldValidations = {
   document: {
     pattern: /^\d{6,12}$/,
     message: "Entre 6 y 12 numeros",
-  },
-  role: {
-    pattern: /^.{3,}$/,
-    message: "Ingresa minimo 3 caracteres",
   },
   phone: {
     pattern: /^\d{10}$/,
