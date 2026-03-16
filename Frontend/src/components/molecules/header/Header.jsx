@@ -4,13 +4,13 @@ import { useSidebarStore } from "@/store/sidebarStore";
 import { Bell, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getColombiaDate } from "@/utils/getColombiaDate";
-import { settingsProfileInitialValues } from "@/data/settingsProfileData";
 import { useState, useEffect } from "react";
 import NotificationsModal from "@/components/templates/notificationsModal/NotificationsModal";
 import { notificationsData } from "@/data/notificationsData";
 import { checkAuth } from "@/utils/auth";
 import { useUserStore } from "@/store/userStore";
 import { buildApiUrl } from "@/utils/apiBase";
+import previuIMG from "@/assets/img/previuIMG.webp";
 
 const Header = () => {
   const { currentSection, isCollapsed, isDesktop } = useSidebarStore();
@@ -32,12 +32,12 @@ const Header = () => {
   useEffect(() => {
     const getUser = async () => {
       const data = await checkAuth();
-      const user = data?.user;
+      const authUser = data?.user;
 
-      const res = await fetch(buildApiUrl("auth/user"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo: user.email }),
+      if (!authUser?.id_admin) return;
+
+      const res = await fetch(buildApiUrl(`auth/user/${authUser.id_admin}`), {
+        method: "GET",
       });
       const datauser = await res.json();
 
@@ -93,7 +93,7 @@ const Header = () => {
             ""
           )}
           <img
-            src={user?.url_img || settingsProfileInitialValues.avatar}
+            src={user?.url_img || previuIMG}
             className={styles.avatar}
             alt="foto de perfil usuario"
           />
