@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import previuIMG from "@/assets/img/previuIMG.webp";
+import { productInputFields } from "@/data/productRegisterData";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -26,8 +27,13 @@ const Inventario = () => {
   const [state, setState] = useState(false);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
+  const [tableEndpoint, setTableEndpoint] = useState("product/list");
+  const [filterQueryParams, setFilterQueryParams] = useState({});
 
   const { toggleLoader } = useLoader();
+  const productTypeOptions =
+    productInputFields.find((field) => field.name === "type")?.select
+      ?.options ?? [];
 
   const OpenModal = (product) => {
     setIsOpenModal(true);
@@ -88,7 +94,20 @@ const Inventario = () => {
               Filtros
               <ChevronDown />
             </button>
-            {state && <FiltersBox />}
+            {state && (
+              <FiltersBox
+                endpoint="product/filter"
+                setData={setProducts}
+                setPage={setPage}
+                setEndpoint={setTableEndpoint}
+                setQueryParams={setFilterQueryParams}
+                queryKeys={{
+                  type: "tipo",
+                  order: "orden",
+                }}
+                typeOptions={productTypeOptions}
+              />
+            )}
           </div>
 
           <div className={styles.tableWrapper}>
@@ -106,7 +125,8 @@ const Inventario = () => {
               setPage={setPage}
               setProducts={setProducts}
               page={page}
-              endpoint="product/list"
+              endpoint={tableEndpoint}
+              queryParams={filterQueryParams}
             >
               {products.map((item) => (
                 <li key={item.id_insumo} className={tableStyles.row}>
