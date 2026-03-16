@@ -13,6 +13,7 @@ const TableLayout = ({
   setPage,
   setProducts,
   endpoint,
+  queryParams = {},
 }) => {
   const resolvedHeaders = headers ?? [];
   const resolvedColumns = columns;
@@ -26,7 +27,20 @@ const TableLayout = ({
 
     try {
       toggleLoader(true);
-      const res = await fetch(buildApiUrl(`${endpoint}/${nextPage}`), {
+      const searchParams = new URLSearchParams();
+
+      Object.entries(queryParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          searchParams.set(key, value);
+        }
+      });
+
+      const queryString = searchParams.toString();
+      const url = queryString
+        ? buildApiUrl(`${endpoint}/${nextPage}?${queryString}`)
+        : buildApiUrl(`${endpoint}/${nextPage}`);
+
+      const res = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
