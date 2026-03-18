@@ -1,57 +1,80 @@
 # AgroGestion360
-Sistema para la gestion integral de fincas (ganaderia, porcicultura, inventario, actividades y administracion de personal).
 
-## Vision general
-El repositorio contiene un frontend SPA en React y una base inicial de backend en PHP. El frontend ya integra autenticacion por sesion (cookie httpOnly), navegacion por rutas y modulos operativos por dominio.
+AgroGestion360 es una aplicacion web para apoyar la gestion operativa de una finca. El proyecto centraliza procesos como inventario, administracion, actividades y otros modulos del entorno agropecuario en una sola interfaz.
 
-## Modulos funcionales
-- Autenticacion y control de sesion
-- Dashboard
-- Inventario
-- Reportes
-- Trabajadores
-- Actividades
-- Ganaderia
-- Porcicultura
-- Configuraciones (perfil y administradores)
+## Que incluye hoy
+- Inicio de sesion con cookie de sesion y validacion de acceso.
+- Modulo de inventario con listado, filtros, creacion, edicion y eliminacion.
+- Modulo de configuracion con perfil de usuario y gestion de administradores.
+- Base visual para dashboard, reportes, trabajadores, actividades, ganaderia y porcicultura.
 
-## Stack actual
-- Frontend: React 19, Vite 7, React Router DOM 7, Zustand, Lucide React, Recharts, react-hot-toast
-- Backend (base): PHP en `Backend/` (sin API productiva completa)
+## Como esta organizado
+```txt
+AgroGestion360-SENA/
+├─ Backend/
+├─ Frontend/
+├─ db/
+├─ doc/
+└─ README.md
+```
 
-## Requisitos
-- Node.js LTS
-- npm
+- `Backend/`: API en `Express`, autenticacion, rutas y acceso a PostgreSQL.
+- `Frontend/`: SPA en `React` + `Vite`.
+- `db/`: script base de la base de datos.
+- `doc/`: documentacion tecnica separada para backend y frontend.
 
-## Instalacion y ejecucion (Frontend)
+## Stack principal
+- Frontend: React, Vite, React Router, Zustand, react-hot-toast.
+- Backend: Node.js, Express, pg, jsonwebtoken, cookie-parser.
+- Base de datos: PostgreSQL.
+
+## Primeros pasos
+
+### 1. Backend
+```bash
+cd Backend
+npm install
+node index.js
+```
+
+### 2. Frontend
 ```bash
 cd Frontend
 npm install
 npm run dev
 ```
 
-## Scripts utiles
-- `npm run dev`: servidor de desarrollo
-- `npm run build`: build de produccion
-- `npm run preview`: vista local del build
-- `npm run lint`: analisis estatico
+Variable importante del frontend:
 
-## Variable de entorno
-El frontend construye URLs con `VITE_API_BASE_URL`.
-Si no se define, usa por defecto:
-`http://localhost:3001/api`
-
-## Estructura del repositorio
-```txt
-/Backend
-/Frontend
-/doc
-README.md
+```env
+VITE_API_BASE_URL=http://localhost:3001/api
 ```
 
-## Documentacion adicional
-- Documento tecnico detallado: `doc/PROYECTO.md`
-- Guia del frontend: `Frontend/README.md`
+Si no se define, el frontend usa esa misma URL por defecto.
 
-## Licencia
-No definida.
+## Flujo general de la aplicacion
+1. El usuario inicia sesion desde el frontend.
+2. El backend valida credenciales y guarda un JWT en cookie.
+3. El frontend verifica esa sesion con `auth/verify`.
+4. Los modulos consumen la API para listar, crear, editar o eliminar datos.
+5. El backend consulta PostgreSQL desde los modelos y responde en JSON.
+
+## Modulos principales
+- `Inventario`: modulo mas avanzado actualmente.
+- `Configuracion`: perfil del usuario y administradores.
+- `Dashboard`
+- `Reportes`
+- `Trabajadores`
+- `Actividades`
+- `Ganaderia`
+- `Porcicultura`
+
+## Documentacion adicional
+- [Guia de backend](doc/backend.md)
+- [Guia de frontend](doc/frontend.md)
+
+## Puntos importantes para nuevos desarrolladores
+- La autenticacion actual depende de cookie, no de `localStorage`.
+- El frontend centraliza las URLs en `Frontend/src/utils/apiBase.js`.
+- La comunicacion con base de datos esta concentrada en `Backend/models/`.
+- El script SQL base del proyecto esta en `db/agroGestion.sql`.
