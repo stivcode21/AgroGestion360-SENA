@@ -12,35 +12,27 @@ const FiltersBox = ({
   setPage,
   setEndpoint,
   setQueryParams,
-  baseQueryParams = {},
-  queryKeys = {
-    type: "tipo",
-    order: "orden",
-  },
   typeOptions = [],
 }) => {
   const [selectedType, setSelectedType] = useState("");
   const [selectedOrder, setSelectedOrder] = useState("");
   const { toggleLoader } = useLoader();
 
+  // Ejecuta la consulta al backend con los filtros activos o con el estado limpio.
   const runFilterRequest = async (filters = {}) => {
     try {
       toggleLoader(true);
 
       const searchParams = new URLSearchParams();
 
-      Object.entries(baseQueryParams).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== "") {
-          searchParams.set(key, value);
-        }
-      });
-
+      // Solo agrega a la URL los filtros que el usuario realmente selecciono.
       Object.entries(filters).forEach(([key, value]) => {
         if (value) {
           searchParams.set(key, value);
         }
       });
 
+      // Si hay filtros usa el endpoint filtrado; si no, vuelve al listado general.
       const queryString = searchParams.toString();
       const url = queryString
         ? buildApiUrl(`${endpoint}/1?${queryString}`)
@@ -58,6 +50,7 @@ const FiltersBox = ({
         return;
       }
 
+      // Sincroniza la tabla y su estado interno con los filtros que si quedaron aplicados.
       setData(data.data);
       setPage?.(1);
       setEndpoint?.(queryString ? endpoint : defaultEndpoint);
@@ -70,13 +63,15 @@ const FiltersBox = ({
     }
   };
 
+  // Toma la seleccion actual del usuario y la convierte en query params.
   const handleApplyFilters = () => {
     runFilterRequest({
-      [queryKeys.type]: selectedType,
-      [queryKeys.order]: selectedOrder,
+      tipo: selectedType,
+      orden: selectedOrder,
     });
   };
 
+  // Limpia la UI y vuelve a consultar la primera pagina sin filtros.
   const handleClearFilters = () => {
     setSelectedType("");
     setSelectedOrder("");
@@ -97,6 +92,7 @@ const FiltersBox = ({
             id="filter-type"
             className={styles.select}
             value={selectedType}
+            // Guarda el tipo elegido para enviarlo despues al backend.
             onChange={(e) => setSelectedType(e.target.value)}
           >
             <option value="">Todos</option>
@@ -117,6 +113,7 @@ const FiltersBox = ({
             id="filter-order"
             className={styles.select}
             value={selectedOrder}
+            // Guarda el criterio de orden antes de lanzar la consulta.
             onChange={(e) => setSelectedOrder(e.target.value)}
           >
             <option value="">Sin orden</option>

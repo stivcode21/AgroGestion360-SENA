@@ -44,6 +44,7 @@ const Inventario = () => {
     const getProducts = async () => {
       try {
         toggleLoader(true);
+        // Carga inicial de inventario: la tabla parte siempre desde la primera pagina.
         const res = await fetch(buildApiUrl("product/list/1"), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -101,10 +102,6 @@ const Inventario = () => {
                 setPage={setPage}
                 setEndpoint={setTableEndpoint}
                 setQueryParams={setFilterQueryParams}
-                queryKeys={{
-                  type: "tipo",
-                  order: "orden",
-                }}
                 typeOptions={productTypeOptions}
               />
             )}
@@ -123,7 +120,7 @@ const Inventario = () => {
               columns="2.3fr 1fr 0.7fr 0.8fr 0.7fr 0.25fr"
               compactColumns="2fr 1fr 1fr 1fr 1fr 0.5fr"
               setPage={setPage}
-              setProducts={setProducts}
+              setData={setProducts}
               page={page}
               endpoint={tableEndpoint}
               queryParams={filterQueryParams}

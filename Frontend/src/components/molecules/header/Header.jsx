@@ -31,6 +31,7 @@ const Header = () => {
 
   useEffect(() => {
     const getUser = async () => {
+      // Primero valida la sesion y luego pide el perfil completo para el encabezado.
       const data = await checkAuth();
       const authUser = data?.user;
 

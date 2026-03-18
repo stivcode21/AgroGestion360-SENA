@@ -45,6 +45,7 @@ const ProductForm = ({ title }) => {
     const getDetails = async () => {
       try {
         toggleLoader(true);
+        // Consulta el producto actual para editar con la ultima informacion guardada.
         const res = await fetch(buildApiUrl(`product/getproduct/${id}`), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -130,6 +131,7 @@ const ProductForm = ({ title }) => {
       const endpoint = isEditMode ? `product/edit/${id}` : "product/register";
       const method = isEditMode ? "PUT" : "POST";
 
+      // Convierte los valores del formulario al formato que espera la API de inventario.
       const res = await fetch(buildApiUrl(endpoint), {
         method,
         headers: { "Content-Type": "application/json" },

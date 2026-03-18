@@ -16,6 +16,7 @@ const ListAdmins = () => {
     const getAdmins = async () => {
       try {
         toggleLoader(true);
+        // Pide el listado de administradores para renderizar las cards de configuracion.
         const res = await fetch(buildApiUrl("auth/admins/list"), {
           method: "GET",
           headers: { "Content-Type": "application/json" },

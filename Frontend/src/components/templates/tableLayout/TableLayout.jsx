@@ -11,7 +11,7 @@ const TableLayout = ({
   children,
   page,
   setPage,
-  setProducts,
+  setData,
   endpoint,
   queryParams = {},
 }) => {
@@ -29,6 +29,7 @@ const TableLayout = ({
       toggleLoader(true);
       const searchParams = new URLSearchParams();
 
+      // Conserva los filtros activos para pedir la siguiente pagina a la misma consulta.
       Object.entries(queryParams).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
           searchParams.set(key, value);
@@ -51,7 +52,8 @@ const TableLayout = ({
         return;
       }
 
-      setProducts(data.data);
+      // La tabla solo reemplaza la data visible; el backend decide que registros enviar.
+      setData(data.data);
       setPage(nextPage);
     } catch (error) {
       console.error("Error en inicio de sesion:", error);

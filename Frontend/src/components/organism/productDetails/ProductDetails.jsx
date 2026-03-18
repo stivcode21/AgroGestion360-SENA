@@ -24,6 +24,7 @@ const ProductDetails = () => {
 
     try {
       toggleLoader(true);
+      // Borra el producto seleccionado y cierra el detalle cuando el backend confirma la eliminacion.
       const res = await fetch(
         buildApiUrl(`product/delete/${selectProduct.id_insumo}`),
         {

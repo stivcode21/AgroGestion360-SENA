@@ -42,6 +42,7 @@ const Login = () => {
 
     try {
       toggleLoader(true);
+      // El login devuelve una cookie de sesion; por eso esta peticion usa credentials include.
       const res = await fetch(buildApiUrl("auth/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -120,6 +120,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
     try {
       toggleLoader(true);
 
+      // Guarda solo los campos editables del perfil y deja intacta la sesion actual.
       const res = await fetch(buildApiUrl(`auth/update/${user.id_usuario}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -141,6 +142,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
       }
 
       if (data?.data) {
+        // Refresca el store global con la respuesta del backend para evitar recargar la pagina.
         const updatedFormData = {
           name: data.data.nombre_completo || "",
           age: String(data.data.edad || ""),

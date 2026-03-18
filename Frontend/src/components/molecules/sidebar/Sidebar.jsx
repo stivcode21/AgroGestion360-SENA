@@ -23,6 +23,7 @@ const Sidebar = () => {
 
   const handleLogoutConfirm = async () => {
     try {
+      // Solicita al backend limpiar la cookie antes de vaciar el estado local del usuario.
       const res = await fetch(buildApiUrl("auth/logout"), {
         method: "POST",
         credentials: "include",
