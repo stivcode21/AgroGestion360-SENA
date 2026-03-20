@@ -50,6 +50,15 @@
   border: 2px solid var(--verde-dark);
 }
 
+.link{
+  font-size: 13px;
+  color:green;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 footer {
   text-align: center;
   color: var(--text-secundary);

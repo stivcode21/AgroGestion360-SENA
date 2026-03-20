@@ -12,9 +12,8 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 
 const ActivityDetails = () => {
   const { selectActivity, setIsOpenModal } = useModalStore();
-  const activity = activitiesData.find((item) => item.id === selectActivity);
-
-  if (!activity) {
+  
+  if (!selectActivity) {
     return (
       <div className={styles.container}>
         <p className={styles.empty}>No se encontraron datos de la actividad.</p>
@@ -23,18 +22,22 @@ const ActivityDetails = () => {
   }
 
   const {
-    workerName,
-    document,
-    statusLabel,
-    activity: activityName,
-    cost,
-    description,
-    avatar,
-  } = activity;
+duracion,
+estado,
+fecha_fin,
+fecha_inicio,
+id_registro,
+monto,
+observaciones,
+trabajador,
+url_evidencia,
+documento,
+actividad
+  } = selectActivity;
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.productCode}>{activityName}</h2>
+      <h2 className={styles.productCode}>{id_registro}</h2>
 
       <header className={styles.header}>
         <h3 className={styles.sectionTitle}>Detalles de actividad</h3>
@@ -61,38 +64,54 @@ const ActivityDetails = () => {
         <div className={styles.detailCard}>
           <div className={styles.row}>
             <span className={styles.label}>Trabajador</span>
-            <span className={styles.value}>{workerName}</span>
+            <span className={styles.value}>{trabajador}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Documento</span>
-            <span className={styles.value}>{document}</span>
+            <span className={styles.value}>{documento}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Actividad</span>
-            <span className={styles.value}>{activityName}</span>
+            <span className={styles.value}>{actividad}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Estado</span>
-            <span className={styles.value}>{statusLabel}</span>
+            <span className={styles.value}>{estado}</span>
+          </div>
+            <div className={styles.row}>
+            <span className={styles.label}>Fecha inicio</span>
+            <span className={styles.value}>{fecha_inicio}</span>
+          </div>
+          <div className={styles.row}>
+            <span className={styles.label}>Fecha final</span>
+            <span className={styles.value}>{fecha_fin}</span>
+          </div>
+           <div className={styles.row}>
+            <span className={styles.label}>id registro</span>
+            <span className={styles.value}>{id_registro}</span>
+          </div>
+          <div className={styles.row}>
+            <span className={styles.label}>duracion</span>
+            <span className={styles.value}>{duracion}</span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Costo</span>
             <span className={styles.value}>
-              {currencyFormatter.format(cost || 0)}
+              {currencyFormatter.format(monto || 0)}
             </span>
           </div>
           <div className={`${styles.row} ${styles.descriptionRow}`}>
             <span className={styles.label}>Detalle</span>
             <p className={styles.description}>
-              {description || "No hay descripcion para esta actividad."}
+              {observaciones|| "No hay descripcion para esta actividad."}
             </p>
           </div>
           <div className={`${styles.row} ${styles.imageRow}`}>
             <span className={styles.label}>Foto</span>
             <div className={styles.imageWrapper}>
               <div className={styles.imageCard}>
-                {avatar ? (
-                  <img src={avatar} alt={workerName} loading="lazy" />
+                {url_evidencia ? (
+                  <img src={url_evidencia} alt={trabajador} loading="lazy" />
                 ) : (
                   <span className={styles.imageBadge}>Sin imagen</span>
                 )}
