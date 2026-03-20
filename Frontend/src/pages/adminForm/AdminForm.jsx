@@ -6,10 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-import {
-  adminFieldValidations,
-  adminInputFields,
-} from "@/data/adminRegisterData";
+import { adminInputFields } from "@/data/adminRegisterData";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
@@ -52,31 +49,64 @@ const AdminForm = ({ title }) => {
     setPreviewUrl(objectUrl);
   };
 
-  const validateField = (name, value) => {
-    const trimmedValue = String(value ?? "").trim();
-    const rule = adminFieldValidations[name];
+  const validateForm = () => {
+    const newErrors = {};
 
-    if (name === "docType" && !trimmedValue) {
-      return "Selecciona un tipo de documento.";
+    if (!formData.name.trim()) {
+      newErrors.name = "El nombre completo es obligatorio.";
+    } else if (!/^[A-Za-z\s]{3,}$/.test(formData.name.trim())) {
+      newErrors.name = "Solo letras y espacios (min 3 caracteres)";
     }
 
-    if (name === "password") {
-      if (!isEditMode && trimmedValue.length < 6) {
-        return "La contrasena debe tener minimo 6 caracteres.";
-      }
-      return "";
+    if (!formData.age.trim()) {
+      newErrors.age = "La edad es obligatoria.";
+    } else if (!/^(?:1[89]|[2-9]\d)$/.test(formData.age.trim())) {
+      newErrors.age = "Ingresa una edad valida (18-99)";
     }
 
-    if (rule?.pattern && !rule.pattern.test(trimmedValue)) {
-      return rule.message;
+    if (!formData.docType.trim()) {
+      newErrors.docType = "Selecciona un tipo de documento.";
     }
 
-    return "";
+    if (!formData.document.trim()) {
+      newErrors.document = "El numero de documento es obligatorio.";
+    } else if (!/^\d{6,12}$/.test(formData.document.trim())) {
+      newErrors.document = "Entre 6 y 12 numeros";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "El numero de celular es obligatorio.";
+    } else if (!/^\d{10}$/.test(formData.phone.trim())) {
+      newErrors.phone = "Ingresa exactamente 10 digitos";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "El correo electronico es obligatorio.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = "Correo electronico invalido";
+    }
+
+    if (!isEditMode && !formData.password.trim()) {
+      newErrors.password = "La contrasena es obligatoria.";
+    } else if (
+      formData.password.trim() &&
+      formData.password.trim().length < 6
+    ) {
+      newErrors.password = "La contrasena debe tener minimo 6 caracteres.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
+  // validamos cada campo individualmente al salir de el, mostrando el error debajo del campo
   const handleBlur = (event) => {
-    const { name, value } = event.target;
-    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+    const { name } = event.target;
+    const isValid = validateForm();
+
+    if (isValid) return;
+
+    setErrors((prev) => ({ [name]: prev[name] }));
   };
 
   const handleChange = (event) => {
@@ -88,20 +118,7 @@ const AdminForm = ({ title }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const nextErrors = {};
-
-    [...adminInputFields.map((field) => field.name), "password"].forEach(
-      (fieldName) => {
-        const error = validateField(fieldName, formData[fieldName]);
-        if (error) {
-          nextErrors[fieldName] = error;
-        }
-      },
-    );
-
-    setErrors(nextErrors);
-
-    if (Object.keys(nextErrors).length > 0) {
+    if (!validateForm()) {
       return;
     }
 
@@ -112,6 +129,7 @@ const AdminForm = ({ title }) => {
       const method = isEditMode ? "PUT" : "POST";
       const trimmedPassword = formData.password.trim();
 
+      // Adapta los nombres del formulario al payload que espera el backend.
       const payload = {
         nombre_completo: formData.name.trim(),
         edad: Number(formData.age),
@@ -145,6 +163,7 @@ const AdminForm = ({ title }) => {
     }
   };
 
+  // se ejecuta solo en el caso de que estemos editando un admin
   useEffect(() => {
     if (!isEditMode) {
       setFormData(initialFormData);
@@ -157,6 +176,7 @@ const AdminForm = ({ title }) => {
     const getAdminDetails = async () => {
       try {
         toggleLoader(true);
+        // Recupera el admin desde la API para precargar el formulario en modo edicion.
         const res = await fetch(buildApiUrl(`auth/user/${id}`), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -231,7 +251,6 @@ const AdminForm = ({ title }) => {
                   name={field.name}
                   placeholder={field.placeholder}
                   select={field?.select}
-                  validation={adminFieldValidations[field.name]}
                   error={errors[field.name]}
                   onBlur={handleBlur}
                   onChange={handleChange}

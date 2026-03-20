@@ -7,10 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-import {
-  productFieldValidations,
-  productInputFields,
-} from "@/data/productRegisterData";
+import { productInputFields } from "@/data/productRegisterData";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
@@ -37,6 +34,59 @@ const ProductForm = ({ title }) => {
     price: "",
     observations: "",
   });
+
+  //validamos formulario antes de enviar, mostrando errores debajo de cada campo
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "El nombre es obligatorio.";
+    } else if (!/^[A-Za-z0-9\s]{3,}$/.test(formData.name.trim())) {
+      newErrors.name = "Minimo 3 caracteres";
+    }
+
+    if (!formData.brand.trim()) {
+      newErrors.brand = "La marca es obligatoria.";
+    } else if (!/^[A-Za-z0-9\s]{2,}$/.test(formData.brand.trim())) {
+      newErrors.brand = "Minimo 2 caracteres";
+    }
+
+    if (!formData.type.trim()) {
+      newErrors.type = "Selecciona un tipo.";
+    }
+
+    if (!formData.amount.trim()) {
+      newErrors.amount = "La cantidad es obligatoria.";
+    } else if (!/^(?:[1-9]\d{0,3})$/.test(formData.amount.trim())) {
+      newErrors.amount = "Ingresa una cantidad valida";
+    }
+
+    if (!formData.unit.trim()) {
+      newErrors.unit = "La unidad de medida es obligatoria.";
+    } else if (!/^.{1,10}$/.test(formData.unit.trim())) {
+      newErrors.unit = "Hasta 10 caracteres";
+    }
+
+    if (!formData.price.trim()) {
+      newErrors.price = "El precio unitario es obligatorio.";
+    } else if (!/^\d{1,9}$/.test(formData.price.trim())) {
+      newErrors.price = "Solo numeros (hasta 9 digitos)";
+    }
+
+    if (
+      formData.expiration.trim() &&
+      !/^\d{4}-\d{2}-\d{2}$/.test(formData.expiration.trim())
+    ) {
+      newErrors.expiration = "Formato esperado YYYY-MM-DD";
+    }
+
+    if (formData.supplier.trim() && !/^.{3,}$/.test(formData.supplier.trim())) {
+      newErrors.supplier = "Minimo 3 caracteres";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // obtenemos los detalles del producto si estamos en modo edicion
   useEffect(() => {
@@ -83,17 +133,14 @@ const ProductForm = ({ title }) => {
     getDetails();
   }, [id, isEditMode]);
 
-  // validamos el campo cuando sale del input
+  // validamos cada campo individualmente al salir de el, mostrando el error debajo del campo
   const handleBlur = (e) => {
-    const { name, value } = e.target;
-    const trimmedValue = String(value ?? "").trim();
-    const rule = productFieldValidations[name];
+    const { name } = e.target;
+    const isValid = validateForm();
 
-    if (rule?.pattern && !rule.pattern.test(trimmedValue)) {
-      setErrors((prev) => ({ ...prev, [name]: rule.message }));
-    } else {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+    if (isValid) return;
+
+    setErrors((prev) => ({ [name]: prev[name] }));
   };
 
   const handlechange = (e) => {
@@ -105,23 +152,7 @@ const ProductForm = ({ title }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const nextErrors = {};
-
-    // validamos cada campo con su respectiva regla
-    Object.entries(productFieldValidations).forEach(([name, rule]) => {
-      const value = String(formData[name] ?? "").trim();
-      if (rule.pattern && !rule.pattern.test(value)) {
-        nextErrors[name] = rule.message;
-      }
-    });
-
-    if (!formData.type) {
-      nextErrors.type = "Selecciona un tipo.";
-    }
-
-    setErrors(nextErrors);
-
-    if (Object.keys(nextErrors).length > 0) {
+    if (!validateForm()) {
       return;
     }
 
@@ -220,7 +251,6 @@ const ProductForm = ({ title }) => {
                   label={field.label}
                   name={field.name}
                   placeholder={field.placeholder}
-                  validation={productFieldValidations[field.name]}
                   select={field?.select}
                   error={errors[field.name]}
                   onBlur={handleBlur}
