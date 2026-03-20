@@ -52,34 +52,3 @@ export const productInputFields = [
   },
   { name: "supplier", label: "Proveedor", placeholder: "Ej. Agroinsumos S.A." },
 ];
-
-export const productFieldValidations = {
-  name: {
-    pattern: /^[A-Za-z0-9\s]{3,}$/,
-    message: "Minimo 3 caracteres",
-  },
-  brand: {
-    pattern: /^[A-Za-z0-9\s]{2,}$/,
-    message: "Minimo 2 caracteres",
-  },
-  amount: {
-    pattern: /^(?:[1-9]\d{0,3})$/,
-    message: "Ingresa una cantidad valida",
-  },
-  unit: {
-    pattern: /^.{1,10}$/,
-    message: "Hasta 10 caracteres",
-  },
-  price: {
-    pattern: /^\d{1,9}$/,
-    message: "Solo numeros (hasta 9 digitos)",
-  },
-  expiration: {
-    pattern: /^\d{4}-\d{2}-\d{2}$/,
-    message: "Formato esperado YYYY-MM-DD",
-  },
-  supplier: {
-    pattern: /^.{3,}$/,
-    message: "Minimo 3 caracteres",
-  },
-};
