@@ -100,13 +100,18 @@
 }
 
 .activa {
-  background: #dcfce7;
-  color: #15803d;
+  background: #fbffcc;
+  color: #c5c516;
 }
 
 .completada {
-  background: #e0e7ff;
-  color: #3730a3;
+  background: #dcfce7;
+  color:  #15803d;
+}
+
+.cancelada {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .workerName {
