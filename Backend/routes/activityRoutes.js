@@ -1,0 +1,12 @@
+const express = require("express");
+const activity = require("../controllers/activityController");
+
+const router = express.Router();
+
+router.get("/list/:page", activity.listActivities);
+router.get("/getactivity/:id", activity.getActivity);
+router.post("/createactivity", activity.createActivity);
+router.put("/editactivity/:id", activity.editActivity);
+router.delete("/deleteactivity/:id", activity.deleteActivity);
+
+module.exports = router;
