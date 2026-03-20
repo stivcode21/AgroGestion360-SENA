@@ -14,9 +14,9 @@ exports.getActivitiesPaginated = async (page) => {
       a.duracion,
       a.monto,
       a.observaciones,
-      a.documento,
       a.actividad,
       t.nombre_completo AS trabajador,
+      t.numero_documento AS documento,
       e.nombre AS estado
     FROM actividades a
     JOIN trabajadores t
@@ -48,7 +48,7 @@ exports.createActivity = async (activityData) => {
     url_evidencia,
     fecha_inicio,
     fecha_fin,
-    duracion
+    duracion,
   } = activityData;
 
   const query = `
@@ -74,7 +74,7 @@ exports.createActivity = async (activityData) => {
     url_evidencia,
     fecha_inicio,
     fecha_fin,
-    duracion
+    duracion,
   ];
 
   const { rows } = await db.query(query, values);
@@ -118,7 +118,7 @@ exports.updateActivity = async (id, data) => {
     url_evidencia,
     fecha_inicio,
     fecha_fin,
-    duracion
+    duracion,
   } = data;
 
   const query = `
@@ -145,7 +145,7 @@ exports.updateActivity = async (id, data) => {
     fecha_inicio,
     fecha_fin,
     duracion,
-    id
+    id,
   ];
 
   const { rows } = await db.query(query, values);
