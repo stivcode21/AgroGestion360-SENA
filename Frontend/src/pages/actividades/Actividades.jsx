@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
+import previuIMG from "@/assets/img/previuIMG.webp";
 import FiltersBox from "../../components/molecules/filtersBox/FiltersBox";
 
 const formatCurrency = (value) =>
@@ -80,8 +81,6 @@ const Actividades = () => {
               <Search className={styles.icon} />
               <input type="text" placeholder="Buscar" />
             </div>
-
-         
           </div>
 
           <div className={styles.listWrapper}>
@@ -99,13 +98,15 @@ const Actividades = () => {
                   <div className={tableStyles.itemInfo}>
                     <figure className={styles.workerThumb}>
                       <img
-                        src={item.url_evidencia || "/default-avatar.png"}
+                        src={item.url_evidencia || previuIMG}
                         alt={item.trabajador}
                       />
                     </figure>
 
                     <div className={styles.workerInfo}>
-                      <span className={`${styles.statusTag} ${styles[item.estado?.toLowerCase()]}`}>
+                      <span
+                        className={`${styles.statusTag} ${styles[item.estado?.toLowerCase()]}`}
+                      >
                         {item.estado}
                       </span>
                       <p className={styles.workerName}>{item.trabajador}</p>
