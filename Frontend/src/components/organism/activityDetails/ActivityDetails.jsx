@@ -1,5 +1,5 @@
 import styles from "../productDetails/ProductDetails.module.css";
-import { activitiesData } from "@/data/activitiesData";
+import { formatDate } from "@/utils/formatDate";
 import { useModalStore } from "@/store/modalStore";
 import { Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 
 const ActivityDetails = () => {
   const { selectActivity, setIsOpenModal } = useModalStore();
-  
+
   if (!selectActivity) {
     return (
       <div className={styles.container}>
@@ -22,17 +22,17 @@ const ActivityDetails = () => {
   }
 
   const {
-duracion,
-estado,
-fecha_fin,
-fecha_inicio,
-id_registro,
-monto,
-observaciones,
-trabajador,
-url_evidencia,
-documento,
-actividad
+    duracion,
+    estado,
+    fecha_fin,
+    fecha_inicio,
+    id_registro,
+    monto,
+    observaciones,
+    trabajador,
+    url_evidencia,
+    documento,
+    actividad,
   } = selectActivity;
 
   return (
@@ -63,6 +63,10 @@ actividad
       <section className={styles.section}>
         <div className={styles.detailCard}>
           <div className={styles.row}>
+            <span className={styles.label}>id registro</span>
+            <span className={styles.value}>{id_registro}</span>
+          </div>
+          <div className={styles.row}>
             <span className={styles.label}>Trabajador</span>
             <span className={styles.value}>{trabajador}</span>
           </div>
@@ -78,17 +82,17 @@ actividad
             <span className={styles.label}>Estado</span>
             <span className={styles.value}>{estado}</span>
           </div>
-            <div className={styles.row}>
+          <div className={styles.row}>
             <span className={styles.label}>Fecha inicio</span>
-            <span className={styles.value}>{fecha_inicio}</span>
+            <span className={styles.value}>
+              {formatDate(fecha_inicio) || "--"}
+            </span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>Fecha final</span>
-            <span className={styles.value}>{fecha_fin}</span>
-          </div>
-           <div className={styles.row}>
-            <span className={styles.label}>id registro</span>
-            <span className={styles.value}>{id_registro}</span>
+            <span className={styles.value}>
+              {formatDate(fecha_fin) || "Aun no finalizada"}
+            </span>
           </div>
           <div className={styles.row}>
             <span className={styles.label}>duracion</span>
@@ -103,7 +107,7 @@ actividad
           <div className={`${styles.row} ${styles.descriptionRow}`}>
             <span className={styles.label}>Detalle</span>
             <p className={styles.description}>
-              {observaciones|| "No hay descripcion para esta actividad."}
+              {observaciones || "No hay descripcion para esta actividad."}
             </p>
           </div>
           <div className={`${styles.row} ${styles.imageRow}`}>
