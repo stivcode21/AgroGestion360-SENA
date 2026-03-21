@@ -153,14 +153,15 @@ export const activitiesData = [
 
 export const activityInputFields = [
   {
-    name: "workerName",
-    label: "Trabajador *",
-    placeholder: "Ej. Juan Perez",
+    name: "idPerson",
+    type: "number",
+    label: "ID Trabajador *",
+    placeholder: "Ej. 12",
   },
   {
-    name: "document",
-    label: "Documento *",
-    placeholder: "Ej. 1.060.212.321",
+    name: "duration",
+    label: "duracion *",
+    placeholder: "Ej. 2 horas",
   },
   {
     name: "activity",
@@ -169,14 +170,21 @@ export const activityInputFields = [
   },
   {
     name: "status",
-    label: "Estado",
+    label: "Estado *",
     placeholder: "Selecciona un estado",
     select: {
       options: [
-        { label: "Activa", value: "activa" },
-        { label: "Completada", value: "completada" },
+        { label: "Activa", value: "1" },
+        { label: "Completada", value: "2" },
+        { label: "Cancelada", value: "3" },
       ],
     },
+  },
+  {
+    name: "dateInit",
+    type: "date",
+    label: "Fecha inicio",
+    placeholder: "DD-MM-AA",
   },
   {
     name: "cost",
