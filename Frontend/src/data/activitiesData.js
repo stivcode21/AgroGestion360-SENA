@@ -193,22 +193,3 @@ export const activityInputFields = [
     type: "number",
   },
 ];
-
-export const activityFieldValidations = {
-  workerName: {
-    pattern: /^[A-Za-z\s]{3,}$/,
-    message: "Solo letras y espacios (min 3 caracteres)",
-  },
-  document: {
-    pattern: /^[\d.]{6,20}$/,
-    message: "Ingresa un documento valido",
-  },
-  activity: {
-    pattern: /^[A-Za-z\s]{3,}$/,
-    message: "Solo letras y espacios (min 3 caracteres)",
-  },
-  cost: {
-    pattern: /^\d{1,9}$/,
-    message: "Solo numeros (hasta 9 digitos)",
-  },
-};
