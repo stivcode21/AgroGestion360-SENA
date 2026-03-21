@@ -17,6 +17,7 @@
   height: 94%;
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: none;
   max-width: 580px;
   background: #ffffff;
@@ -26,6 +27,34 @@
   transform: translateX(80px);
   opacity: 0;
   animation: slideIn var(--dynamic-transition) forwards;
+}
+
+.modal > * {
+  min-width: 0;
+}
+
+.modal
+  :is(
+    div,
+    section,
+    article,
+    header,
+    footer,
+    p,
+    span,
+    a,
+    button,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6
+  ) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere; /*Si el texto se está desbordando, puedes romper la palabra en cualquier punto*/
+  word-break: break-word; /*También rompe palabras largas*/
 }
 
 .btn {

@@ -31,6 +31,8 @@ const Inventario = () => {
   const [filterQueryParams, setFilterQueryParams] = useState({});
 
   const { toggleLoader } = useLoader();
+
+  // Opciones para el filtro de tipo de producto, obtenidas del archivo de configuración de campos del formulario.
   const productTypeOptions =
     productInputFields.find((field) => field.name === "type")?.select
       ?.options ?? [];
