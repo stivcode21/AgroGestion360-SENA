@@ -27,8 +27,10 @@ const Inventario = () => {
   const [state, setState] = useState(false);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [tableEndpoint, setTableEndpoint] = useState("product/list");
   const [filterQueryParams, setFilterQueryParams] = useState({});
+  const [search, setSearch] = useState("");
 
   const { toggleLoader } = useLoader();
 
@@ -42,12 +44,41 @@ const Inventario = () => {
     setSelectProduct(product);
   };
 
+  const normalizedSearch = search.trim();
+  const hasActiveFilters = Object.keys(filterQueryParams).length > 0;
+  // La tabla trabaja en un solo modo activo: busqueda, filtros o listado normal.
+  const tableMode = normalizedSearch
+    ? "search"
+    : hasActiveFilters
+      ? "filter"
+      : "default";
+
   useEffect(() => {
+    // Cuando los filtros traen la data directamente, evitamos una segunda consulta.
+    if (tableMode === "filter") {
+      return;
+    }
+
     const getProducts = async () => {
       try {
         toggleLoader(true);
+
+        const searchParams = new URLSearchParams();
+
+        // En modo busqueda solo enviamos el texto escrito por el usuario.
+        if (normalizedSearch) {
+          searchParams.set("search", normalizedSearch);
+        }
+
+        const queryString = searchParams.toString();
+        // El endpoint se decide segun si hay texto de busqueda o no
+        const currentEndpoint = queryString ? "product/filter" : "product/list";
+        const requestPath = queryString
+          ? `${currentEndpoint}/1?${queryString}`
+          : `${currentEndpoint}/1`;
+
         // Carga inicial de inventario: la tabla parte siempre desde la primera pagina.
-        const res = await fetch(buildApiUrl("product/list/1"), {
+        const res = await fetch(buildApiUrl(requestPath), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -58,7 +89,10 @@ const Inventario = () => {
           return;
         }
 
+        setPage(1);
+        setTableEndpoint(currentEndpoint);
         setProducts(data.data);
+        setTotalPages(data.totalPages ?? 1);
       } catch (error) {
         console.error("Error en getProducts:", error);
         toast.error("Ha ocurrido un error inesperado.");
@@ -67,7 +101,24 @@ const Inventario = () => {
       }
     };
     getProducts();
-  }, []);
+  }, [normalizedSearch, tableMode]);
+
+  // Estos params se reutilizan en la paginacion para no perder el contexto actual.
+  const tableQueryParams =
+    tableMode === "search" && normalizedSearch
+      ? { search: normalizedSearch }
+      : filterQueryParams;
+
+  const handleSearchChange = (e) => {
+    const nextValue = e.target.value;
+
+    setSearch(nextValue);
+
+    // Si el usuario busca, limpiamos los filtros para no mezclar modos.
+    if (nextValue.trim()) {
+      setFilterQueryParams({});
+    }
+  };
 
   return (
     <MainLayout>
@@ -86,7 +137,12 @@ const Inventario = () => {
           <div className={styles.actions}>
             <div className={styles.search}>
               <Search className={styles.icon} />
-              <input type="text" placeholder="Buscar" />
+              <input
+                type="text"
+                placeholder="Buscar por nombre o marca"
+                value={search}
+                onChange={handleSearchChange}
+              />
             </div>
             <button
               className={styles.filter}
@@ -100,11 +156,14 @@ const Inventario = () => {
             {state && (
               <FiltersBox
                 endpoint="product/filter"
+                defaultEndpoint="product/list"
                 setData={setProducts}
                 setPage={setPage}
                 setEndpoint={setTableEndpoint}
                 setQueryParams={setFilterQueryParams}
+                setTotalPages={setTotalPages}
                 typeOptions={productTypeOptions}
+                setSearch={setSearch}
               />
             )}
           </div>
@@ -124,38 +183,48 @@ const Inventario = () => {
               setPage={setPage}
               setData={setProducts}
               page={page}
+              totalPages={totalPages}
               endpoint={tableEndpoint}
-              queryParams={filterQueryParams}
+              queryParams={tableQueryParams}
             >
-              {products.map((item) => (
-                <li key={item.id_insumo} className={tableStyles.row}>
-                  <div className={tableStyles.itemInfo}>
-                    <figure className={tableStyles.thumbnail}>
-                      <img src={item?.image || previuIMG} alt={item.nombre} />
-                    </figure>
-                    <div>
-                      <p className={tableStyles.title}>{item.nombre}</p>
-                      <span className={tableStyles.subtitle}>{item.marca}</span>
-                    </div>
-                  </div>
-                  <span
-                    className={tableStyles.value}
-                  >{`PRD-${item.id_insumo}`}</span>
-                  <span className={tableStyles.value}>{item.cantidad}</span>
-                  <span className={tableStyles.tag}>{item.tipo}</span>
-                  <span className={tableStyles.emphasis}>
-                    {currencyFormatter.format(item.precio_unitario)}
-                  </span>
-                  <button
-                    type="button"
-                    className={tableStyles.actionButton}
-                    onClick={() => OpenModal(item)}
-                    aria-label={`Ver detalles de ${item.nombre}`}
-                  >
-                    <Eye />
-                  </button>
+              {products.length === 0 ? (
+                // Mensaje visible cuando la consulta no devuelve filas.
+                <li className={tableStyles.empty}>
+                  No se encontraron productos para esta busqueda.
                 </li>
-              ))}
+              ) : (
+                products.map((item) => (
+                  <li key={item.id_insumo} className={tableStyles.row}>
+                    <div className={tableStyles.itemInfo}>
+                      <figure className={tableStyles.thumbnail}>
+                        <img src={item?.image || previuIMG} alt={item.nombre} />
+                      </figure>
+                      <div>
+                        <p className={tableStyles.title}>{item.nombre}</p>
+                        <span className={tableStyles.subtitle}>
+                          {item.marca}
+                        </span>
+                      </div>
+                    </div>
+                    <span
+                      className={tableStyles.value}
+                    >{`PRD-${item.id_insumo}`}</span>
+                    <span className={tableStyles.value}>{item.cantidad}</span>
+                    <span className={tableStyles.tag}>{item.tipo}</span>
+                    <span className={tableStyles.emphasis}>
+                      {currencyFormatter.format(item.precio_unitario)}
+                    </span>
+                    <button
+                      type="button"
+                      className={tableStyles.actionButton}
+                      onClick={() => OpenModal(item)}
+                      aria-label={`Ver detalles de ${item.nombre}`}
+                    >
+                      <Eye />
+                    </button>
+                  </li>
+                ))
+              )}
             </TableLayout>
           </div>
         </section>
