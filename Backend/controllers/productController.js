@@ -150,9 +150,9 @@ exports.deleteProduct = async (req, res) => {
 exports.filterProductsPaginated = async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
-    const { tipo, orden } = req.query;
+    const { tipo, orden, search } = req.query;
 
-    const result = await filterProductsPaginatedModel(page, tipo, orden);
+    const result = await filterProductsPaginatedModel(page, tipo, orden, search);
 
     res.json({
       page,

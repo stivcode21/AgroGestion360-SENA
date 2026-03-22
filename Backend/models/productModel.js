@@ -164,7 +164,7 @@ exports.deleteProductModel = async (id) => {
   return rows[0] || null;
 };
 
-exports.filterProductsPaginatedModel = async (page, tipo, orden) => {
+exports.filterProductsPaginatedModel = async (page, tipo, orden, search) => {
   const limit = 10;
   const offset = (page - 1) * limit;
 
@@ -180,6 +180,13 @@ exports.filterProductsPaginatedModel = async (page, tipo, orden) => {
   if (tipo) {
     values.push(tipo);
     condiciones.push(`i.id_tipo = $${values.length}`);
+  }
+
+  if (search?.trim()) {
+    values.push(`%${search.trim()}%`);
+    condiciones.push(
+      `(i.nombre ILIKE $${values.length} OR i.marca ILIKE $${values.length})`
+    );
   }
 
   if (condiciones.length > 0) {
