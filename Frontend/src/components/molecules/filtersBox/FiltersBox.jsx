@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDownAZ, CalendarClock, FilterX, Tag } from "lucide-react";
+import { ArrowDownAZ, FilterX, Tag } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
@@ -7,12 +7,15 @@ import styles from "./FiltersBox.module.css";
 
 const FiltersBox = ({
   endpoint,
-  defaultEndpoint = "product/list",
+  titleType,
+  defaultEndpoint = "list",
   setData,
   setPage,
   setEndpoint,
   setQueryParams,
+  setTotalPages,
   typeOptions = [],
+  setSearch,
 }) => {
   const [selectedType, setSelectedType] = useState("");
   const [selectedOrder, setSelectedOrder] = useState("");
@@ -53,8 +56,9 @@ const FiltersBox = ({
       // Sincroniza la tabla y su estado interno con los filtros que si quedaron aplicados.
       setData(data.data);
       setPage?.(1);
+      setTotalPages?.(data.totalPages ?? 1);
       setEndpoint?.(queryString ? endpoint : defaultEndpoint);
-      setQueryParams?.(queryString ? Object.fromEntries(searchParams) : {});
+      setQueryParams?.(filters);
     } catch (error) {
       console.error("Error al filtrar datos:", error);
       toast.error("Ha ocurrido un error inesperado.");
@@ -65,16 +69,20 @@ const FiltersBox = ({
 
   // Toma la seleccion actual del usuario y la convierte en query params.
   const handleApplyFilters = () => {
-    runFilterRequest({
+    const nextFilters = {
       tipo: selectedType,
       orden: selectedOrder,
-    });
+    };
+
+    setSearch?.("");
+    runFilterRequest(nextFilters);
   };
 
   // Limpia la UI y vuelve a consultar la primera pagina sin filtros.
   const handleClearFilters = () => {
     setSelectedType("");
     setSelectedOrder("");
+    setSearch?.("");
     runFilterRequest();
   };
 
@@ -86,7 +94,7 @@ const FiltersBox = ({
         <div className={styles.field}>
           <label className={styles.label} htmlFor="filter-type">
             <Tag />
-            Tipo
+            {titleType || "Tipo"}
           </label>
           <select
             id="filter-type"
@@ -113,7 +121,6 @@ const FiltersBox = ({
             id="filter-order"
             className={styles.select}
             value={selectedOrder}
-            // Guarda el criterio de orden antes de lanzar la consulta.
             onChange={(e) => setSelectedOrder(e.target.value)}
           >
             <option value="">Sin orden</option>
