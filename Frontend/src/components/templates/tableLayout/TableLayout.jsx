@@ -10,6 +10,7 @@ const TableLayout = ({
   compactColumns,
   children,
   page,
+  totalPages,
   setPage,
   setData,
   endpoint,
@@ -81,6 +82,7 @@ const TableLayout = ({
 
       <footer className={styles.tableFooter}>
         <span>{`Pagina ${page}`}</span>
+        <span>{`${page} / ${totalPages}`}</span>
         <div className={styles.pagination}>
           <button
             type="button"
