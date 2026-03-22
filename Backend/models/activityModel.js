@@ -163,3 +163,81 @@ exports.deleteActivity = async (id) => {
   const { rows } = await db.query(query, [id]);
   return rows[0];
 };
+
+exports.filterActivitiesPaginatedModel = async (page, tipo, orden, search) => {
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  let baseQuery = `
+    FROM actividades a
+    JOIN trabajadores t
+      ON a.id_trabajador = t.id_trabajador
+    JOIN estado_actividades e
+      ON a.id_estado = e.id_estado
+  `;
+
+  const values = [];
+  const condiciones = [];
+
+  if (tipo) {
+    values.push(tipo);
+    condiciones.push(`a.id_estado = $${values.length}`);
+  }
+
+  if (search?.trim()) {
+    values.push(`%${search.trim()}%`);
+    condiciones.push(
+      `(a.actividad ILIKE $${values.length} OR t.nombre_completo ILIKE $${values.length})`
+    );
+  }
+
+  if (condiciones.length > 0) {
+    baseQuery += ` WHERE ` + condiciones.join(" AND ");
+  }
+
+  let orderClause = ` ORDER BY a.id_registro`;
+
+  if (orden === "recientes") {
+    orderClause = ` ORDER BY a.fecha_inicio DESC`;
+  }
+
+  if (orden === "az") {
+    orderClause = ` ORDER BY a.actividad ASC`;
+  }
+
+  const activitiesQuery = `
+    SELECT
+      a.id_registro,
+      a.url_evidencia,
+      a.fecha_inicio,
+      a.fecha_fin,
+      a.duracion,
+      a.monto,
+      a.observaciones,
+      a.actividad,
+      t.nombre_completo AS trabajador,
+      t.numero_documento AS documento,
+      e.nombre AS estado
+    ${baseQuery}
+    ${orderClause}
+    LIMIT $${values.length + 1} OFFSET $${values.length + 2}
+  `;
+
+  const countQuery = `
+    SELECT COUNT(*) AS total
+    ${baseQuery}
+  `;
+
+  const activities = await db.query(activitiesQuery, [
+    ...values,
+    limit,
+    offset,
+  ]);
+  const total = await db.query(countQuery, values);
+
+  return {
+    activities: activities.rows,
+    total: parseInt(total.rows[0].total, 10),
+    limit,
+  };
+};

@@ -1,9 +1,10 @@
 const {
   getActivitiesPaginated,
-  createActivity: createActivityModel,
+  createActivityModel,
   getActivityById,
   updateActivity,
-  deleteActivity: deleteActivityModel,
+  deleteActivityModel,
+  filterActivitiesPaginatedModel,
 } = require("../models/activityModel");
 
 // 🔹 LISTAR
@@ -149,5 +150,30 @@ exports.deleteActivity = async (req, res) => {
   } catch (error) {
     console.error("Error al eliminar actividad:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.filterActivitiesPaginated = async (req, res) => {
+  try {
+    const page = parseInt(req.params.page, 10) || 1;
+    const { tipo, orden, search } = req.query;
+
+    const result = await filterActivitiesPaginatedModel(
+      page,
+      tipo,
+      orden,
+      search
+    );
+
+    res.json({
+      page,
+      limit: result.limit,
+      total: result.total,
+      totalPages: Math.ceil(result.total / result.limit),
+      data: result.activities,
+    });
+  } catch (error) {
+    console.error("Error al filtrar actividades:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
   }
 };
