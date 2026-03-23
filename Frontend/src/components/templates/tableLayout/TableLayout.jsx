@@ -94,6 +94,7 @@ const TableLayout = ({
           </button>
           <button
             type="button"
+            disabled={page >= totalPages}
             onClick={() => changePage(true)}
             className={styles.actionButton}
           >
