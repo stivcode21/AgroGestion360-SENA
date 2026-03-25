@@ -15,6 +15,7 @@ exports.getActivitiesPaginated = async (page) => {
       a.monto,
       a.observaciones,
       a.actividad,
+      a.id_trabajador,
       t.nombre_completo AS trabajador,
       t.numero_documento AS documento,
       e.nombre AS estado
@@ -41,40 +42,37 @@ exports.getActivitiesPaginated = async (page) => {
 // 🔹 CREAR
 exports.createActivity = async (activityData) => {
   const {
-    id_trabajador,
-    id_estado,
-    monto,
-    observaciones,
-    url_evidencia,
-    fecha_inicio,
-    fecha_fin,
-    duracion,
+      id_trabajador,
+      duracion,
+      actividad,
+      id_estado,
+      fecha_inicio,
+      monto,
+      observaciones,
   } = activityData;
 
   const query = `
     INSERT INTO actividades (
-      id_trabajador,
+       id_trabajador,
+      duracion,
+      actividad,
       id_estado,
-      monto,
-      observaciones,
-      url_evidencia,
       fecha_inicio,
-      fecha_fin,
-      duracion
+      monto,
+      observaciones
     )
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+    VALUES ($1,$2,$3,$4,$5,$6,$7)
     RETURNING *
   `;
 
   const values = [
-    id_trabajador,
-    id_estado,
-    monto,
-    observaciones,
-    url_evidencia,
-    fecha_inicio,
-    fecha_fin,
-    duracion,
+     id_trabajador,
+      duracion,
+      actividad,
+      id_estado,
+      fecha_inicio,
+      monto,
+      observaciones,
   ];
 
   const { rows } = await db.query(query, values);
@@ -90,6 +88,7 @@ exports.getActivityById = async (id) => {
       a.fecha_inicio,
       a.fecha_fin,
       a.duracion,
+      a.actividad,
       a.id_trabajador,
       t.nombre_completo AS trabajador,
       a.id_estado,
@@ -149,7 +148,7 @@ exports.updateActivity = async (id, data) => {
   ];
 
   const { rows } = await db.query(query, values);
-  return rows[0];
+  return rows[0] || null;
 };
 
 // 🔹 ELIMINAR

@@ -2,17 +2,22 @@ import MainLayout from "@/components/templates/mainLayout/MainLayout";
 import styles from "./ActivityForm.module.css";
 import Button from "@/components/templates/button/Button";
 import { ArrowLeft, Save } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-import { activitiesData, activityInputFields } from "@/data/activitiesData";
+import {activityInputFields } from "@/data/activitiesData";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
+import toast from "react-hot-toast";
+import { buildApiUrl } from "@/utils/apiBase";
 
 const ActivityForm = ({ title }) => {
   const inputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
+  const { toggleLoader } = useLoader();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     idPerson: "",
     duration: "",
@@ -25,14 +30,13 @@ const ActivityForm = ({ title }) => {
 
   const { id } = useParams();
   const isEditMode = Boolean(id);
-  const activity = activitiesData.find((item) => item.id === id);
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.idPerson.trim()) {
+    if (!formData.idPerson) {
       newErrors.idPerson = "El ID del trabajador es obligatorio.";
-    } else if (!/^\d{1,6}$/.test(formData.idPerson.trim())) {
+    } else if (!/^[A-Za-z0-9\s]{1,}$/.test(formData.idPerson)) {
       newErrors.idPerson = "Solo numeros (hasta 6 digitos)";
     }
 
@@ -48,7 +52,7 @@ const ActivityForm = ({ title }) => {
       newErrors.activity = "Solo letras y espacios (min 3 caracteres)";
     }
 
-    if (!formData.status.trim()) {
+    if (!formData.status) {
       newErrors.status = "Selecciona un estado.";
     }
 
@@ -76,6 +80,114 @@ const ActivityForm = ({ title }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // obtenemos los detalles del producto si estamos en modo edicion
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    const getDetails = async () => {
+      try {
+        toggleLoader(true);
+        // Consulta el producto actual para editar con la ultima informacion guardada.
+        const res = await fetch(buildApiUrl(`activity/getactivity/${id}`), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        const actividades = data.data;
+
+        console.log("Detalles de la actividad obtenidos:", actividades);
+        setFormData({
+          idPerson: String(actividades.id_trabajador ?? ""),
+          duration: String(actividades.duracion ?? ""),
+          activity: actividades.actividad ?? "",
+          status: String(actividades.id_estado ?? ""),
+          dateInit: actividades.fecha_inicio ?? "",
+          cost: String(actividades.monto ?? ""),
+          description: actividades.observaciones ?? "",
+        });
+
+        setPreviewUrl(actividades.url_evidencia || "");
+      } catch (error) {
+        console.error("Error en getDetails:", error);
+        toast.error("Ha ocurrido un error inesperado.");
+      } finally {
+        toggleLoader(false);
+      }
+    };
+
+    getDetails();
+  }, [id, isEditMode]);
+
+  // validamos cada campo individualmente al salir de el, mostrando el error debajo del campo
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    const isValid = validateForm();
+
+    if (isValid) return;
+
+    setErrors((prev) => ({ [name]: prev[name] }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  //envio final del formulario para crear o editar el producto dependiendo del modo
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      toggleLoader(true);
+
+      const endpoint = isEditMode
+        ? `activity/editactivity/${id}`
+        : "activity/createActivity";
+      const method = isEditMode ? "PUT" : "POST";
+
+      // Convierte los valores del formulario al formato que espera la API de inventario.
+      const res = await fetch(buildApiUrl(endpoint), {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_trabajador: Number(formData.idPerson),
+          duracion: String(formData.duration).trim(),
+          actividad: formData.activity,
+          id_estado: Number(formData.status),
+          fecha_inicio: formData.dateInit || null,
+          monto: Number(formData.cost),
+          observaciones: formData.description || null,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(data.message);
+      navigate("/actividades");
+    } catch (error) {
+      console.error("error en actividad:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
+  };
+
+  // manejamos el click en la imagen para abrir el selector de archivos
   const handleImageClick = () => {
     inputRef.current?.click();
   };
@@ -93,42 +205,9 @@ const ActivityForm = ({ title }) => {
     setPreviewUrl(objectUrl);
   };
 
-  // Función para manejar el evento de desenfoque (blur) en los campos del formulario
-  const handleBlur = (e) => {
-    const { name } = e.target;
-    const isValid = validateForm();
-
-    if (isValid) return;
-
-    setErrors((prev) => ({ [name]: prev[name] }));
-  };
-
-  // Función para manejar el cambio de cualquier campo del formulario, actualizando el estado formData con el nuevo valor.
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    // Simulacion temporal del envio hasta conectar con la API real.
-    console.log("Formulario de actividad listo para enviar:", formData);
-  };
-
-  useEffect(() => {
-    if (!isEditMode) return;
-
-    console.log("Modo edicion pendiente de implementar", activity);
-  }, [isEditMode, activity]);
-
   useEffect(() => {
     return () => {
-      if (previewUrl?.startsWith("blob:")) {
+      if (previewUrl.startsWith("blob:")) {
         URL.revokeObjectURL(previewUrl);
       }
     };
@@ -186,7 +265,7 @@ const ActivityForm = ({ title }) => {
             </div>
 
             <div className={styles.footerActions}>
-              <Button type="three" buttonType="submit">
+              <Button type="three" onClick={handleSubmit}>
                 <Save /> Guardar
               </Button>
             </div>
