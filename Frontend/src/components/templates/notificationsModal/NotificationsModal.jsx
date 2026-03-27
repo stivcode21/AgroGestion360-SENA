@@ -5,12 +5,7 @@ import RequestCreate from "@/components/molecules/requestCreate/RequestCreate";
 import NotificationDetails from "@/components/organism/notificationDetails/NotificationDetails";
 import styles from "./NotificationsModal.module.css";
 
-const NotificationsModal = ({
-  isOpen,
-  onClose,
-  notifications = [],
-  onMarkAllRead,
-}) => {
+const NotificationsModal = ({ isOpen, onClose, notifications = [] }) => {
   const [stateContent, setStateContent] = useState("notifications");
   const [currentDetailsId, setCurrentDetailsId] = useState(() =>
     typeof window !== "undefined"
@@ -82,22 +77,11 @@ const NotificationsModal = ({
             <Plus size={15} />
             {isNotificationsView ? "Nueva solicitud" : "Ver bandeja"}
           </button>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={onMarkAllRead}
-          >
-            <CheckCheck size={15} />
-            Marcar leidas
-          </button>
         </section>
 
         <section className={styles.list}>
           {isCreateRequestView ? (
-            <RequestCreate
-              onCancel={() => setStateContent("notifications")}
-              onSubmitRequest={() => setStateContent("notifications")}
-            />
+            <RequestCreate onCancel={() => setStateContent("notifications")} />
           ) : isDetailsView ? (
             <NotificationDetails
               notification={selectedNotification}
@@ -106,7 +90,7 @@ const NotificationsModal = ({
           ) : hasNotifications ? (
             notifications.map((item) => (
               <CardNotification
-                key={item.id}
+                key={item.id_solicitud || item.id}
                 item={item}
                 onClick={handleOpenDetails}
               />
