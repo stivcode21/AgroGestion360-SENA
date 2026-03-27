@@ -5,10 +5,9 @@ export const requestCreateInputFields = [
     placeholder: "Selecciona un tipo",
     select: {
       options: [
-        { label: "Fertilizante", value: "fertilizante" },
-        { label: "Herramienta", value: "herramienta" },
-        { label: "Alimento", value: "alimento" },
-        { label: "Medicina", value: "medicina" },
+        { label: "Fertilizante", value: "1" },
+        { label: "Herramienta", value: "2" },
+        { label: "Alimento", value: "3" },
       ],
     },
   },
@@ -56,49 +55,4 @@ export const requestCreateInputFields = [
     placeholder: "AAAA-MM-DD",
     type: "date",
   },
-];
-
-export const requestCreateFieldValidations = {
-  title: {
-    pattern: /^.{3,}$/,
-    message: "Minimo 3 caracteres",
-  },
-  reason: {
-    pattern: /^.{8,}$/,
-    message: "Minimo 8 caracteres",
-  },
-  requestType: {
-    pattern: /^(fertilizante|herramienta|alimento|medicina)$/,
-    message: "Selecciona un tipo valido",
-  },
-  quantity: {
-    pattern: /^(?:[1-9]\d{0,3})$/,
-    message: "Ingresa una cantidad valida",
-  },
-  targetSpecies: {
-    pattern: /^(cerdos|peces|ganado|gallinas|ninguna)$/,
-    message: "Selecciona una especie valida",
-  },
-  unit: {
-    pattern: /^(kg|litros|sacos|unidad)$/,
-    message: "Selecciona una unidad valida",
-  },
-  provider: {
-    pattern: /^.{3,}$/,
-    message: "Minimo 3 caracteres",
-  },
-  expirationDate: {
-    pattern: /^(?:\d{4}-\d{2}-\d{2})?$/,
-    message: "Usa el formato AAAA-MM-DD",
-  },
-};
-
-export const requestCreateRequiredFields = [
-  "title",
-  "reason",
-  "requestType",
-  "quantity",
-  "targetSpecies",
-  "unit",
-  "provider",
 ];

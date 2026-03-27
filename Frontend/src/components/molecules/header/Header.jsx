@@ -6,27 +6,25 @@ import { Link } from "react-router-dom";
 import { getColombiaDate } from "@/utils/getColombiaDate";
 import { useState, useEffect } from "react";
 import NotificationsModal from "@/components/templates/notificationsModal/NotificationsModal";
-import { notificationsData } from "@/data/notificationsData";
 import { checkAuth } from "@/utils/auth";
 import { useUserStore } from "@/store/userStore";
 import { buildApiUrl } from "@/utils/apiBase";
 import previuIMG from "@/assets/img/previuIMG.webp";
+import toast from "react-hot-toast";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 
 const Header = () => {
   const { currentSection, isCollapsed, isDesktop } = useSidebarStore();
   const currentPage = sidebarData.find((item) => item.path === currentSection);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] = useState(notificationsData);
+  const [notifications, setNotifications] = useState([]);
+
   const unreadCount = notifications.filter((item) => !item.read).length;
   const { user, setUser } = useUserStore();
+  const { toggleLoader } = useLoader();
 
   const toggleNotifications = () => {
     setIsNotificationsOpen((prev) => !prev);
-  };
-
-  const handleMarkAllRead = () => {
-    // Marcar todas las notificaciones como leídas
-    setNotifications((prev) => prev.map((item) => ({ ...item, read: true })));
   };
 
   useEffect(() => {
@@ -52,6 +50,36 @@ const Header = () => {
       }
     };
     getUser();
+  }, []);
+
+  useEffect(() => {
+    const getRequests = async () => {
+      try {
+        toggleLoader(true);
+
+        const res = await fetch(buildApiUrl("request/list"), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message ?? "No se pudieron cargar las solicitudes.");
+          return;
+        }
+
+        console.log("Solicitudes obtenidas:", data.data);
+        setNotifications(data.data);
+      } catch (error) {
+        console.error("Error en getRequests:", error);
+        toast.error("Ha ocurrido un error inesperado.");
+      } finally {
+        toggleLoader(false);
+      }
+    };
+
+    getRequests();
   }, []);
 
   return (
@@ -100,11 +128,11 @@ const Header = () => {
           />
         </section>
       </nav>
+
       <NotificationsModal
         isOpen={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
         notifications={notifications}
-        onMarkAllRead={handleMarkAllRead}
       />
     </header>
   );
