@@ -1,10 +1,10 @@
 const {
   getActivitiesPaginated,
-  createActivityModel,
   getActivityById,
   updateActivity,
-  deleteActivityModel,
+  deleteActivity,
   filterActivitiesPaginatedModel,
+  createActivity,
 } = require("../models/activityModel");
 
 // 🔹 LISTAR
@@ -17,7 +17,7 @@ exports.listActivities = async (req, res) => {
 
     return res.status(200).json({
       page,
-      limit,
+      limit,  
       total: result.total,
       totalPages: Math.ceil(result.total / limit),
       data: result.activities,
@@ -33,15 +33,13 @@ exports.createActivity = async (req, res) => {
   try {
     const {
       id_trabajador,
+      duracion,
+      actividad,
       id_estado,
+      fecha_inicio,
       monto,
       observaciones,
-      url_evidencia,
-      fecha_inicio,
-      fecha_fin,
-      duracion,
-      documento,
-      actividad,
+      
     } = req.body;
 
     if (!id_trabajador || !id_estado || !monto) {
@@ -50,17 +48,14 @@ exports.createActivity = async (req, res) => {
       });
     }
 
-    const newActivity = await createActivityModel({
+    const newActivity = await createActivity({
       id_trabajador,
+      duracion,
+      actividad,
       id_estado,
+      fecha_inicio,
       monto,
       observaciones,
-      url_evidencia,
-      fecha_inicio,
-      fecha_fin,
-      duracion,
-      documento,
-      actividad,
     });
 
     return res.status(201).json({
@@ -122,6 +117,7 @@ exports.editActivity = async (req, res) => {
       message: "Actividad actualizada correctamente.",
       data: updated,
     });
+    
   } catch (error) {
     console.error("Error al editar actividad:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
@@ -137,7 +133,7 @@ exports.deleteActivity = async (req, res) => {
       return res.status(400).json({ message: "ID inválido." });
     }
 
-    const deleted = await deleteActivityModel(id);
+    const deleted = await deleteActivity(id);
 
     if (!deleted) {
       return res.status(404).json({ message: "Actividad no encontrada." });

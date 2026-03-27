@@ -3,6 +3,10 @@ import { formatDate } from "@/utils/formatDate";
 import { useModalStore } from "@/store/modalStore";
 import { Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
+import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
+import { buildApiUrl } from "@/utils/apiBase";
+import toast from "react-hot-toast";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -11,7 +15,51 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 });
 
 const ActivityDetails = () => {
-  const { selectActivity, setIsOpenModal } = useModalStore();
+  const { selectActivity, setIsOpenModal, setSelectActivity} = useModalStore();
+  const { toggleLoader } = useLoader();
+  const { openActionModal } = useActionModal();
+
+    const handleDeleteConfirm = async () => {
+    if (!selectActivity?.id_registro) return;
+
+    try {
+      toggleLoader(true);
+      // Borra el producto seleccionado y cierra el detalle cuando el backend confirma la eliminacion.
+      const res = await fetch(
+        buildApiUrl(`activity/deleteactivity/${selectActivity.id_registro}`),
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(data.message);
+      setSelectActivity(null);
+      setIsOpenModal(false);
+    } catch (error) {
+      console.error("Error al eliminar actividad:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
+  };
+
+  const openDeleteModal = () => {
+    openActionModal({
+      variant: "delete",
+      title: "Quieres eliminar",
+      titleSuffix: "",
+      highlight: selectActivity?.id_registro,
+      description: "Esta accion eliminara el producto permanentemente.",
+      onConfirm: handleDeleteConfirm,
+    });
+  };
 
   if (!selectActivity) {
     return (
@@ -20,7 +68,7 @@ const ActivityDetails = () => {
       </div>
     );
   }
-
+console.log("Actividad seleccionada:", selectActivity);
   const {
     duracion,
     estado,
@@ -43,7 +91,9 @@ const ActivityDetails = () => {
         <h3 className={styles.sectionTitle}>Detalles de actividad</h3>
 
         <div className={styles.actions}>
-          <button type="button" className={styles.action}>
+          <button type="button" className={styles.action}
+            onClick={openDeleteModal}
+            >
             <Trash2 className={styles.icon} />
             <span>Eliminar</span>
           </button>
@@ -52,7 +102,7 @@ const ActivityDetails = () => {
             className={styles.action}
             onClick={() => setIsOpenModal(false)}
           >
-            <Link to={`/actividades/editar/${selectActivity}`}>
+            <Link to={`/actividades/editar/${id_registro}`}>
               <Pencil className={styles.icon} />
               <span>Editar</span>
             </Link>
