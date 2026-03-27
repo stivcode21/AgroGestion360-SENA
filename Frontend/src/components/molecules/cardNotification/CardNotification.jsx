@@ -48,10 +48,10 @@ const CardNotification = ({ item, onClick }) => {
       </span>
 
       <section className={styles.content}>
-        <h4 className={styles.title}>{item.subject ?? item.title}</h4>
-        <p className={styles.message}>{item.message}</p>
+        <h4 className={styles.title}>{item.titulo}</h4>
+        <p className={styles.message}>{item.motivo}</p>
         <footer className={styles.footer}>
-          <span className={styles.time}>{item.time}</span>
+          <span className={styles.time}></span>
           <span className={`${styles.badge} ${current.badgeClass}`}>
             {current.label}
           </span>

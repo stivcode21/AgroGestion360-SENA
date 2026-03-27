@@ -116,7 +116,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #15803d;
+  background: #e70c0c;
 }
 
 .circle::before {
@@ -125,14 +125,14 @@
   border-radius: 50%;
   width: 8px;
   height: 8px;
-  background: #15803d;
-  opacity: 0.8;
+  background: #b91c1c;
+  opacity: 0.6;
   animation: 1s ease zoom-in infinite;
 }
 
 @keyframes zoom-in {
   to {
-    transform: scale(3);
+    transform: scale(2);
     opacity: 0;
   }
 }
