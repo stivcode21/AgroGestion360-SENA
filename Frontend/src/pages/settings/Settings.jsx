@@ -5,6 +5,8 @@ import ListAdmins from "@/components/organism/listAdmins/ListAdmins";
 import UpdateCrendentials from "@/components/molecules/updateCrendentials/UpdateCrendentials";
 import { UserRound, UsersRound } from "lucide-react";
 import styles from "./Settings.module.css";
+import { useUserStore } from "@/store/userStore";
+import { hasRole } from "@/utils/auth";
 
 const Settings = () => {
   const [activeView, setActiveView] = useState("settingsPanel");
@@ -13,14 +15,20 @@ const Settings = () => {
     userId: "",
     defaultUsername: "",
   });
+  const { user } = useUserStore();
+  const canViewAdmins = hasRole(user, 1);
 
   const views = [
     { id: "settingsPanel", label: "Mi perfil", icon: <UserRound size={16} /> },
-    {
-      id: "listAdmins",
-      label: "Administradores",
-      icon: <UsersRound size={16} />,
-    },
+    ...(canViewAdmins
+      ? [
+          {
+            id: "listAdmins",
+            label: "Administradores",
+            icon: <UsersRound size={16} />,
+          },
+        ]
+      : []),
   ];
 
   const handleOpenCredentials = (userId, defaultUsername = "") => {
@@ -54,8 +62,10 @@ const Settings = () => {
         <article className={styles.content}>
           {activeView === "settingsPanel" ? (
             <SettingsPanel onOpenCredentials={handleOpenCredentials} />
-          ) : (
+          ) : canViewAdmins ? (
             <ListAdmins onOpenCredentials={handleOpenCredentials} />
+          ) : (
+            <SettingsPanel onOpenCredentials={handleOpenCredentials} />
           )}
         </article>
 
