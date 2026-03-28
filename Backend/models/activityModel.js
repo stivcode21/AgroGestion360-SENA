@@ -111,6 +111,7 @@ exports.getActivityById = async (id) => {
 exports.updateActivity = async (id, data) => {
   const {
     id_trabajador,
+    actividad,
     id_estado,
     monto,
     observaciones,
@@ -124,19 +125,21 @@ exports.updateActivity = async (id, data) => {
     UPDATE actividades
     SET
       id_trabajador = $1,
-      id_estado = $2,
-      monto = $3,
-      observaciones = $4,
-      url_evidencia = $5,
-      fecha_inicio = $6,
-      fecha_fin = $7,
-      duracion = $8
-    WHERE id_registro = $9
+      actividad = $2,
+      id_estado = $3,
+      monto = $4,
+      observaciones = $5,
+      url_evidencia = $6,
+      fecha_inicio = $7,
+      fecha_fin = $8,
+      duracion = $9
+    WHERE id_registro = $10
     RETURNING *
   `;
 
   const values = [
     id_trabajador,
+    actividad,
     id_estado,
     monto,
     observaciones,

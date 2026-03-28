@@ -1,15 +1,16 @@
 const express = require("express");
 const request = require("../controllers/requestController.js");
+const { verifyToken } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
 // GET /getrequest/6
-router.get("/request/:id", request.getRequest);
+router.get("/request/:id", verifyToken, request.getRequest);
 
-router.get("/list", request.listRequests);
+router.get("/list", verifyToken, request.listRequests);
 
 // POST /create
-router.post("/create", request.postRequest);
+router.post("/create", verifyToken, request.postRequest);
 
 // router.put("/edit/:id", request.editRequest);
 
