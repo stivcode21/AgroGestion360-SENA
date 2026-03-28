@@ -144,6 +144,7 @@ const AdminForm = ({ title }) => {
       const res = await fetch(buildApiUrl(endpoint), {
         method,
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -180,6 +181,7 @@ const AdminForm = ({ title }) => {
         const res = await fetch(buildApiUrl(`auth/user/${id}`), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
         const data = await res.json();
 

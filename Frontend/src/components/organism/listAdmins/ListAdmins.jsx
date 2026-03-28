@@ -20,6 +20,7 @@ const ListAdmins = () => {
         const res = await fetch(buildApiUrl("auth/admins/list"), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
         const data = await res.json();
 

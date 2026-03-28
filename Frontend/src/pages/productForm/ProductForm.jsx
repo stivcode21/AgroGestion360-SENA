@@ -99,6 +99,7 @@ const ProductForm = ({ title }) => {
         const res = await fetch(buildApiUrl(`product/getproduct/${id}`), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
         const data = await res.json();
 
@@ -166,6 +167,7 @@ const ProductForm = ({ title }) => {
       const res = await fetch(buildApiUrl(endpoint), {
         method,
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           nombre: formData.name.trim(),
           id_tipo: Number(formData.type),

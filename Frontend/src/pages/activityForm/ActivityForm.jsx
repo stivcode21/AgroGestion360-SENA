@@ -7,10 +7,13 @@ import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-import {activityInputFields } from "@/data/activitiesData";
+import { activityInputFields } from "@/data/activitiesData";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import toast from "react-hot-toast";
 import { buildApiUrl } from "@/utils/apiBase";
+import { formatDate } from "@/utils/formatDate";
+import { useUserStore } from "@/store/userStore";
+import { hasRole } from "@/utils/auth";
 
 const ActivityForm = ({ title }) => {
   const inputRef = useRef(null);
@@ -18,11 +21,14 @@ const ActivityForm = ({ title }) => {
   const [errors, setErrors] = useState({});
   const { toggleLoader } = useLoader();
   const navigate = useNavigate();
+  const { user } = useUserStore();
+  const canView = hasRole(user, 1);
+
   const [formData, setFormData] = useState({
     idPerson: "",
     duration: "",
     activity: "",
-    status: "",
+    status: "1",
     dateInit: "",
     cost: "",
     description: "",
@@ -30,6 +36,9 @@ const ActivityForm = ({ title }) => {
 
   const { id } = useParams();
   const isEditMode = Boolean(id);
+
+  const normalizeCostValue = (value) =>
+    String(value ?? "").replace(/[^\d]/g, "");
 
   const validateForm = () => {
     const newErrors = {};
@@ -48,7 +57,9 @@ const ActivityForm = ({ title }) => {
 
     if (!formData.activity.trim()) {
       newErrors.activity = "La actividad es obligatoria.";
-    } else if (!/^[A-Za-z\s]{3,}$/.test(formData.activity.trim())) {
+    } else if (
+      !/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]{3,}$/.test(formData.activity.trim())
+    ) {
       newErrors.activity = "Solo letras y espacios (min 3 caracteres)";
     }
 
@@ -91,6 +102,7 @@ const ActivityForm = ({ title }) => {
         const res = await fetch(buildApiUrl(`activity/getactivity/${id}`), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
         const data = await res.json();
 
@@ -107,8 +119,8 @@ const ActivityForm = ({ title }) => {
           duration: String(actividades.duracion ?? ""),
           activity: actividades.actividad ?? "",
           status: String(actividades.id_estado ?? ""),
-          dateInit: actividades.fecha_inicio ?? "",
-          cost: String(actividades.monto ?? ""),
+          dateInit: formatDate(actividades.fecha_inicio),
+          cost: normalizeCostValue(actividades.monto),
           description: actividades.observaciones ?? "",
         });
 
@@ -159,14 +171,15 @@ const ActivityForm = ({ title }) => {
       const res = await fetch(buildApiUrl(endpoint), {
         method,
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           id_trabajador: Number(formData.idPerson),
           duracion: String(formData.duration).trim(),
-          actividad: formData.activity,
+          actividad: formData.activity.trim(),
           id_estado: Number(formData.status),
           fecha_inicio: formData.dateInit || null,
           monto: Number(formData.cost),
-          observaciones: formData.description || null,
+          observaciones: formData.description.trim() || null,
         }),
       });
 
@@ -246,6 +259,7 @@ const ActivityForm = ({ title }) => {
                   placeholder={field.placeholder}
                   select={field?.select}
                   error={errors[field.name]}
+                  disabled={field?.select && !canView}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   required={field?.required}

@@ -124,6 +124,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
       const res = await fetch(buildApiUrl(`auth/update/${user.id_usuario}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           nombre_completo: formData.name.trim(),
           edad: Number(formData.age),

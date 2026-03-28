@@ -37,6 +37,7 @@ const Header = () => {
 
       const res = await fetch(buildApiUrl(`auth/user/${authUser.id_admin}`), {
         method: "GET",
+        credentials: "include",
       });
       const datauser = await res.json();
 
@@ -60,6 +61,7 @@ const Header = () => {
         const res = await fetch(buildApiUrl("request/list"), {
           method: "GET",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
 
         const data = await res.json();

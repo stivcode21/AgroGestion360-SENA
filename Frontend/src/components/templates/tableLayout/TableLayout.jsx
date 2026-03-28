@@ -45,6 +45,7 @@ const TableLayout = ({
       const res = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
       const data = await res.json();
 
