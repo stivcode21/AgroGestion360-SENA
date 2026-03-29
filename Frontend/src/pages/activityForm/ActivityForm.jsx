@@ -14,6 +14,7 @@ import { buildApiUrl } from "@/utils/apiBase";
 import { formatDate } from "@/utils/formatDate";
 import { useUserStore } from "@/store/userStore";
 import { hasRole } from "@/utils/auth";
+import ConsumoForm from "@/components/organism/consumoForm/ConsumoForm";
 
 const ActivityForm = ({ title }) => {
   const inputRef = useRef(null);
@@ -33,6 +34,7 @@ const ActivityForm = ({ title }) => {
     cost: "",
     description: "",
   });
+  const [consumptionItems, setConsumptionItems] = useState([]);
 
   const { id } = useParams();
   const isEditMode = Boolean(id);
@@ -159,12 +161,30 @@ const ActivityForm = ({ title }) => {
       return;
     }
 
+    //validar que no haya consumos con cantidad vacia, si los hay se muestra un error y se detiene el proceso
+    const hasIncompleteConsumption = consumptionItems.some(
+      (item) => item.id_insumo && !String(item.cantidad ?? "").trim(),
+    );
+
+    if (hasIncompleteConsumption) {
+      toast.error("Cada producto agregado en consumo debe tener una cantidad.");
+      return;
+    }
+
+    // Normalizamos el arreglo para enviar solo los datos necesarios ademas de convertir las cantidades a numeros.
+    const normalizedConsumptionItems = consumptionItems
+      .map((item) => ({
+        id_insumo: Number(item.id_insumo),
+        cantidad: Number(item.cantidad),
+      }))
+      .filter((item) => item.id_insumo && item.cantidad);
+
     try {
       toggleLoader(true);
 
       const endpoint = isEditMode
         ? `activity/editactivity/${id}`
-        : "activity/createActivity";
+        : "activity/createactivity";
       const method = isEditMode ? "PUT" : "POST";
 
       // Convierte los valores del formulario al formato que espera la API de inventario.
@@ -190,6 +210,52 @@ const ActivityForm = ({ title }) => {
         return;
       }
 
+      // acticidad guardada exitosamente, ahora procedemos a guardar el consumo si es que se agregaron items
+      const savedActivity = data.data ?? {};
+      const activityId = Number(savedActivity.id_registro ?? id);
+      const shouldSyncConsumption =
+        isEditMode || normalizedConsumptionItems.length > 0;
+
+      if (shouldSyncConsumption) {
+        const consumptionConfig = isEditMode
+          ? {
+              endpoint: `consumption/activity/${activityId}`,
+              method: "PUT",
+            }
+          : {
+              endpoint: "consumption/create",
+              method: "POST",
+            };
+
+        const consumptionRes = await fetch(
+          buildApiUrl(consumptionConfig.endpoint),
+          {
+            method: consumptionConfig.method,
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              id_actividad: activityId,
+              id_responsable: Number(
+                savedActivity.id_trabajador ?? formData.idPerson,
+              ),
+              items: normalizedConsumptionItems,
+            }),
+          },
+        );
+
+        const consumptionData = await consumptionRes.json();
+
+        if (!consumptionRes.ok) {
+          toast.error(
+            `La actividad se guardó, pero el consumo no pudo procesarse: ${consumptionData.message}`,
+          );
+          setConsumptionItems([]);
+          navigate("/actividades");
+          return;
+        }
+      }
+
+      setConsumptionItems([]);
       toast.success(data.message);
       navigate("/actividades");
     } catch (error) {
@@ -276,10 +342,16 @@ const ActivityForm = ({ title }) => {
                 style={{ gridColumn: "1 / -1" }}
                 value={formData.description}
               />
+              <ConsumoForm
+                activityId={id}
+                consumptionItems={consumptionItems}
+                isEditMode={isEditMode}
+                setConsumptionItems={setConsumptionItems}
+              />
             </div>
 
             <div className={styles.footerActions}>
-              <Button type="three" onClick={handleSubmit}>
+              <Button type="three" buttonType="submit">
                 <Save /> Guardar
               </Button>
             </div>

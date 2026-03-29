@@ -193,3 +193,19 @@ export const activityInputFields = [
     type: "number",
   },
 ];
+
+export const consumoInputFields = [
+  {
+    name: "searchProduct",
+    type: "text",
+    label: "Busca los productos consumidos *",
+    placeholder: "Ej. cuido vacas",
+  },
+
+  {
+    name: "amount",
+    label: "cantidad *",
+    type: "number",
+    placeholder: "Ej. 10",
+  },
+];
