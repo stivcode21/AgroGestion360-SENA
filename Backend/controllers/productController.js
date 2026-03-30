@@ -32,6 +32,7 @@ exports.postProduct = async (req, res) => {
     const {
       nombre,
       id_tipo,
+      url_img,
       marca,
       cantidad,
       fecha_vencimiento,
@@ -51,6 +52,7 @@ exports.postProduct = async (req, res) => {
     const newProduct = await createProduct({
       nombre: nombre.trim(),
       id_tipo,
+      url_img,
       marca,
       cantidad,
       fecha_vencimiento,

@@ -10,6 +10,7 @@ exports.getProductsPaginated = async (page) => {
         i.id_tipo,
         t.nombre AS tipo,
         i.nombre,
+        i.url_img,
         i.marca,
         i.cantidad,
         i.fecha_registro,
@@ -42,6 +43,7 @@ exports.createProduct = async (productData) => {
   const {
     nombre,
     id_tipo,
+    url_img,
     marca,
     cantidad,
     fecha_vencimiento,
@@ -55,6 +57,7 @@ exports.createProduct = async (productData) => {
     INSERT INTO inventario (
       nombre,
       id_tipo,
+      url_img,
       marca,
       cantidad,
       fecha_vencimiento,
@@ -63,13 +66,14 @@ exports.createProduct = async (productData) => {
       precio_unitario,
       observaciones
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     RETURNING *
   `;
 
   const values = [
     nombre,
     id_tipo,
+    url_img ?? null,
     marca ?? null,
     cantidad,
     fecha_vencimiento ?? null,
@@ -90,6 +94,7 @@ exports.getProductById = async (id) => {
         i.id_tipo,
         t.nombre AS tipo,
         i.nombre,
+        i.url_img,
         i.marca,
         i.cantidad,
         i.fecha_registro,
@@ -111,6 +116,7 @@ exports.updateProduct = async (id, productData) => {
   const {
     id_tipo,
     nombre,
+    url_img,
     marca,
     cantidad,
     fecha_vencimiento,
@@ -125,20 +131,22 @@ exports.updateProduct = async (id, productData) => {
     SET
       id_tipo = $1,
       nombre = $2,
-      marca = $3,
-      cantidad = $4,
-      fecha_vencimiento = $5,
-      unidad_medida = $6,
-      proveedor = $7,
-      precio_unitario = $8,
-      observaciones = $9
-    WHERE id_insumo = $10
+      url_img = $3,
+      marca = $4,
+      cantidad = $5,
+      fecha_vencimiento = $6,
+      unidad_medida = $7,
+      proveedor = $8,
+      precio_unitario = $9,
+      observaciones = $10
+    WHERE id_insumo = $11
     RETURNING *
   `;
 
   const values = [
     id_tipo,
     nombre,
+    url_img ?? null,
     marca ?? null,
     cantidad,
     fecha_vencimiento ?? null,
@@ -185,7 +193,7 @@ exports.filterProductsPaginatedModel = async (page, tipo, orden, search) => {
   if (search?.trim()) {
     values.push(`%${search.trim()}%`);
     condiciones.push(
-      `(i.nombre ILIKE $${values.length} OR i.marca ILIKE $${values.length})`
+      `(i.nombre ILIKE $${values.length} OR i.marca ILIKE $${values.length})`,
     );
   }
 
@@ -209,6 +217,7 @@ exports.filterProductsPaginatedModel = async (page, tipo, orden, search) => {
       i.id_tipo,
       t.nombre AS tipo,
       i.nombre,
+      i.url_img,
       i.marca,
       i.cantidad,
       i.fecha_registro,
