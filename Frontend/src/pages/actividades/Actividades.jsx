@@ -14,16 +14,17 @@ import toast from "react-hot-toast";
 import previuIMG from "@/assets/img/previuIMG.webp";
 import FiltersBox from "@/components/molecules/filtersBox/FiltersBox";
 import { activityInputFields } from "@/data/activitiesData";
+import { useDataStore } from "@/store/dataStore";
 
 const Actividades = () => {
   const { setIsOpenModal, setSelectActivity } = useModalStore();
   const [state, setState] = useState(false);
-  const [activity, setActivities] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [tableEndpoint, setTableEndpoint] = useState("activity/list");
   const [filterQueryParams, setFilterQueryParams] = useState({});
   const [search, setSearch] = useState("");
+  const { activities, setActivities } = useDataStore();
 
   const { toggleLoader } = useLoader();
 
@@ -189,13 +190,13 @@ const Actividades = () => {
               endpoint={tableEndpoint}
               queryParams={tableQueryParams}
             >
-              {activity.length === 0 ? (
+              {activities.length === 0 ? (
                 // Mensaje visible cuando la consulta no devuelve filas.
                 <li className={tableStyles.empty}>
                   No se encontraron actividades para esta busqueda.
                 </li>
               ) : (
-                activity.map((item) => (
+                activities.map((item) => (
                   <li key={item.id_registro} className={tableStyles.row}>
                     <div className={tableStyles.itemInfo}>
                       <figure className={styles.workerThumb}>

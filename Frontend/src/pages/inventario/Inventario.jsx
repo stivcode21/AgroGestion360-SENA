@@ -15,6 +15,7 @@ import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import previuIMG from "@/assets/img/previuIMG.webp";
 import { productInputFields } from "@/data/productRegisterData";
+import { useDataStore } from "@/store/dataStore";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -25,12 +26,12 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 const Inventario = () => {
   const { setIsOpenModal, setSelectProduct } = useModalStore();
   const [state, setState] = useState(false);
-  const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [tableEndpoint, setTableEndpoint] = useState("product/list");
   const [filterQueryParams, setFilterQueryParams] = useState({});
   const [search, setSearch] = useState("");
+  const { products, setProducts } = useDataStore();
 
   const { toggleLoader } = useLoader();
 

@@ -7,6 +7,7 @@ import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
+import { useDataStore } from "@/store/dataStore";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -15,7 +16,8 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 });
 
 const ActivityDetails = () => {
-  const { selectActivity, setIsOpenModal, setSelectActivity} = useModalStore();
+  const { selectActivity, setIsOpenModal, setSelectActivity } = useModalStore();
+  const { setActivities } = useDataStore();
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
 
@@ -40,6 +42,9 @@ const ActivityDetails = () => {
         return;
       }
 
+      setActivities((prev) =>
+        prev.filter((item) => item.id_registro !== selectActivity.id_registro),
+      );
       toast.success(data.message);
       setSelectActivity(null);
       setIsOpenModal(false);
