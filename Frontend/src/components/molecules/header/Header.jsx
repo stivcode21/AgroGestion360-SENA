@@ -12,13 +12,13 @@ import { buildApiUrl } from "@/utils/apiBase";
 import previuIMG from "@/assets/img/previuIMG.webp";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
+import { useDataStore } from "@/store/dataStore";
 
 const Header = () => {
   const { currentSection, isCollapsed, isDesktop } = useSidebarStore();
   const currentPage = sidebarData.find((item) => item.path === currentSection);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-
+  const { notifications, setNotifications } = useDataStore();
   const unreadCount = notifications.filter((item) => !item.read).length;
   const { user, setUser } = useUserStore();
   const { toggleLoader } = useLoader();
@@ -134,7 +134,6 @@ const Header = () => {
       <NotificationsModal
         isOpen={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
-        notifications={notifications}
       />
     </header>
   );
