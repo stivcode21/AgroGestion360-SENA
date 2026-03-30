@@ -1,4 +1,5 @@
 import { CircleCheckBig, Clock3, CircleX } from "lucide-react";
+import { formatDate } from "@/utils/formatDate";
 import styles from "./CardNotification.module.css";
 
 const statusConfig = {
@@ -28,7 +29,7 @@ const statusConfig = {
 const CardNotification = ({ item, onClick }) => {
   const current = statusConfig[item.status] || statusConfig.pendiente;
   const StatusIcon = current.Icon;
-  const handleOpenDetails = () => onClick?.(item.id);
+  const handleOpenDetails = () => onClick?.(item.id_solicitud);
 
   return (
     <article
@@ -51,7 +52,9 @@ const CardNotification = ({ item, onClick }) => {
         <h4 className={styles.title}>{item.titulo}</h4>
         <p className={styles.message}>{item.motivo}</p>
         <footer className={styles.footer}>
-          <span className={styles.time}></span>
+          <span className={styles.time}>
+            {formatDate(item.fecha_registro) || ""}
+          </span>
           <span className={`${styles.badge} ${current.badgeClass}`}>
             {current.label}
           </span>
