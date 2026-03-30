@@ -7,7 +7,28 @@ const insertConsumptionItem = async (
   id_responsable,
   item,
 ) => {
-  const query = `
+  const values = [id_actividad, id_responsable, item.id_insumo, item.cantidad];
+
+  // 1. Descontar inventario primero
+  const updateQuery = `
+    UPDATE inventario
+    SET cantidad = cantidad - $1
+    WHERE id_insumo = $2
+      AND cantidad >= $1
+    RETURNING *;
+  `;
+
+  const updateValues = [item.cantidad, item.id_insumo];
+  const updateResult = await client.query(updateQuery, updateValues);
+
+  if (updateResult.rowCount === 0) {
+    throw new Error(
+      `Stock insuficiente para el insumo con id ${item.id_insumo}`,
+    );
+  }
+
+  // 2. Insertar consumo solo si el descuento sí se pudo hacer
+  const insertQuery = `
     INSERT INTO consumo_insumo (
       id_actividad,
       id_responsable,
@@ -15,17 +36,10 @@ const insertConsumptionItem = async (
       cantidad
     )
     VALUES ($1, $2, $3, $4)
-    RETURNING *
+    RETURNING *;
   `;
 
-  const values = [
-    id_actividad,
-    id_responsable,
-    item.id_insumo,
-    item.cantidad,
-  ];
-
-  const { rows } = await client.query(query, values);
+  const { rows } = await client.query(insertQuery, values);
   return rows[0];
 };
 
