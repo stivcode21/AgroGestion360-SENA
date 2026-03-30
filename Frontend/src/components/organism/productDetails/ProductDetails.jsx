@@ -7,6 +7,7 @@ import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
+import { useDataStore } from "@/store/dataStore";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -16,6 +17,7 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 
 const ProductDetails = () => {
   const { selectProduct, setSelectProduct, setIsOpenModal } = useModalStore();
+  const { setProducts } = useDataStore();
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
 
@@ -40,6 +42,9 @@ const ProductDetails = () => {
         return;
       }
 
+      setProducts((prev) =>
+        prev.filter((item) => item.id_insumo !== selectProduct.id_insumo),
+      );
       toast.success(data.message);
       setSelectProduct(null);
       setIsOpenModal(false);
