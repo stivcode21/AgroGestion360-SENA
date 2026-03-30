@@ -3,10 +3,10 @@ import styles from "./ProductForm.module.css";
 import Button from "@/components/templates/button/Button";
 import { ArrowLeft, Save } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
-import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
+import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
 import { productInputFields } from "@/data/productRegisterData";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
@@ -14,8 +14,6 @@ import { buildApiUrl } from "@/utils/apiBase";
 import { formatDate } from "@/utils/formatDate";
 
 const ProductForm = ({ title }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
   const { toggleLoader } = useLoader();
   const navigate = useNavigate();
@@ -26,6 +24,7 @@ const ProductForm = ({ title }) => {
   const [formData, setFormData] = useState({
     name: "",
     type: "",
+    url_img: "",
     brand: "",
     amount: "",
     expiration: "",
@@ -113,6 +112,7 @@ const ProductForm = ({ title }) => {
         setFormData({
           name: product.nombre ?? "",
           type: String(product.id_tipo ?? ""),
+          url_img: product.url_img ?? "",
           brand: product.marca ?? "",
           amount: String(product.cantidad ?? ""),
           expiration: formatDate(product.fecha_vencimiento),
@@ -121,8 +121,6 @@ const ProductForm = ({ title }) => {
           price: String(product.precio_unitario ?? ""),
           observations: product.observaciones ?? "",
         });
-
-        setPreviewUrl(product.url_img || "");
       } catch (error) {
         console.error("Error en getDetails:", error);
         toast.error("Ha ocurrido un error inesperado.");
@@ -171,6 +169,7 @@ const ProductForm = ({ title }) => {
         body: JSON.stringify({
           nombre: formData.name.trim(),
           id_tipo: Number(formData.type),
+          url_img: formData.url_img || null,
           marca: formData.brand || null,
           cantidad: Number(formData.amount),
           fecha_vencimiento: formData.expiration || null,
@@ -198,31 +197,6 @@ const ProductForm = ({ title }) => {
     }
   };
 
-  // manejamos el click en la imagen para abrir el selector de archivos
-  const handleImageClick = () => {
-    inputRef.current?.click();
-  };
-
-  const handleImageChange = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (previewUrl.startsWith("blob:")) {
-      URL.revokeObjectURL(previewUrl);
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-
   return (
     <MainLayout>
       <section className={styles.page}>
@@ -238,15 +212,15 @@ const ProductForm = ({ title }) => {
         <section className={styles.card}>
           <h3 className={styles.sectionTitle}>Informacion</h3>
 
-          <div className={styles.formLayout}>
-            <ImagePicker
-              handleImageClick={handleImageClick}
-              handleImageChange={handleImageChange}
-              previewUrl={previewUrl}
-              inputRef={inputRef}
+          <form className={styles.formLayout} onSubmit={handleSubmit}>
+            <ImgPicker
+              urlValue={formData.url_img}
+              setUrlState={(url) =>
+                setFormData((prev) => ({ ...prev, url_img: url }))
+              }
             />
 
-            <form className={styles.inputsGrid}>
+            <div className={styles.inputsGrid}>
               {productInputFields.map((field) => (
                 <FormInput
                   key={field.name}
@@ -270,14 +244,14 @@ const ProductForm = ({ title }) => {
                 style={{ gridColumn: "1 / -1" }}
                 value={formData.observations}
               />
-            </form>
-          </div>
+            </div>
 
-          <div className={styles.footerActions}>
-            <Button type="three" onClick={handleSubmit}>
-              <Save /> Guardar
-            </Button>
-          </div>
+            <div className={styles.footerActions}>
+              <Button type="three" buttonType="submit">
+                <Save /> Guardar
+              </Button>
+            </div>
+          </form>
         </section>
       </section>
     </MainLayout>

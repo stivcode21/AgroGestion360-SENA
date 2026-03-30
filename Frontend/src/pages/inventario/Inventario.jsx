@@ -199,7 +199,7 @@ const Inventario = () => {
                   <li key={item.id_insumo} className={tableStyles.row}>
                     <div className={tableStyles.itemInfo}>
                       <figure className={tableStyles.thumbnail}>
-                        <img src={item?.image || previuIMG} alt={item.nombre} />
+                        <img src={item?.url_img || previuIMG} alt={item.nombre} />
                       </figure>
                       <div>
                         <p className={tableStyles.title}>{item.nombre}</p>
