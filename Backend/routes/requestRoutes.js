@@ -12,8 +12,8 @@ router.get("/list", verifyToken, request.listRequests);
 // POST /create
 router.post("/create", verifyToken, request.postRequest);
 
-// router.put("/edit/:id", request.editRequest);
+router.put("/edit/:id", verifyToken, request.editRequest);
 
-// router.delete("/delete/:id", request.deleteRequest);
+router.delete("/delete/:id", verifyToken, request.deleteRequest);
 
 module.exports = router;

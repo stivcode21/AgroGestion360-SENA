@@ -74,6 +74,8 @@ exports.updateRequest = async (id, requestData) => {
     unidad_medida,
     proveedor,
     fecha_vencimiento,
+    status,
+    read,
   } = requestData;
 
   const query = `
@@ -86,8 +88,10 @@ exports.updateRequest = async (id, requestData) => {
       especie_destino = $5,
       unidad_medida = $6,
       proveedor = $7,
-      fecha_vencimiento = $8
-    WHERE id_solicitud = $9
+      fecha_vencimiento = $8,
+      status = $9,
+      read = $10
+    WHERE id_solicitud = $11
     RETURNING *
   `;
 
@@ -100,6 +104,9 @@ exports.updateRequest = async (id, requestData) => {
     unidad_medida ?? null,
     proveedor ?? null,
     fecha_vencimiento ?? null,
+    status ?? "pendiente",
+    read ?? false,
+    id,
   ];
 
   const { rows } = await db.query(query, values);
@@ -110,6 +117,7 @@ exports.deleteRequestModel = async (id) => {
   const query = `
     DELETE FROM solicitud
     WHERE id_solicitud = $1
+    RETURNING id_solicitud
   `;
 
   const { rows } = await db.query(query, [id]);
