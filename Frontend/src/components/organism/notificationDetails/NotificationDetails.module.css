@@ -9,9 +9,28 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.backButton {
+.actionsWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.statusSelect {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  outline: none;
+}
+
+.actionButton {
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   background: #ffffff;
@@ -22,10 +41,20 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+  cursor: pointer;
 }
 
-.backButton:hover {
+.actionButton:hover {
   background: #f9fafb;
+}
+
+.actionButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.deleteButton {
+  color: #b91c1c;
 }
 
 .statusBadge {
