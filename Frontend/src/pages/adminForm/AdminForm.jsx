@@ -3,51 +3,39 @@ import styles from "./AdminForm.module.css";
 import Button from "@/components/templates/button/Button";
 import { ArrowLeft, Eye, EyeClosed, Save } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
-import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
+import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
 import { adminInputFields } from "@/data/adminRegisterData";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
+import { hasRole } from "@/utils/auth";
+import { useUserStore } from "@/store/userStore";
 
 const initialFormData = {
   name: "",
   age: "",
   docType: "",
   document: "",
+  url_img: "",
   phone: "",
   email: "",
   password: "",
+  status: true,
 };
 
 const AdminForm = ({ title }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const { toggleLoader } = useLoader();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useUserStore();
+  const canView = hasRole(user, 1);
 
   const isEditMode = Boolean(id);
-
-  const handleImageClick = () => {
-    inputRef.current?.click();
-  };
-
-  const handleImageChange = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (previewUrl?.startsWith("blob:")) {
-      URL.revokeObjectURL(previewUrl);
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -136,8 +124,10 @@ const AdminForm = ({ title }) => {
         id_tipo_documento: Number(formData.docType),
         numero_documento: formData.document.trim(),
         celular: formData.phone.trim(),
+        url_img: formData.url_img || null,
         correo: formData.email.trim(),
         id_rol: 2,
+        estado: formData.status,
         ...(trimmedPassword ? { contrasena: trimmedPassword } : {}),
       };
 
@@ -169,7 +159,6 @@ const AdminForm = ({ title }) => {
     if (!isEditMode) {
       setFormData(initialFormData);
       setErrors({});
-      setPreviewUrl("");
       return;
     }
 
@@ -197,11 +186,12 @@ const AdminForm = ({ title }) => {
           age: String(admin.edad ?? ""),
           docType: String(admin.id_tipo_documento ?? ""),
           document: admin.numero_documento ?? "",
+          url_img: admin.url_img ?? "",
           phone: admin.celular ?? "",
           email: admin.correo ?? "",
           password: "",
+          status: admin.estado ?? true,
         });
-        setPreviewUrl(admin.url_img || "");
       } catch (error) {
         console.error("Error al obtener admin:", error);
         toast.error("Ha ocurrido un error inesperado.");
@@ -212,14 +202,6 @@ const AdminForm = ({ title }) => {
 
     getAdminDetails();
   }, [id, isEditMode]);
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl?.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
 
   return (
     <MainLayout>
@@ -238,11 +220,11 @@ const AdminForm = ({ title }) => {
           <h3 className={styles.sectionTitle}>Informacion</h3>
 
           <form className={styles.formLayout} onSubmit={handleSubmit}>
-            <ImagePicker
-              handleImageClick={handleImageClick}
-              handleImageChange={handleImageChange}
-              previewUrl={previewUrl}
-              inputRef={inputRef}
+            <ImgPicker
+              urlValue={formData.url_img}
+              setUrlState={(url) =>
+                setFormData((prev) => ({ ...prev, url_img: url }))
+              }
             />
 
             <div className={styles.inputsGrid}>
@@ -254,6 +236,7 @@ const AdminForm = ({ title }) => {
                   placeholder={field.placeholder}
                   select={field?.select}
                   error={errors[field.name]}
+                  disabled={field.name === "status" && !canView}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   type={field?.type}

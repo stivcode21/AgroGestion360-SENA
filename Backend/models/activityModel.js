@@ -42,37 +42,40 @@ exports.getActivitiesPaginated = async (page) => {
 // 🔹 CREAR
 exports.createActivity = async (activityData) => {
   const {
-      id_trabajador,
-      duracion,
-      actividad,
-      id_estado,
-      fecha_inicio,
-      monto,
-      observaciones,
+    id_trabajador,
+    duracion,
+    actividad,
+    id_estado,
+    url_evidencia,
+    fecha_inicio,
+    monto,
+    observaciones,
   } = activityData;
 
   const query = `
     INSERT INTO actividades (
-       id_trabajador,
+      id_trabajador,
       duracion,
       actividad,
       id_estado,
+      url_evidencia,
       fecha_inicio,
       monto,
       observaciones
     )
-    VALUES ($1,$2,$3,$4,$5,$6,$7)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
     RETURNING *
   `;
 
   const values = [
-     id_trabajador,
-      duracion,
-      actividad,
-      id_estado,
-      fecha_inicio,
-      monto,
-      observaciones,
+    id_trabajador,
+    duracion,
+    actividad,
+    id_estado,
+    url_evidencia ?? null,
+    fecha_inicio,
+    monto,
+    observaciones,
   ];
 
   const { rows } = await db.query(query, values);

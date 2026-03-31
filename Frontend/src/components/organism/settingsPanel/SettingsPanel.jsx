@@ -1,7 +1,7 @@
 import { KeyRound, Save } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
-import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
+import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
 import Button from "@/components/templates/button/Button";
 import {
   settingsProfileFieldValidations,
@@ -14,8 +14,6 @@ import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 
 const SettingsPanel = ({ onOpenCredentials }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
   const { user, setUser } = useUserStore();
   const { toggleLoader } = useLoader();
@@ -23,23 +21,6 @@ const SettingsPanel = ({ onOpenCredentials }) => {
 
   // Inicializamos el formulario con los datos del usuario
   const [formData, setFormData] = useState({});
-
-  const handleImageClick = () => {
-    inputRef.current?.click();
-  };
-
-  // capturamos el cambio de imagen y generamos una URL para mostrar la previsualizacion
-  const handleImageChange = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (previewUrl?.startsWith("blob:")) {
-      URL.revokeObjectURL(previewUrl);
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-  };
 
   const handleBlur = (event) => {
     const { name, value } = event.target;
@@ -70,27 +51,18 @@ const SettingsPanel = ({ onOpenCredentials }) => {
       docType: String(user.id_tipo_documento || ""),
       document: user.numero_documento || "",
       role: user.id_rol === 1 ? "Dueño" : "Administrador",
+      url_img: user.url_img || "",
       phone: user.celular || "",
       email: user.correo || "",
     };
 
     setInitialFormData(userFormData);
     setFormData(userFormData);
-    setPreviewUrl(user.url_img || "");
   }, [user]);
 
   const hasChanges =
     initialFormData &&
     JSON.stringify(formData) !== JSON.stringify(initialFormData);
-
-  // Limpiamos la URL del objeto cuando el componente se desmonta o cambia la imagen
-  useEffect(() => {
-    return () => {
-      if (previewUrl?.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
 
   //envio final del formulario para editar el perfil del usuario
   const handleSubmit = async (e) => {
@@ -131,6 +103,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
           id_tipo_documento: formData.docType || null,
           numero_documento: formData.document,
           celular: formData.phone || null,
+          url_img: formData.url_img || null,
           correo: formData.email || null,
         }),
       });
@@ -150,6 +123,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
           docType: String(data.data.id_tipo_documento || ""),
           document: data.data.numero_documento || "",
           role: data.data.id_rol === 1 ? "Dueño" : "Administrador",
+          url_img: data.data.url_img || "",
           phone: data.data.celular || "",
           email: data.data.correo || "",
         };
@@ -193,11 +167,11 @@ const SettingsPanel = ({ onOpenCredentials }) => {
       <section className={styles.card}>
         <h3 className={styles.sectionTitle}>Informacion</h3>
         <form className={styles.formLayout} onSubmit={handleSubmit}>
-          <ImagePicker
-            handleImageClick={handleImageClick}
-            handleImageChange={handleImageChange}
-            previewUrl={previewUrl}
-            inputRef={inputRef}
+          <ImgPicker
+            urlValue={formData.url_img}
+            setUrlState={(url) =>
+              setFormData((prev) => ({ ...prev, url_img: url }))
+            }
           />
 
           <div className={styles.inputsGrid}>

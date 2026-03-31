@@ -3,10 +3,10 @@ import styles from "./ActivityForm.module.css";
 import Button from "@/components/templates/button/Button";
 import { ArrowLeft, Save } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
-import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
+import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
 import { activityInputFields } from "@/data/activitiesData";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import toast from "react-hot-toast";
@@ -17,8 +17,6 @@ import { hasRole } from "@/utils/auth";
 import ConsumoForm from "@/components/organism/consumoForm/ConsumoForm";
 
 const ActivityForm = ({ title }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
   const { toggleLoader } = useLoader();
   const navigate = useNavigate();
@@ -30,6 +28,7 @@ const ActivityForm = ({ title }) => {
     duration: "",
     activity: "",
     status: "1",
+    url_evidencia: "",
     dateInit: "",
     cost: "",
     description: "",
@@ -121,12 +120,11 @@ const ActivityForm = ({ title }) => {
           duration: String(actividades.duracion ?? ""),
           activity: actividades.actividad ?? "",
           status: String(actividades.id_estado ?? ""),
+          url_evidencia: actividades.url_evidencia ?? "",
           dateInit: formatDate(actividades.fecha_inicio),
           cost: normalizeCostValue(actividades.monto),
           description: actividades.observaciones ?? "",
         });
-
-        setPreviewUrl(actividades.url_evidencia || "");
       } catch (error) {
         console.error("Error en getDetails:", error);
         toast.error("Ha ocurrido un error inesperado.");
@@ -197,6 +195,7 @@ const ActivityForm = ({ title }) => {
           duracion: String(formData.duration).trim(),
           actividad: formData.activity.trim(),
           id_estado: Number(formData.status),
+          url_evidencia: formData.url_evidencia || null,
           fecha_inicio: formData.dateInit || null,
           monto: Number(formData.cost),
           observaciones: formData.description.trim() || null,
@@ -266,32 +265,6 @@ const ActivityForm = ({ title }) => {
     }
   };
 
-  // manejamos el click en la imagen para abrir el selector de archivos
-  const handleImageClick = () => {
-    inputRef.current?.click();
-  };
-
-  // Función para manejar el cambio de imagen, creando una URL de objeto para mostrar una vista previa y liberando la URL anterior si existía.
-  const handleImageChange = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (previewUrl?.startsWith("blob:")) {
-      URL.revokeObjectURL(previewUrl);
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-
   return (
     <MainLayout>
       <section className={styles.page}>
@@ -309,11 +282,13 @@ const ActivityForm = ({ title }) => {
           <h3 className={styles.sectionTitle}>Informacion</h3>
 
           <form className={styles.formLayout} onSubmit={handleSubmit}>
-            <ImagePicker
-              handleImageClick={handleImageClick}
-              handleImageChange={handleImageChange}
-              previewUrl={previewUrl}
-              inputRef={inputRef}
+            <ImgPicker
+              urlValue={formData.url_evidencia}
+              title="Evidencia"
+              description="Sube la foto o soporte visual de la actividad"
+              setUrlState={(url) =>
+                setFormData((prev) => ({ ...prev, url_evidencia: url }))
+              }
             />
 
             <div className={styles.inputsGrid}>
