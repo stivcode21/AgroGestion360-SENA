@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, KeyRound, X } from "lucide-react";
 import FormInput from "@/components/molecules/formInput/FormInput";
+import { buildApiUrl } from "@/utils/apiBase";
+import toast from "react-hot-toast";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import styles from "./UpdateCrendentials.module.css";
 
 const UpdateCrendentials = ({ isOpen, userId, defaultUsername = "", onClose }) => {
@@ -9,6 +12,7 @@ const UpdateCrendentials = ({ isOpen, userId, defaultUsername = "", onClose }) =
   const [errors, setErrors] = useState({});
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { toggleLoader } = useLoader();
 
   const resetForm = () => {
     setNewPassword("");
@@ -47,22 +51,10 @@ const UpdateCrendentials = ({ isOpen, userId, defaultUsername = "", onClose }) =
     onClose?.();
   };
 
-  const simulateUpdateCredentials = async ({ userId, username, newPassword }) => {
-    // Reemplaza esta simulacion por tu fetch PUT cuando conectes la API.
-    // Ejemplo: await fetch(buildApiUrl(`auth/editadmin/${userId}`), { method: "PUT", ... })
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    console.log("[SIMULACION PUT] Actualizar credenciales:", {
-      userId,
-      username,
-      newPassword,
-    });
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const nextErrors = {};
-    const trimmedUsername = defaultUsername.trim();
 
     if (!newPassword) {
       nextErrors.newPassword = "Campo obligatorio";
@@ -81,13 +73,33 @@ const UpdateCrendentials = ({ isOpen, userId, defaultUsername = "", onClose }) =
       return;
     }
 
-    await simulateUpdateCredentials({
-      userId,
-      username: trimmedUsername,
-      newPassword,
-    });
+    try {
+      toggleLoader(true);
 
-    handleClose();
+      const res = await fetch(buildApiUrl(`auth/update/${userId}`), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          contrasena: newPassword.trim(),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message ?? "No se pudo actualizar la contrasena.");
+        return;
+      }
+
+      toast.success(data.message ?? "Contrasena actualizada correctamente.");
+      handleClose();
+    } catch (error) {
+      console.error("Error al actualizar credenciales:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
   };
 
   return (
