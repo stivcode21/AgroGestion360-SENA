@@ -38,6 +38,7 @@ exports.updateAdmin = async (id, adminData) => {
     url_img,
     correo,
     contrasena,
+    estado,
   } = adminData;
 
   const query = `
@@ -50,8 +51,9 @@ exports.updateAdmin = async (id, adminData) => {
       celular = $5,
       url_img = $6,
       correo = $7,
-      contrasena = COALESCE($8, contrasena)
-    WHERE id_usuario = $9
+      contrasena = COALESCE($8, contrasena),
+      estado = $9
+    WHERE id_usuario = $10
     RETURNING *
   `;
 
@@ -64,6 +66,7 @@ exports.updateAdmin = async (id, adminData) => {
     url_img,
     correo,
     contrasena,
+    estado,
     id,
   ];
 
@@ -85,6 +88,7 @@ exports.createAdmin = async (adminData) => {
     correo,
     contrasena,
     id_rol,
+    estado,
   } = adminData;
 
   const query = `
@@ -97,9 +101,10 @@ exports.createAdmin = async (adminData) => {
       url_img,
       correo,
       contrasena,
-      id_rol
+      id_rol,
+      estado
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     RETURNING *
   `;
 
@@ -113,6 +118,7 @@ exports.createAdmin = async (adminData) => {
     correo,
     contrasena,
     id_rol,
+    estado,
   ];
 
   const { rows } = await db.query(query, values);

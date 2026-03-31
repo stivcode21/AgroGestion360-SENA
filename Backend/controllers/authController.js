@@ -24,6 +24,10 @@ exports.loginController = async (req, res) => {
       return res.status(404).json({ message: "Correo no registrado." });
     }
 
+    if (user.estado === false) {
+      return res.status(403).json({ message: "Usuario deshabilitado." });
+    }
+
     // Verificar contrase�a (por ahora sin encriptar)
     const isMatch = password === user.contrasena;
     if (!isMatch) {
@@ -155,6 +159,7 @@ exports.createAdminController = async (req, res) => {
       correo,
       contrasena,
       id_rol,
+      estado,
     } = req.body;
 
     if (
@@ -186,6 +191,7 @@ exports.createAdminController = async (req, res) => {
       correo: correo.trim(),
       contrasena: contrasena.trim(),
       id_rol,
+      estado,
     });
 
     return res.status(201).json({
