@@ -24,6 +24,17 @@ export const adminInputFields = [
     type: "number",
   },
   {
+    name: "status",
+    label: "Estado",
+    placeholder: "Selecciona un tipo",
+    select: {
+      options: [
+        { label: "Activo", value: true },
+        { label: "Inhabilitar", value: false },
+      ],
+    },
+  },
+  {
     name: "phone",
     label: "Numero de celular *",
     placeholder: "Ej. 313821...",
