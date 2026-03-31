@@ -6,6 +6,7 @@ const corsOptions = require("./config/corsOptions");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const activityRoutes = require("./routes/activityRoutes");
+const workersRoutes = require("./routes/workersRoutes");  
 const app = express();
 const isProd = process.env.NODE_ENV === "production";
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/activity", activityRoutes);
+app.use("/api/workers", workersRoutes);
 // Servidor escuchando
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

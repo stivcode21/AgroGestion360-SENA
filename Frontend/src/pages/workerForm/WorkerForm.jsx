@@ -2,67 +2,198 @@ import MainLayout from "@/components/templates/mainLayout/MainLayout";
 import styles from "./WorkerForm.module.css";
 import Button from "@/components/templates/button/Button";
 import { ArrowLeft, Save } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
 import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-import {
-  workerFieldValidations,
-  workerInputFields,
-} from "@/data/workerRegisterData";
-import { workersData } from "@/data/workersData";
+import { workerInputFields } from "@/data/workerRegisterData";
+import toast from "react-hot-toast";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
+import { buildApiUrl } from "@/utils/apiBase";
 
 const WorkerForm = ({ title }) => {
   const inputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
-
+  const { toggleLoader } = useLoader();
+  const navigate = useNavigate();
   const { id } = useParams();
-  const isEditMode = Boolean(id);
-  const worker = workersData.find((item) => item.id === id);
 
-  const handleImageClick = () => {
-    inputRef.current?.click();
+  const isEditMode = Boolean(id);
+
+  const [formData, setFormData] = useState({
+    nombre_completo: "",
+    edad: "",
+    id_tipo_documento: "",
+    numero_documento: "",
+    estado: true,
+    id_tipo_trabajador: "",
+    celular: "",
+    direccion: "",
+    observaciones: "",
+    url_img: "",
+  });
+
+  // Validaciones
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!String(formData.edad ?? "").trim()) {
+      newErrors.edad = "La edad es obligatoria.";
+    } else if (!/^(?:1[89]|[2-9]\d)$/.test(String(formData.edad).trim())) {
+      newErrors.edad = "Edad debe ser un numero entre 18 y 99";
+    }
+
+    if (!formData.id_tipo_documento) {
+      newErrors.id_tipo_documento = "Selecciona un tipo de documento.";
+    }
+
+    if (!String(formData.numero_documento ?? "").trim()) {
+      newErrors.numero_documento = "El numero de documento es obligatorio.";
+    } else if (!/^[A-Za-z0-9]{5,}$/.test(String(formData.numero_documento).trim())) {
+      newErrors.numero_documento = "Minimo 5 caracteres, solo letras y numeros";
+    }
+
+    if (!formData.id_tipo_trabajador) {
+      newErrors.id_tipo_trabajador = "Selecciona un tipo de trabajador.";
+    }
+
+    if (!String(formData.celular ?? "").trim()) {
+      newErrors.celular = "El numero de telefono es obligatorio.";
+    } else if (!/^\d{7,15}$/.test(String(formData.celular).trim())) {
+      newErrors.celular = "Ingresa un numero de telefono valido (7-15 digitos)";
+    }
+
+    if (!String(formData.direccion ?? "").trim()) {
+      newErrors.direccion = "La direccion es obligatoria.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files?.[0];
+  // Obtener datos en edición
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    const getDetails = async () => {
+      try {
+        toggleLoader(true);
+        const res = await fetch(buildApiUrl(`workers/getworker/${id}`), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        const worker = data.data;
+
+        setFormData({
+          nombre_completo: worker.nombre_completo ?? "",
+          edad: worker.edad ?? "",
+          id_tipo_documento: worker.id_tipo_documento ?? "",
+          numero_documento: worker.numero_documento ?? "",
+          estado: worker.estado ?? true,
+          id_tipo_trabajador: worker.id_tipo_trabajador ?? "",
+          celular: worker.celular ?? "",
+          direccion: worker.direccion ?? "",
+          observaciones: worker.observaciones ?? "",
+          url_img: worker.url_img ?? "",
+        });
+
+        setPreviewUrl(worker.url_img || "");
+      } catch (error) {
+        toast.error("Error al cargar los detalles del trabajador.");
+      } finally {
+        toggleLoader(false);
+      }
+    };
+
+    getDetails();
+  }, [id, isEditMode]);
+
+  // Blur para validación individual
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    validateForm();
+    setErrors((prev) => ({ ...prev, [name]: prev[name] }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let newValue = value;
+
+    if (name === "estado") {
+      newValue = value === "true";
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
+  };
+
+  // Submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      toggleLoader(true);
+
+      const endpoint = isEditMode
+        ? `workers/edit/${id}`
+        : "workers/register";
+      const method = isEditMode ? "PUT" : "POST";
+
+      const res = await fetch(buildApiUrl(endpoint), {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre_completo: formData.nombre_completo.trim(),
+          edad: Number(formData.edad),
+          id_tipo_documento: Number(formData.id_tipo_documento),
+          numero_documento: formData.numero_documento.trim(),
+          estado: formData.estado,
+          id_tipo_trabajador: Number(formData.id_tipo_trabajador),
+          celular: formData.celular || null,
+          direccion: formData.direccion || null,
+          observaciones: formData.observaciones || null,
+          url_img: previewUrl || null,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(data.message);
+      navigate("/trabajadores");
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
+  };
+
+  // Imagen
+  const handleImageClick = () => inputRef.current.click();
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (!file) return;
 
-    if (previewUrl?.startsWith("blob:")) {
-      URL.revokeObjectURL(previewUrl);
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
+    if (previewUrl.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
+    const objecturl = URL.createObjectURL(file);
+    setPreviewUrl(objecturl);
   };
 
-  // Validacion de campos al perder el foco
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
-    const trimmedValue = value.trim();
-    const rule = workerFieldValidations[name];
-    if (rule?.pattern && !rule.pattern.test(trimmedValue)) {
-      setErrors((prev) => ({ ...prev, [name]: rule.message }));
-    } else {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  // Cargar la imagen existente en modo edicion
-  useEffect(() => {
-    if (isEditMode && worker?.avatar) {
-      setPreviewUrl(worker.avatar);
-    }
-  }, [isEditMode, worker]);
-
-  // Limpieza de URL al desmontar el componente
   useEffect(() => {
     return () => {
-      if (previewUrl?.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
+      if (previewUrl.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
 
@@ -75,6 +206,7 @@ const WorkerForm = ({ title }) => {
             <span>Volver</span>
           </Link>
         </button>
+
         <header>
           <h1 className={styles.title}>{title}</h1>
         </header>
@@ -82,7 +214,7 @@ const WorkerForm = ({ title }) => {
         <section className={styles.card}>
           <h3 className={styles.sectionTitle}>Informacion</h3>
 
-          <form className={styles.formLayout}>
+          <div className={styles.formLayout}>
             <ImagePicker
               handleImageClick={handleImageClick}
               handleImageChange={handleImageChange}
@@ -90,7 +222,7 @@ const WorkerForm = ({ title }) => {
               inputRef={inputRef}
             />
 
-            <div className={styles.inputsGrid}>
+            <form className={styles.inputsGrid} onSubmit={handleSubmit}>
               {workerInputFields.map((field) => (
                 <FormInput
                   key={field.name}
@@ -98,27 +230,31 @@ const WorkerForm = ({ title }) => {
                   name={field.name}
                   placeholder={field.placeholder}
                   select={field?.select}
-                  validation={workerFieldValidations[field.name]}
                   error={errors[field.name]}
                   onBlur={handleBlur}
+                  onChange={handleChange}
+                  required={field?.required}
                   type={field?.type}
-                  defaultValue={isEditMode ? worker?.[field.name] ?? "" : ""}
+                  value={formData[field.name] ?? ""}
                 />
               ))}
+
               <FormTextarea
                 label="Observaciones"
                 name="observaciones"
+                onChange={handleChange}
                 placeholder="Agrega una observacion del trabajador"
                 style={{ gridColumn: "1 / -1" }}
-                defaultValue={isEditMode ? worker?.notes ?? "" : ""}
+                value={formData.observaciones ?? ""}
               />
-            </div>
-            <div className={styles.footerActions}>
-              <Button type="three">
-                <Save /> Guardar
-              </Button>
-            </div>
-          </form>
+            </form>
+          </div>
+
+          <div className={styles.footerActions}>
+            <Button type="three" onClick={handleSubmit}>
+              <Save /> Guardar
+            </Button>
+          </div>
         </section>
       </section>
     </MainLayout>

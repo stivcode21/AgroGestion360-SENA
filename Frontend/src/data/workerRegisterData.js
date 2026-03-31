@@ -1,73 +1,64 @@
 export const workerInputFields = [
-  { name: "name", label: "Nombre completo *", placeholder: "Ej. pepito perez" },
-  { name: "age", label: "Edad *", placeholder: "Ej. 20", type: "number" },
   {
-    name: "docType",
-    label: "Tipo de cedula",
-    placeholder: "Selecciona un tipo",
-    select: {
-      options: [
-        { label: "cedula de ciudania", value: "cc" },
-        { label: "pasaporte", value: "pasaporte " },
-      ],
-    },
+    name: "nombre_completo",
+    label: "Nombre completo *",
+    placeholder: "Ej. pepito perez",
   },
   {
-    name: "document",
-    label: "Numero de cedula *",
-    placeholder: "Ej. 1023...",
+    name: "edad",
+    label: "Edad *",
+    placeholder: "Ej. 20",
     type: "number",
   },
   {
-    name: "status",
-    label: "Estado",
+    name: "id_tipo_documento",
+    label: "Tipo de documento",
     placeholder: "Selecciona un tipo",
     select: {
       options: [
-        { label: "Activo", value: "activo" },
-        { label: "Inhabilitado", value: "inhabilitado" },
+        { label: "Cédula de ciudadanía", value: 1 }, 
+        { label: "Pasaporte", value: 2 },
       ],
     },
   },
   {
-    name: "role",
-    label: "Rol *",
-    placeholder: "Ej. fumigador",
-    type: "text",
+    name: "numero_documento",
+    label: "Numero de documento *",
+    placeholder: "Ej. 1023...",
+    type: "text", 
   },
   {
-    name: "phone",
+    name: "estado",
+    label: "Estado",
+    placeholder: "Selecciona un estado",
+    select: {
+      options: [
+        { label: "Activo", value: true },
+        { label: "Inhabilitado", value: false },
+      ],
+    },
+  },
+  {
+    name: "id_tipo_trabajador",
+    label: "Rol *",
+    placeholder: "Selecciona un rol",
+    select: { 
+      options: [
+        { label: "Administrador", value: 2 },
+        { label: "Obrero", value: 1 },
+      ],
+    },
+  },
+  {
+    name: "celular",
     label: "Numero de celular *",
     placeholder: "Ej. 313821...",
-    type: "number",
+    type: "number", 
   },
   {
-    name: "address",
+    name: "direccion",
     label: "Direccion *",
     placeholder: "Ej. finca tres esquinas",
-  },
-  {
-    name: "familyPhone",
-    label: "numero familiar",
-    placeholder: "DD-MM-AA",
-    type: "number",
+    type:"text",
   },
 ];
-
-export const workerFieldValidations = {
-  name: {
-    pattern: /^[A-Za-z\s]{3,}$/,
-    message: "Solo letras y espacios (min 3 caracteres)",
-  },
-  age: { pattern: /^(?:[1-9]\d{0,2})$/, message: "Ingresa una edad valida" },
-  phone: { pattern: /^\d{10}$/, message: "Ingresa exactamente 10 digitos" },
-  phonefamily: {
-    pattern: /^\d{10}$/,
-    message: "Telefono familiar de 10 digitos",
-  },
-  address: {
-    pattern: /^(?=.*\S).{4,}$/,
-    message: "Ingresa minimo 4 caracteres",
-  },
-  dni: { pattern: /^\d{6,12}$/, message: "Entre 6 y 12 numeros" },
-};
