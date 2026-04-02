@@ -1,5 +1,9 @@
 import styles from "./Reportes.module.css";
 import MainLayout from "@/components/templates/mainLayout/MainLayout";
+import { buildApiUrl } from "@/utils/apiBase";
+import { generateReportPdf } from "@/utils/generateReportPdf";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
+import toast from "react-hot-toast";
 import {
   Calendar,
   Download,
@@ -11,6 +15,7 @@ import {
 
 const Reportes = () => {
   const fixedPeriodLabel = "Ultimos 6 meses";
+  const { toggleLoader } = useLoader();
 
   const summaryCards = [
     {
@@ -32,6 +37,7 @@ const Reportes = () => {
 
   const reports = [
     {
+      key: "sales",
       title: "Ventas de animales",
       tag: fixedPeriodLabel,
       updated: "Incluye todo el historial reciente",
@@ -40,6 +46,7 @@ const Reportes = () => {
       icon: <PiggyBank />,
     },
     {
+      key: "inventory",
       title: "Inventario",
       tag: fixedPeriodLabel,
       updated: "Incluye todo el historial reciente",
@@ -48,6 +55,7 @@ const Reportes = () => {
       icon: <Package />,
     },
     {
+      key: "payroll",
       title: "Pago nomina trabajadores",
       tag: fixedPeriodLabel,
       updated: "Incluye todo el historial reciente",
@@ -56,6 +64,40 @@ const Reportes = () => {
       icon: <Users />,
     },
   ];
+
+  const handleGenerateReport = async (reportKey) => {
+    if (reportKey !== "inventory") {
+      toast.error("Este reporte estara disponible proximamente.");
+      return;
+    }
+
+    try {
+      toggleLoader(true);
+
+      // Pide al backend el JSON ya preparado con la data real del reporte.
+      const res = await fetch(buildApiUrl("report/inventory"), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "No se pudo generar el reporte.");
+        return;
+      }
+
+      // Con ese JSON se construye y descarga el PDF en el navegador.
+      generateReportPdf(data.data);
+      toast.success("Reporte descargado correctamente.");
+    } catch (error) {
+      console.error("Error al descargar reporte:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
+  };
 
   return (
     <MainLayout>
@@ -106,14 +148,13 @@ const Reportes = () => {
                 </div>
                 <div className={styles.reportActions}>
                   <button
-                    className={styles.iconButton}
+                    className={styles.reportActionButton}
                     type="button"
                     aria-label={`Descargar reporte ${report.title}`}
+                    onClick={() => handleGenerateReport(report.key)}
                   >
                     <Download />
-                  </button>
-                  <button className={styles.linkButton} type="button">
-                    Generar
+                    <span>Generar</span>
                   </button>
                 </div>
               </article>

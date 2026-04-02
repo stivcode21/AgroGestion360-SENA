@@ -181,37 +181,53 @@
 .reportActions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  margin-left: auto;
 }
 
-.iconButton {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  border: 1px solid #57575c;
-  background: #ffffff;
-  display: grid;
-  place-items: center;
-  transition: background var(--transition, 0.15s ease);
+.reportActionButton {
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
 }
 
-.iconButton svg {
+.reportActionButton svg {
   width: 16px;
   height: 16px;
   color: #2e2e30;
+  flex-shrink: 0;
 }
 
-.iconButton:hover {
-  background: var(--color-hover, #f5f6f8);
-}
-
-.linkButton {
-  border: none;
-  background: transparent;
+.reportActionButton span {
   color: var(--verde-primary);
   font-weight: 600;
   font-size: 0.85rem;
-  cursor: pointer;
+  line-height: 1;
+}
+
+.reportActionButton svg {
+  width: 34px;
+  height: 34px;
+  padding: 9px;
+  border-radius: 10px;
+  border: 1px solid #57575c;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition:
+    background var(--transition, 0.15s ease),
+    border-color var(--transition, 0.15s ease);
+}
+
+.reportActionButton:hover svg {
+  background: var(--color-hover, #f5f6f8);
+}
+
+.reportActionButton:hover span {
+  color: #166534;
 }
 
 @media (max-width: 1000px) {
