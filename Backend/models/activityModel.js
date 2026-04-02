@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-// 🔹 PAGINADO
+// PAGINADO
 exports.getActivitiesPaginated = async (page) => {
   const limit = 10;
   const offset = (page - 1) * limit;
@@ -39,7 +39,7 @@ exports.getActivitiesPaginated = async (page) => {
   };
 };
 
-// 🔹 CREAR
+// CREAR
 exports.createActivity = async (activityData) => {
   const {
     id_trabajador,
@@ -82,7 +82,7 @@ exports.createActivity = async (activityData) => {
   return rows[0];
 };
 
-// 🔹 OBTENER POR ID
+// OBTENER POR ID
 exports.getActivityById = async (id) => {
   const query = `
     SELECT
@@ -110,7 +110,7 @@ exports.getActivityById = async (id) => {
   return rows[0];
 };
 
-// 🔹 ACTUALIZAR
+// ACTUALIZAR
 exports.updateActivity = async (id, data) => {
   const {
     id_trabajador,
@@ -157,7 +157,7 @@ exports.updateActivity = async (id, data) => {
   return rows[0] || null;
 };
 
-// 🔹 ELIMINAR
+// ELIMINAR
 exports.deleteActivity = async (id) => {
   const query = `
     DELETE FROM actividades
@@ -192,7 +192,7 @@ exports.filterActivitiesPaginatedModel = async (page, tipo, orden, search) => {
   if (search?.trim()) {
     values.push(`%${search.trim()}%`);
     condiciones.push(
-      `(a.actividad ILIKE $${values.length} OR t.nombre_completo ILIKE $${values.length})`
+      `(a.actividad ILIKE $${values.length} OR t.nombre_completo ILIKE $${values.length})`,
     );
   }
 

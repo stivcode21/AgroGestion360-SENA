@@ -7,7 +7,7 @@ const {
   createActivity,
 } = require("../models/activityModel");
 
-// 🔹 LISTAR
+// LISTAR
 exports.listActivities = async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
@@ -17,7 +17,7 @@ exports.listActivities = async (req, res) => {
 
     return res.status(200).json({
       page,
-      limit,  
+      limit,
       total: result.total,
       totalPages: Math.ceil(result.total / limit),
       data: result.activities,
@@ -28,7 +28,7 @@ exports.listActivities = async (req, res) => {
   }
 };
 
-// 🔹 CREAR
+// CREAR
 exports.createActivity = async (req, res) => {
   try {
     const {
@@ -40,7 +40,6 @@ exports.createActivity = async (req, res) => {
       fecha_inicio,
       monto,
       observaciones,
-      
     } = req.body;
 
     if (!id_trabajador || !id_estado || !monto) {
@@ -70,7 +69,7 @@ exports.createActivity = async (req, res) => {
   }
 };
 
-// 🔹 OBTENER POR ID
+// OBTENER POR ID
 exports.getActivity = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -95,7 +94,7 @@ exports.getActivity = async (req, res) => {
   }
 };
 
-// 🔹 EDITAR
+// EDITAR
 exports.editActivity = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -119,14 +118,13 @@ exports.editActivity = async (req, res) => {
       message: "Actividad actualizada correctamente.",
       data: updated,
     });
-    
   } catch (error) {
     console.error("Error al editar actividad:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
 };
 
-// 🔹 ELIMINAR
+// ELIMINAR
 exports.deleteActivity = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -160,7 +158,7 @@ exports.filterActivitiesPaginated = async (req, res) => {
       page,
       tipo,
       orden,
-      search
+      search,
     );
 
     res.json({

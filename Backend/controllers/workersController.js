@@ -7,7 +7,7 @@ const {
   registerWorker,
 } = require("../models/workersModel");
 
-// 🔹 LISTAR
+//  LISTAR
 exports.listWorkers = async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
@@ -27,7 +27,7 @@ exports.listWorkers = async (req, res) => {
   }
 };
 
-// 🔹 CREAR
+//  CREAR
 exports.registerWorkers = async (req, res) => {
   try {
     const {
@@ -43,7 +43,7 @@ exports.registerWorkers = async (req, res) => {
       url_img,
     } = req.body;
 
-    // 🔥 Validación correcta (evita NaN)
+    // Validación correcta (evita NaN)
     if (
       !nombre_completo ||
       !numero_documento ||
@@ -82,7 +82,7 @@ exports.registerWorkers = async (req, res) => {
   }
 };
 
-// 🔹 OBTENER POR ID
+// OBTENER POR ID
 exports.getWorkersById = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -105,7 +105,7 @@ exports.getWorkersById = async (req, res) => {
   }
 };
 
-// 🔹 EDITAR
+// EDITAR
 exports.editWorkers = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -150,7 +150,7 @@ exports.editWorkers = async (req, res) => {
   }
 };
 
-// 🔹 ELIMINAR
+// ELIMINAR
 exports.deleteWorkers = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -173,7 +173,7 @@ exports.deleteWorkers = async (req, res) => {
   }
 };
 
-// 🔹 FILTRAR + PAGINADO
+// FILTRAR + PAGINADO
 exports.filterWorkersPaginated = async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
