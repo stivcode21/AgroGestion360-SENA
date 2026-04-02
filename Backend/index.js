@@ -6,10 +6,8 @@ const corsOptions = require("./config/corsOptions");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const activityRoutes = require("./routes/activityRoutes");
-const requestRoutes = require("./routes/requestRoutes");
-const consumptionRoutes = require("./routes/consumptionRoutes");
-const imageRoutes = require("./routes/ImageRoutes");
-const reportRoutes = require("./routes/reportRoutes");
+const workersRoutes = require("./routes/workersRoutes");  
+
 const app = express();
 const isProd = process.env.NODE_ENV === "production";
 
@@ -32,6 +30,8 @@ app.use("/api/request", requestRoutes);
 app.use("/api/consumption", consumptionRoutes);
 app.use("/api/image", imageRoutes);
 app.use("/api/report", reportRoutes);
+app.use("/api/workers", workersRoutes);
+
 
 // Servidor escuchando
 const PORT = process.env.PORT || 3000;
