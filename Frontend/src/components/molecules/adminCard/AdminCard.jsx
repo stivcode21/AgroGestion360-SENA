@@ -1,7 +1,7 @@
 import { Mail, Pencil, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AdminCard.module.css";
-import previuIMG from "@/assets/img/previuIMG.webp";
+import previuIMG from "@/assets/img/previuUser.png";
 
 const docTypeLabelMap = {
   1: "CC",

@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
 import Button from "@/components/templates/button/Button";
-import {
-  settingsProfileFieldValidations,
-  settingsProfileInputFields,
-} from "@/data/settingsProfileData";
+import { settingsProfileInputFields } from "@/data/settingsProfileData";
 import { useUserStore } from "@/store/userStore";
 import styles from "./SettingsPanel.module.css";
 import toast from "react-hot-toast";
@@ -22,17 +19,58 @@ const SettingsPanel = ({ onOpenCredentials }) => {
   // Inicializamos el formulario con los datos del usuario
   const [formData, setFormData] = useState({});
 
-  const handleBlur = (event) => {
-    const { name, value } = event.target;
-    const trimmedValue = value.trim();
-    const rule = settingsProfileFieldValidations[name];
+  const validateForm = () => {
+    const nextErrors = {};
 
-    if (rule?.pattern && !rule.pattern.test(trimmedValue)) {
-      setErrors((prev) => ({ ...prev, [name]: rule.message }));
-      return;
+    if (!String(formData.name ?? "").trim()) {
+      nextErrors.name = "El nombre es obligatorio.";
+    } else if (!/^[A-Za-z\s]{3,}$/.test(String(formData.name).trim())) {
+      nextErrors.name = "Solo letras y espacios (min 3 caracteres)";
     }
 
-    setErrors((prev) => ({ ...prev, [name]: "" }));
+    if (!String(formData.age ?? "").trim()) {
+      nextErrors.age = "La edad es obligatoria.";
+    } else if (!/^(?:1[89]|[2-9]\d)$/.test(String(formData.age).trim())) {
+      nextErrors.age = "Ingresa una edad valida (18-99)";
+    }
+
+    if (!String(formData.document ?? "").trim()) {
+      nextErrors.document = "El numero de documento es obligatorio.";
+    } else if (!/^\d{6,12}$/.test(String(formData.document).trim())) {
+      nextErrors.document = "Entre 6 y 12 numeros";
+    }
+
+    if (!String(formData.role ?? "").trim()) {
+      nextErrors.role = "El rol es obligatorio.";
+    } else if (!/^.{3,}$/.test(String(formData.role).trim())) {
+      nextErrors.role = "Ingresa minimo 3 caracteres";
+    }
+
+    if (!String(formData.phone ?? "").trim()) {
+      nextErrors.phone = "El numero de celular es obligatorio.";
+    } else if (!/^\d{10}$/.test(String(formData.phone).trim())) {
+      nextErrors.phone = "Ingresa exactamente 10 digitos";
+    }
+
+    if (!String(formData.email ?? "").trim()) {
+      nextErrors.email = "El correo electronico es obligatorio.";
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(formData.email).trim())
+    ) {
+      nextErrors.email = "Correo electronico invalido";
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleBlur = (event) => {
+    const { name } = event.target;
+    const isValid = validateForm();
+
+    if (isValid) return;
+
+    setErrors((prev) => ({ [name]: prev[name] }));
   };
 
   // Actualizamos el estado cuando cambian los datos del usuario
@@ -68,19 +106,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const nextErrors = {};
-
-    // validamos cada campo con su respectiva regla
-    Object.entries(settingsProfileFieldValidations).forEach(([name, rule]) => {
-      const value = String(formData[name] ?? "").trim();
-      if (rule.pattern && !rule.pattern.test(value)) {
-        nextErrors[name] = rule.message;
-      }
-    });
-
-    setErrors(nextErrors);
-
-    if (Object.keys(nextErrors).length > 0) {
+    if (!validateForm()) {
       return;
     }
 
@@ -182,7 +208,6 @@ const SettingsPanel = ({ onOpenCredentials }) => {
                 name={field.name}
                 placeholder={field.placeholder}
                 select={field?.select}
-                validation={settingsProfileFieldValidations[field.name]}
                 error={errors[field.name]}
                 onBlur={handleBlur}
                 onChange={handleChange}

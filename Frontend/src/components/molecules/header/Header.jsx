@@ -9,7 +9,7 @@ import NotificationsModal from "@/components/templates/notificationsModal/Notifi
 import { checkAuth } from "@/utils/auth";
 import { useUserStore } from "@/store/userStore";
 import { buildApiUrl } from "@/utils/apiBase";
-import previuIMG from "@/assets/img/previuIMG.webp";
+import previuIMG from "@/assets/img/previuUser.png";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useDataStore } from "@/store/dataStore";
