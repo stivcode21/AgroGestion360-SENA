@@ -2,7 +2,9 @@ import MainLayout from "@/components/templates/mainLayout/MainLayout";
 import styles from "./Workers.module.css";
 import Button from "@/components/templates/button/Button";
 import { ChevronDown, Eye, Filter, Plus, Search } from "lucide-react";
-import TableLayout, {tableClasses as tableStyles,} from "@/components/templates/tableLayout/TableLayout";
+import TableLayout, {
+  tableClasses as tableStyles,
+} from "@/components/templates/tableLayout/TableLayout";
 import { useModalStore } from "@/store/modalStore";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -10,7 +12,7 @@ import FiltersBox from "../../components/molecules/filtersBox/FiltersBox";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
-import previuIMG from "@/assets/img/previuIMG.webp";
+import previuIMG from "@/assets/img/previuUser.png";
 import { workerInputFields } from "@/data/workerRegisterData";
 
 const Workers = () => {
@@ -27,12 +29,11 @@ const Workers = () => {
   const { toggleLoader } = useLoader();
 
   const workersTypeOptions =
-    workerInputFields.find(
-      (field) => field.name === "id_tipo_trabajador"
-    )?.select?.options ?? [];
+    workerInputFields.find((field) => field.name === "id_tipo_trabajador")
+      ?.select?.options ?? [];
 
   const OpenModal = (workers) => {
-    console.log(" trabajador seleccionado:", workers); 
+    console.log(" trabajador seleccionado:", workers);
 
     setIsOpenModal(true);
 
@@ -45,8 +46,8 @@ const Workers = () => {
   const tableMode = normalizedSearch
     ? "search"
     : hasActiveFilters
-    ? "filter"
-    : "default";
+      ? "filter"
+      : "default";
 
   useEffect(() => {
     if (tableMode === "filter") return;
@@ -195,7 +196,7 @@ const Workers = () => {
                           {item.nombre_completo}
                         </p>
                         <span className={tableStyles.subtitle}>
-                          ID:{item.id_trabajador} 
+                          ID: {item.id_trabajador}
                         </span>
                       </div>
                     </div>
@@ -209,12 +210,10 @@ const Workers = () => {
                     </span>
 
                     <span className={tableStyles.emphasis}>
-                      N°:{item.numero_documento}
+                      N° {item.numero_documento}
                     </span>
 
-                    <span className={tableStyles.value}>
-                      {item.celular}
-                    </span>
+                    <span className={tableStyles.value}>{item.celular}</span>
 
                     <button
                       type="button"

@@ -110,29 +110,3 @@ export const settingsAdminsInputFields = [
   },
 ];
 
-export const settingsProfileFieldValidations = {
-  name: {
-    pattern: /^[A-Za-z\s]{3,}$/,
-    message: "Solo letras y espacios (min 3 caracteres)",
-  },
-  age: {
-    pattern: /^(?:1[89]|[2-9]\d)$/,
-    message: "Ingresa una edad valida (18-99)",
-  },
-  document: {
-    pattern: /^\d{6,12}$/,
-    message: "Entre 6 y 12 numeros",
-  },
-  role: {
-    pattern: /^.{3,}$/,
-    message: "Ingresa minimo 3 caracteres",
-  },
-  phone: {
-    pattern: /^\d{10}$/,
-    message: "Ingresa exactamente 10 digitos",
-  },
-  email: {
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    message: "Correo electronico invalido",
-  },
-};
