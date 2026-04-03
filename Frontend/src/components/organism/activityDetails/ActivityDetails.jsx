@@ -21,7 +21,7 @@ const ActivityDetails = () => {
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
 
-    const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = async () => {
     if (!selectActivity?.id_registro) return;
 
     try {
@@ -74,7 +74,7 @@ const ActivityDetails = () => {
       </div>
     );
   }
-console.log("Actividad seleccionada:", selectActivity);
+
   const {
     duracion,
     estado,
@@ -97,20 +97,27 @@ console.log("Actividad seleccionada:", selectActivity);
         <h3 className={styles.sectionTitle}>Detalles de actividad</h3>
 
         <div className={styles.actions}>
-          <button type="button" className={styles.action}
+          <button
+            type="button"
+            className={styles.iconAction}
             onClick={openDeleteModal}
-            >
-            <Trash2 className={styles.icon} />
-            <span>Eliminar</span>
+            aria-label="Eliminar"
+            title="Eliminar"
+          >
+            <Trash2 className={styles.iconDelete} />
           </button>
           <button
             type="button"
-            className={styles.action}
+            className={styles.iconAction}
             onClick={() => setIsOpenModal(false)}
+            aria-label="Editar"
+            title="Editar"
           >
-            <Link to={`/actividades/editar/${id_registro}`}>
-              <Pencil className={styles.icon} />
-              <span>Editar</span>
+            <Link
+              to={`/actividades/editar/${id_registro}`}
+              className={styles.iconLink}
+            >
+              <Pencil className={styles.iconEdit} />
             </Link>
           </button>
         </div>
