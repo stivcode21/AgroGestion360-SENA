@@ -38,8 +38,20 @@ const ActivityForm = ({ title }) => {
   const { id } = useParams();
   const isEditMode = Boolean(id);
 
-  const normalizeCostValue = (value) =>
-    String(value ?? "").replace(/[^\d]/g, "");
+  const normalizeCostValue = (value) => {
+    if (value === null || value === undefined || value === "") {
+      return "";
+    }
+
+    const parsedValue = Number(value);
+
+    if (Number.isNaN(parsedValue)) {
+      return "";
+    }
+
+    // El frontend solo trabaja con enteros para el costo.
+    return String(Math.trunc(parsedValue));
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -75,10 +87,12 @@ const ActivityForm = ({ title }) => {
       newErrors.dateInit = "Formato esperado YYYY-MM-DD";
     }
 
-    if (!formData.cost.trim()) {
+    const normalizedCost = formData.cost.trim();
+
+    if (!normalizedCost) {
       newErrors.cost = "El costo es obligatorio.";
-    } else if (!/^\d{1,9}$/.test(formData.cost.trim())) {
-      newErrors.cost = "Solo numeros (hasta 9 digitos)";
+    } else if (!/^\d{1,8}$/.test(normalizedCost) || Number(normalizedCost) > 10000000) {
+      newErrors.cost = "Solo numeros enteros hasta 10.000.000";
     }
 
     if (
@@ -148,7 +162,9 @@ const ActivityForm = ({ title }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const nextValue = name === "cost" ? value.replace(/[^\d]/g, "") : value;
+
+    setFormData((prev) => ({ ...prev, [name]: nextValue }));
   };
 
   //envio final del formulario para crear o editar el producto dependiendo del modo
