@@ -2,66 +2,220 @@ import MainLayout from "@/components/templates/mainLayout/MainLayout";
 import styles from "./GanaderiaForm.module.css";
 import Button from "@/components/templates/button/Button";
 import { ArrowLeft, Save } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
-import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
-import {
-  cattleData,
-  cattleFieldValidations,
-  cattleInputFields,
-} from "@/data/cattleData";
+import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
+import VacunaForm from "@/components/organism/vacunaForm/VacunaForm";
+import { cattleInputFields } from "@/data/cattleData";
+import toast from "react-hot-toast";
+import { useLoader } from "@/context/loaderProvider/LoaderProvider";
+import { buildApiUrl } from "@/utils/apiBase";
+import { formatDate } from "@/utils/formatDate";
 
 const GanaderiaForm = ({ title }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
-
+  const { toggleLoader } = useLoader();
+  const navigate = useNavigate();
   const { id } = useParams();
+
   const isEditMode = Boolean(id);
-  const cattle = cattleData.find((item) => item.id === id);
+  const [formData, setFormData] = useState({
+    name: "",
+    tag: "",
+    type: "",
+    breed: "",
+    age: "",
+    weight: "",
+    status: "",
+    milkLiters: "",
+    lastCheck: "",
+    notes: "",
+    url_img: "",
+  });
+  const [formDataVacuna, setFormDataVacuna] = useState({
+    tipoVacuna: "",
+    dosisAplicada: "",
+    fechaAplicacion: "",
+    responsable: "",
+  });
 
-  const handleImageClick = () => {
-    inputRef.current?.click();
-  };
+  const validateForm = () => {
+    const newErrors = {};
 
-  const handleImageChange = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (previewUrl?.startsWith("blob:")) {
-      URL.revokeObjectURL(previewUrl);
+    if (!formData.name.trim()) {
+      newErrors.name = "El nombre es obligatorio.";
+    } else if (!/^[A-Za-z\s]{2,}$/.test(formData.name.trim())) {
+      newErrors.name = "Solo letras y espacios (min 2 caracteres)";
     }
 
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
+    if (!formData.tag.trim()) {
+      newErrors.tag = "La identificacion es obligatoria.";
+    } else if (!/^[A-Za-z0-9-]{2,12}$/.test(formData.tag.trim())) {
+      newErrors.tag = "Usa letras, numeros o guion (2-12)";
+    }
+
+    if (!formData.type.trim()) {
+      newErrors.type = "Selecciona un tipo.";
+    }
+
+    if (!formData.breed.trim()) {
+      newErrors.breed = "La raza es obligatoria.";
+    } else if (!/^[A-Za-z\s]{3,}$/.test(formData.breed.trim())) {
+      newErrors.breed = "Solo letras y espacios (min 3)";
+    }
+
+    if (formData.age.trim() && !/^.{2,20}$/.test(formData.age.trim())) {
+      newErrors.age = "Ingresa una edad valida";
+    }
+
+    if (!formData.weight.trim()) {
+      newErrors.weight = "El peso es obligatorio.";
+    } else if (!/^\d{1,4}$/.test(formData.weight.trim())) {
+      newErrors.weight = "Ingresa un peso valido";
+    }
+
+    if (!formData.status.trim()) {
+      newErrors.status = "Selecciona un estado.";
+    }
+
+    if (
+      formData.milkLiters.trim() &&
+      !/^\d{1,4}$/.test(formData.milkLiters.trim())
+    ) {
+      newErrors.milkLiters = "Ingresa una produccion valida";
+    }
+
+    if (
+      formData.lastCheck.trim() &&
+      !/^\d{4}-\d{2}-\d{2}$/.test(formData.lastCheck.trim())
+    ) {
+      newErrors.lastCheck = "Formato esperado YYYY-MM-DD";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleBlur = (e) => {
+    const { name } = e.target;
+    const isValid = validateForm();
+
+    if (isValid) return;
+
+    setErrors((prev) => ({ [name]: prev[name] }));
+  };
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    const trimmedValue = value.trim();
-    const rule = cattleFieldValidations[name];
-    if (rule?.pattern && !rule.pattern.test(trimmedValue)) {
-      setErrors((prev) => ({ ...prev, [name]: rule.message }));
-    } else {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   useEffect(() => {
-    if (isEditMode && cattle?.avatar) {
-      setPreviewUrl(cattle.avatar);
-    }
-  }, [isEditMode, cattle]);
+    if (!isEditMode) return;
 
-  useEffect(() => {
-    return () => {
-      if (previewUrl?.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
+    const getDetails = async () => {
+      try {
+        toggleLoader(true);
+
+        // Consulta el animal actual para editar con la ultima informacion guardada.
+        const res = await fetch(buildApiUrl(`cattle/getcattle/${id}`), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        const cattle = data.data;
+
+        setFormData({
+          name: cattle.nombre ?? "",
+          tag: cattle.identificacion ?? "",
+          type: cattle.tipo ?? "",
+          breed: cattle.raza ?? "",
+          age: cattle.edad ?? "",
+          weight: String(cattle.peso ?? ""),
+          status: cattle.estado ?? "",
+          milkLiters: String(cattle.produccion_leche ?? ""),
+          lastCheck: formatDate(cattle.ultimo_control),
+          notes: cattle.observaciones ?? "",
+          url_img: cattle.url_img ?? "",
+        });
+
+        setFormDataVacuna({
+          tipoVacuna: "",
+          dosisAplicada: "",
+          fechaAplicacion: "",
+          responsable: "",
+        });
+      } catch (error) {
+        console.error("Error en getDetails:", error);
+        toast.error("Ha ocurrido un error inesperado.");
+      } finally {
+        toggleLoader(false);
       }
     };
-  }, [previewUrl]);
+
+    getDetails();
+  }, [id, isEditMode]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      toggleLoader(true);
+
+      const endpoint = isEditMode ? `cattle/edit/${id}` : "cattle/register";
+      const method = isEditMode ? "PUT" : "POST";
+
+      // Convierte los valores del formulario al formato que espera la API de ganaderia.
+      const res = await fetch(buildApiUrl(endpoint), {
+        method,
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          nombre: formData.name.trim(),
+          identificacion: formData.tag.trim(),
+          tipo: formData.type,
+          raza: formData.breed.trim(),
+          edad: formData.age || null,
+          peso: Number(formData.weight),
+          estado: formData.status,
+          produccion_leche: formData.milkLiters
+            ? Number(formData.milkLiters)
+            : null,
+          ultimo_control: formData.lastCheck || null,
+          observaciones: formData.notes || null,
+          url_img: formData.url_img || null,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(data.message);
+      navigate("/ganaderia");
+    } catch (error) {
+      console.error("Error en inicio de sesion:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
+  };
 
   return (
     <MainLayout>
@@ -79,12 +233,14 @@ const GanaderiaForm = ({ title }) => {
         <section className={styles.card}>
           <h3 className={styles.sectionTitle}>Informacion</h3>
 
-          <form className={styles.formLayout}>
-            <ImagePicker
-              handleImageClick={handleImageClick}
-              handleImageChange={handleImageChange}
-              previewUrl={previewUrl}
-              inputRef={inputRef}
+          <form className={styles.formLayout} onSubmit={handleSubmit}>
+            <ImgPicker
+              urlValue={formData.url_img}
+              setUrlState={(url) =>
+                setFormData((prev) => ({ ...prev, url_img: url }))
+              }
+              title="Foto del animal"
+              description="Sube una imagen en PNG o JPG"
             />
 
             <div className={styles.inputsGrid}>
@@ -95,24 +251,29 @@ const GanaderiaForm = ({ title }) => {
                   name={field.name}
                   placeholder={field.placeholder}
                   select={field?.select}
-                  validation={cattleFieldValidations[field.name]}
                   error={errors[field.name]}
                   onBlur={handleBlur}
+                  onChange={handleChange}
                   type={field?.type}
-                  defaultValue={isEditMode ? cattle?.[field.name] ?? "" : ""}
+                  value={formData[field.name] ?? ""}
                 />
               ))}
               <FormTextarea
                 label="Observaciones"
                 name="notes"
+                onChange={handleChange}
                 placeholder="Agrega observaciones del animal"
                 style={{ gridColumn: "1 / -1" }}
-                defaultValue={isEditMode ? cattle?.notes ?? "" : ""}
+                value={formData.notes}
+              />
+              <VacunaForm
+                formDataVacuna={formDataVacuna}
+                setFormDataVacuna={setFormDataVacuna}
               />
             </div>
 
             <div className={styles.footerActions}>
-              <Button type="three">
+              <Button type="three" buttonType="submit">
                 <Save /> Guardar
               </Button>
             </div>
