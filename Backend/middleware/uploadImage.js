@@ -23,3 +23,5 @@ const upload = multer({
 });
 
 exports.uploadSingleImage = upload.single("image");
+
+//multer es el middleware que permite que Express entienda y procese archivos subidos desde el frontend.

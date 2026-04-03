@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 const LIMIT = 10;
 
-// 🔹 PAGINADO
+// PAGINADO
 exports.getWorkersPaginated = async (page) => {
   const pageNumber = parseInt(page, 10) || 1;
   const offset = (pageNumber - 1) * LIMIT;
@@ -49,7 +49,7 @@ exports.getWorkersPaginated = async (page) => {
   }
 };
 
-// 🔹 CREAR
+// CREAR
 exports.registerWorker = async (workerData) => {
   const {
     nombre_completo,
@@ -106,7 +106,7 @@ exports.registerWorker = async (workerData) => {
   }
 };
 
-// 🔹 OBTENER POR ID
+// OBTENER POR ID
 exports.getWorkerById = async (id) => {
   const query = `
     SELECT
@@ -141,7 +141,7 @@ exports.getWorkerById = async (id) => {
   }
 };
 
-// 🔹 ACTUALIZAR
+// ACTUALIZAR
 exports.updateWorker = async (id, data) => {
   const {
     nombre_completo,
@@ -198,7 +198,7 @@ exports.updateWorker = async (id, data) => {
   }
 };
 
-// 🔹 ELIMINAR (sin cambios)
+// ELIMINAR (sin cambios)
 exports.deleteWorker = async (id) => {
   const query = `
     DELETE FROM trabajadores
@@ -215,12 +215,12 @@ exports.deleteWorker = async (id) => {
   }
 };
 
-// 🔹 FILTRO + PAGINADO
+// FILTRO + PAGINADO
 exports.filterWorkersPaginated = async (page, tipo, orden, search) => {
   const pageNumber = parseInt(page, 10) || 1;
   const offset = (pageNumber - 1) * LIMIT;
 
-  const tipoParsed = tipo ? parseInt(tipo, 10) : null;
+  const hasEstadoFilter = tipo === "true" || tipo === "false";
 
   let baseQuery = `
     FROM trabajadores t
@@ -233,15 +233,15 @@ exports.filterWorkersPaginated = async (page, tipo, orden, search) => {
   const values = [];
   const condiciones = [];
 
-  if (tipoParsed) {
-    values.push(tipoParsed);
-    condiciones.push(`t.id_tipo_trabajador = $${values.length}`);
+  if (hasEstadoFilter) {
+    values.push(tipo === "true");
+    condiciones.push(`t.estado = $${values.length}`);
   }
 
   if (search && typeof search === "string" && search.trim()) {
     values.push(`%${search.trim()}%`);
     condiciones.push(
-      `(t.nombre_completo ILIKE $${values.length} OR t.numero_documento ILIKE $${values.length})`
+      `(t.nombre_completo ILIKE $${values.length} OR t.numero_documento ILIKE $${values.length})`,
     );
   }
 

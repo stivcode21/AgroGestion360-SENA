@@ -107,6 +107,27 @@ exports.replaceConsumptionItemsByActivity = async ({
     // Aqui se reemplaza toda la lista de consumos de la actividad.
     await client.query("BEGIN");
 
+    const { rows: previousItems } = await client.query(
+      `
+        SELECT id_insumo, cantidad
+        FROM consumo_insumo
+        WHERE id_actividad = $1
+      `,
+      [id_actividad],
+    );
+
+    // Antes de reemplazar, devolvemos al inventario las cantidades consumidas previamente.
+    for (const item of previousItems) {
+      await client.query(
+        `
+          UPDATE inventario
+          SET cantidad = cantidad + $1
+          WHERE id_insumo = $2
+        `,
+        [item.cantidad, item.id_insumo],
+      );
+    }
+
     // Primero elimina lo anterior para volver a guardar el estado completo.
     await client.query(
       `

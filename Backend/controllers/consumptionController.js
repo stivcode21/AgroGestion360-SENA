@@ -135,7 +135,24 @@ exports.updateConsumptionByActivity = async (req, res) => {
       });
     }
 
-    const stockError = await validateStockAvailability(items);
+    const previousItems = await getConsumptionByActivityId(id_actividad);
+    const restoredItems = items.map((item) => {
+      const previousQuantity = previousItems
+        .filter((previousItem) => previousItem.id_insumo === item.id_insumo)
+        .reduce(
+          (total, previousItem) => total + Number(previousItem.cantidad ?? 0),
+          0,
+        );
+
+      return {
+        ...item,
+        cantidad: item.cantidad - previousQuantity,
+      };
+    });
+
+    const stockError = await validateStockAvailability(
+      restoredItems.filter((item) => item.cantidad > 0),
+    );
 
     if (stockError) {
       return res.status(400).json({ message: stockError });
