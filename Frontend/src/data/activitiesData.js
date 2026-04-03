@@ -204,7 +204,7 @@ export const consumoInputFields = [
 
   {
     name: "amount",
-    label: "cantidad *",
+    label: "cantidad: ",
     type: "number",
     placeholder: "Ej. 10",
   },

@@ -156,33 +156,3 @@ export const cattleInputFields = [
   },
 ];
 
-export const cattleFieldValidations = {
-  name: {
-    pattern: /^[A-Za-z\s]{2,}$/,
-    message: "Solo letras y espacios (min 2 caracteres)",
-  },
-  tag: {
-    pattern: /^[A-Za-z0-9-]{2,12}$/,
-    message: "Usa letras, numeros o guion (2-12)",
-  },
-  type: {
-    pattern: /^[a-z]+$/,
-    message: "Selecciona un tipo valido",
-  },
-  breed: {
-    pattern: /^[A-Za-z\s]{3,}$/,
-    message: "Solo letras y espacios (min 3)",
-  },
-  weight: {
-    pattern: /^\d{1,4}$/,
-    message: "Ingresa un peso valido",
-  },
-  milkLiters: {
-    pattern: /^\d{0,4}$/,
-    message: "Ingresa una produccion valida",
-  },
-  lastCheck: {
-    pattern: /^(?:\d{4}-\d{2}-\d{2}|\d{2}[/-]\d{2}[/-]\d{2,4})$/,
-    message: "Formato esperado DD-MM-AA",
-  },
-};
