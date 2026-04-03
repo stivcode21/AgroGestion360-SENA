@@ -13,7 +13,6 @@ import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import previuIMG from "@/assets/img/previuUser.png";
-import { workerInputFields } from "@/data/workerRegisterData";
 
 const Workers = () => {
   const { setIsOpenModal, setSelectWoker } = useModalStore();
@@ -28,9 +27,10 @@ const Workers = () => {
 
   const { toggleLoader } = useLoader();
 
-  const workersTypeOptions =
-    workerInputFields.find((field) => field.name === "id_tipo_trabajador")
-      ?.select?.options ?? [];
+  const workersTypeOptions = [
+    { label: "Activo", value: "true" },
+    { label: "Inhabilitado", value: "false" },
+  ];
 
   const OpenModal = (workers) => {
     console.log(" trabajador seleccionado:", workers);
@@ -205,8 +205,12 @@ const Workers = () => {
                       {item.tipo_trabajador}
                     </span>
 
-                    <span className={tableStyles.tag}>
-                      {item.estado ? "Activo" : "Inactivo"}
+                    <span
+                      className={`${styles.statusTag} ${
+                        item.estado ? styles.activeStatus : styles.disabledStatus
+                      }`}
+                    >
+                      {item.estado ? "Activo" : "Inhabilitado"}
                     </span>
 
                     <span className={tableStyles.emphasis}>

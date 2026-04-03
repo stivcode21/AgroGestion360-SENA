@@ -8,6 +8,7 @@ import { useActionModal } from "@/context/actionModalProvider/ActionModalProvide
 import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
 import { workerInputFields } from "@/data/workerRegisterData";
+import previuIMG from "@/assets/img/previuUser.png";
 
 const WorkerDetails = () => {
   const { selectWoker, setIsOpenModal, setSelectWoker } = useModalStore();
@@ -33,7 +34,7 @@ const WorkerDetails = () => {
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       const data = await res.json();
@@ -96,19 +97,23 @@ const WorkerDetails = () => {
 
   return (
     <div className={styles.container}>
-     <h2 className={styles.productCode}>{id_trabajador}</h2>
-<div className={styless.image}>
+      <h2 className={styles.productCode}>{id_trabajador}</h2>
+      <div className={styless.image}>
         {url_img ? (
           <img src={url_img} alt={nombre_completo} loading="lazy" />
         ) : (
-          <span className={styless.imageBadge}>Sin imagen</span>
+          <img src={previuIMG} alt="Imagen del trabajador" loading="lazy" />
         )}
       </div>
       <header className={styles.header}>
         <h3 className={styles.sectionTitle}>Detalles del trabajador</h3>
 
         <div className={styles.actions}>
-          <button type="button" className={styles.action} onClick={openDeleteModal}>
+          <button
+            type="button"
+            className={styles.action}
+            onClick={openDeleteModal}
+          >
             <Trash2 className={styles.icon} />
             <span>Eliminar</span>
           </button>
@@ -116,7 +121,7 @@ const WorkerDetails = () => {
           <Link
             to={`/trabajadores/editar/${id_trabajador}`}
             onClick={() => setIsOpenModal(false)}
-            className={styles.action} 
+            className={styles.action}
           >
             <Pencil className={styles.icon} />
             <span>Editar</span>
@@ -158,7 +163,9 @@ const WorkerDetails = () => {
 
           <div className={styles.row}>
             <span className={styles.label}>Estado</span>
-            <span className={styles.value}>{estado ? "Activo" : "Inactivo"}</span>
+            <span className={styles.value}>
+              {estado ? "Activo" : "Inactivo"}
+            </span>
           </div>
 
           <div className={styles.row}>

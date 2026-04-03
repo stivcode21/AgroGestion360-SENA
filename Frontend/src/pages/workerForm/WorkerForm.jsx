@@ -3,18 +3,16 @@ import styles from "./WorkerForm.module.css";
 import Button from "@/components/templates/button/Button";
 import { ArrowLeft, Save } from "lucide-react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
 import FormTextarea from "@/components/atoms/formTextarea/FormTextarea";
-import ImagePicker from "@/components/atoms/imagePicker/ImagePicker";
+import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
 import { workerInputFields } from "@/data/workerRegisterData";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 
 const WorkerForm = ({ title }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState("");
   const [errors, setErrors] = useState({});
   const { toggleLoader } = useLoader();
   const navigate = useNavigate();
@@ -104,8 +102,6 @@ const WorkerForm = ({ title }) => {
           observaciones: worker.observaciones ?? "",
           url_img: worker.url_img ?? "",
         });
-
-        setPreviewUrl(worker.url_img || "");
       } catch (error) {
         toast.error("Error al cargar los detalles del trabajador.");
       } finally {
@@ -160,7 +156,7 @@ const WorkerForm = ({ title }) => {
           celular: formData.celular || null,
           direccion: formData.direccion || null,
           observaciones: formData.observaciones || null,
-          url_img: previewUrl || null,
+          url_img: formData.url_img || null,
         }),
       });
 
@@ -180,23 +176,6 @@ const WorkerForm = ({ title }) => {
     }
   };
 
-  // Imagen
-  const handleImageClick = () => inputRef.current.click();
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (previewUrl.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
-    const objecturl = URL.createObjectURL(file);
-    setPreviewUrl(objecturl);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
-
   return (
     <MainLayout>
       <section className={styles.page}>
@@ -214,15 +193,17 @@ const WorkerForm = ({ title }) => {
         <section className={styles.card}>
           <h3 className={styles.sectionTitle}>Informacion</h3>
 
-          <div className={styles.formLayout}>
-            <ImagePicker
-              handleImageClick={handleImageClick}
-              handleImageChange={handleImageChange}
-              previewUrl={previewUrl}
-              inputRef={inputRef}
+          <form className={styles.formLayout} onSubmit={handleSubmit}>
+            <ImgPicker
+              urlValue={formData.url_img}
+              setUrlState={(url) =>
+                setFormData((prev) => ({ ...prev, url_img: url }))
+              }
+              title="Foto del trabajador"
+              description="Sube una imagen en PNG o JPG"
             />
 
-            <form className={styles.inputsGrid} onSubmit={handleSubmit}>
+            <div className={styles.inputsGrid}>
               {workerInputFields.map((field) => (
                 <FormInput
                   key={field.name}
@@ -247,14 +228,14 @@ const WorkerForm = ({ title }) => {
                 style={{ gridColumn: "1 / -1" }}
                 value={formData.observaciones ?? ""}
               />
-            </form>
-          </div>
+            </div>
 
-          <div className={styles.footerActions}>
-            <Button type="three" onClick={handleSubmit}>
-              <Save /> Guardar
-            </Button>
-          </div>
+            <div className={styles.footerActions}>
+              <Button type="three" buttonType="submit">
+                <Save /> Guardar
+              </Button>
+            </div>
+          </form>
         </section>
       </section>
     </MainLayout>

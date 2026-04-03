@@ -98,6 +98,24 @@
   object-fit: contain;
 }
 
+.statusTag {
+  width: fit-content;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.activeStatus {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.disabledStatus {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
 @media (max-width: 900px) {
   .card {
     width: 27rem;

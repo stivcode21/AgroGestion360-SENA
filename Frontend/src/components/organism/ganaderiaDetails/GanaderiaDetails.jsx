@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { Banknote, Pencil, Trash2 } from "lucide-react";
 import styles from "../productDetails/ProductDetails.module.css";
 import { cattleData } from "@/data/cattleData";
 import { useModalStore } from "@/store/modalStore";
@@ -44,18 +44,34 @@ const GanaderiaDetails = () => {
         <h3 className={styles.sectionTitle}>Detalles del animal</h3>
 
         <div className={styles.actions}>
-          <button type="button" className={styles.action}>
-            <Trash2 className={styles.icon} />
-            <span>Eliminar</span>
+          <button
+            type="button"
+            className={styles.iconAction}
+            aria-label="Verder"
+            title="Verder"
+          >
+            <Banknote className={styles.iconSell} />
           </button>
           <button
             type="button"
-            className={styles.action}
-            onClick={() => setIsOpenModal(false)}
+            className={styles.iconAction}
+            aria-label="Eliminar"
+            title="Eliminar"
           >
-            <Link to={`/ganaderia/editar/${selectCattle}`}>
-              <Pencil className={styles.icon} />
-              <span>Editar</span>
+            <Trash2 className={styles.iconDelete} />
+          </button>
+          <button
+            type="button"
+            className={styles.iconAction}
+            onClick={() => setIsOpenModal(false)}
+            aria-label="Editar"
+            title="Editar"
+          >
+            <Link
+              to={`/ganaderia/editar/${selectCattle}`}
+              className={styles.iconLink}
+            >
+              <Pencil className={styles.iconEdit} />
             </Link>
           </button>
         </div>
