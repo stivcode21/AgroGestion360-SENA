@@ -98,6 +98,7 @@ const WorkerDetails = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.productCode}>{id_trabajador}</h2>
+      <h3 className={styles.sectionTitle}>Detalles del trabajador</h3>
       <div className={styless.image}>
         {url_img ? (
           <img src={url_img} alt={nombre_completo} loading="lazy" />
@@ -106,8 +107,6 @@ const WorkerDetails = () => {
         )}
       </div>
       <header className={styles.header}>
-        <h3 className={styles.sectionTitle}>Detalles del trabajador</h3>
-
         <div className={styles.actions}>
           <button
             type="button"

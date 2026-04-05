@@ -84,7 +84,7 @@ const ProductDetails = () => {
       <h2 className={styles.productCode}>{selectProduct.id_insumo}</h2>
 
       <header className={styles.header}>
-        <h3 className={styles.sectionTitle}>Detalles</h3>
+        <h3 className={styles.sectionTitle}>Detalles de producto</h3>
 
         <div className={styles.actions}>
           <button
@@ -95,16 +95,15 @@ const ProductDetails = () => {
             <Trash2 className={styles.icon} />
             <span>Eliminar</span>
           </button>
-          <button
-            type="button"
+
+          <Link
+            to={`/inventario/editar/${selectProduct.id_insumo}`}
             className={styles.action}
             onClick={() => setIsOpenModal(false)}
           >
-            <Link to={`/inventario/editar/${selectProduct.id_insumo}`}>
-              <Pencil className={styles.icon} />
-              <span>Editar</span>
-            </Link>
-          </button>
+            <Pencil className={styles.icon} />
+            <span>Editar</span>
+          </Link>
         </div>
       </header>
 

@@ -8,7 +8,8 @@
 
 .header {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   justify-content: space-between;
 }
 
@@ -21,13 +22,14 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: end;
+  gap: 10px;
 }
 
 .action {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 8px 10px;
   font-size: 0.95rem;
   font-weight: 600;
@@ -36,7 +38,8 @@
   color: #111827;
   border: none;
   border-radius: 10px;
-  transition: background var(--transition, 0.15s ease),
+  transition:
+    background var(--transition, 0.15s ease),
     color var(--transition, 0.15s ease);
 }
 
@@ -64,7 +67,8 @@
   border-radius: 12px;
   background: #ffffff;
   color: #111827;
-  transition: background var(--transition, 0.15s ease),
+  transition:
+    background var(--transition, 0.15s ease),
     border-color var(--transition, 0.15s ease),
     transform var(--transition, 0.15s ease);
 }
@@ -81,6 +85,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
 }
 
 .iconDelete {
@@ -103,7 +108,9 @@
 
 .sectionTitle {
   font-size: 1.3rem;
+  text-align: center;
   font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .detailCard {

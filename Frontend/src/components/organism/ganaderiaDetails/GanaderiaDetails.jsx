@@ -44,36 +44,25 @@ const GanaderiaDetails = () => {
         <h3 className={styles.sectionTitle}>Detalles del animal</h3>
 
         <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.iconAction}
-            aria-label="Verder"
-            title="Verder"
-          >
-            <Banknote className={styles.iconSell} />
+          <button type="button" className={styles.action} aria-label="Vender">
+            <Banknote className={styles.icon} />
+            <span>Vender</span>
           </button>
-          <button
-            type="button"
-            className={styles.iconAction}
-            aria-label="Eliminar"
-            title="Eliminar"
-          >
-            <Trash2 className={styles.iconDelete} />
+          
+          <button type="button" className={styles.action} aria-label="Eliminar">
+            <Trash2 className={styles.icon} />
+            <span>Eliminar</span>
           </button>
-          <button
-            type="button"
-            className={styles.iconAction}
+
+          <Link
+            to={`/ganaderia/editar/${selectCattle}`}
+            className={styles.action}
             onClick={() => setIsOpenModal(false)}
             aria-label="Editar"
-            title="Editar"
           >
-            <Link
-              to={`/ganaderia/editar/${selectCattle}`}
-              className={styles.iconLink}
-            >
-              <Pencil className={styles.iconEdit} />
-            </Link>
-          </button>
+            <Pencil className={styles.icon} s />
+            <span>Editar</span>
+          </Link>
         </div>
       </header>
 
