@@ -1,7 +1,7 @@
 import styles from "../productDetails/ProductDetails.module.css";
 import { formatDate } from "@/utils/formatDate";
 import { useModalStore } from "@/store/modalStore";
-import { Pencil, Trash2 } from "lucide-react";
+import { Banknote, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
@@ -21,6 +21,7 @@ const ActivityDetails = () => {
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
 
+  // Elimina la actividad seleccionada despues de confirmar en el modal de accion.
   const handleDeleteConfirm = async () => {
     if (!selectActivity?.id_registro) return;
 
@@ -42,6 +43,7 @@ const ActivityDetails = () => {
         return;
       }
 
+      //filtra la actividad eliminada del estado global para actualizar la tabla sin necesidad de recargar la pagina.
       setActivities((prev) =>
         prev.filter((item) => item.id_registro !== selectActivity.id_registro),
       );
@@ -65,6 +67,50 @@ const ActivityDetails = () => {
       description: "Esta accion eliminara el producto permanentemente.",
       onConfirm: handleDeleteConfirm,
     });
+  };
+
+  // generacion de pago de actividad
+  const handlePayment = async () => {
+    try {
+      toggleLoader(true);
+
+      const res = await fetch(
+        buildApiUrl(`activity/editactivity/${selectActivity.id_registro}`),
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            id_estado: 2,
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message ?? "No se pudo actualizar el pago.");
+        return;
+      }
+
+      toast.success(data.message ?? "Pago actualizado correctamente.");
+
+      // Actualiza el estado global sin necesidad de recargar la pagina.
+      setActivities((prev) =>
+        prev.map((item) =>
+          item.id_registro === selectActivity.id_registro
+            ? { ...item, id_estado: 2, estado: "Completada" }
+            : item,
+        ),
+      );
+
+      setIsOpenModal(false);
+    } catch (error) {
+      console.error("Error al actualizar credenciales:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
   };
 
   if (!selectActivity) {
@@ -97,29 +143,36 @@ const ActivityDetails = () => {
         <h3 className={styles.sectionTitle}>Detalles de actividad</h3>
 
         <div className={styles.actions}>
+          {estado !== "completada" && (
+            <button
+              type="button"
+              onClick={handlePayment}
+              className={styles.action}
+              aria-label="Pagar"
+            >
+              <Banknote className={styles.icon} />
+              <span>Pagar</span>
+            </button>
+          )}
+
           <button
             type="button"
-            className={styles.iconAction}
+            className={styles.action}
             onClick={openDeleteModal}
             aria-label="Eliminar"
-            title="Eliminar"
           >
-            <Trash2 className={styles.iconDelete} />
+            <Trash2 className={styles.icon} />
+            <span>Eliminar</span>
           </button>
-          <button
-            type="button"
-            className={styles.iconAction}
+
+          <Link
+            to={`/actividades/editar/${id_registro}`}
+            className={styles.action}
             onClick={() => setIsOpenModal(false)}
-            aria-label="Editar"
-            title="Editar"
           >
-            <Link
-              to={`/actividades/editar/${id_registro}`}
-              className={styles.iconLink}
-            >
-              <Pencil className={styles.iconEdit} />
-            </Link>
-          </button>
+            <Pencil className={styles.icon} />
+            <span>Editar</span>
+          </Link>
         </div>
       </header>
 
