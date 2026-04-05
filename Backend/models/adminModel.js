@@ -127,3 +127,15 @@ exports.createAdmin = async (adminData) => {
   const { contrasena: _contrasena, ...admin } = rows[0];
   return admin;
 };
+
+exports.updateUserPassword = async (id, newPassword) => {
+  const query = `
+    UPDATE usuarios
+    SET contrasena = $1
+    WHERE id_usuario = $2
+    RETURNING id_usuario, correo
+  `;
+
+  const { rows } = await db.query(query, [newPassword, id]);
+  return rows.length > 0 ? rows[0] : null;
+};

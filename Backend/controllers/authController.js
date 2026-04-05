@@ -5,7 +5,9 @@ const {
   updateAdmin,
   createAdmin,
   findAdminByUser,
+  updateUserPassword,
 } = require("../models/adminModel");
+const transporter = require("../config/email");
 
 exports.loginController = async (req, res) => {
   try {
@@ -214,4 +216,59 @@ exports.logoutController = (req, res) => {
     path: "/",
   });
   return res.status(200).json({ message: "Sesion cerrada correctamente." });
+};
+
+const generateTemporaryPassword = (length = 10) => {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let password = "";
+
+  for (let i = 0; i < length; i += 1) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    password += chars[randomIndex];
+  }
+
+  return password;
+};
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const cleanEmail = email?.trim();
+
+    if (!cleanEmail) {
+      return res.status(400).json({ message: "Correo es requerido." });
+    }
+
+    const user = await findAdminByEmail(cleanEmail);
+    if (!user) {
+      return res.status(404).json({ message: "Correo no encontrado." });
+    }
+
+    //genera contraseña aleatoria
+    const newPassword = generateTemporaryPassword();
+
+    //actualiza la base de datos
+    const updatedUser = await updateUserPassword(user.id_usuario, newPassword);
+    if (!updatedUser) {
+      return res
+        .status(500)
+        .json({ message: "No se pudo actualizar la contraseña." });
+    }
+
+    //envia el correo
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: user.correo,
+      subject: "Nueva contraseña - AgroGestion360",
+      text: `Tu nueva contraseña temporal es: ${newPassword}. Usala para iniciar sesion.`,
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Nueva contraseña enviada a tu correo." });
+  } catch (error) {
+    console.error("Error en forgot password:", error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
 };
