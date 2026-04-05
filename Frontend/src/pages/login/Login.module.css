@@ -50,9 +50,10 @@
   border: 2px solid var(--verde-dark);
 }
 
-.link{
+.link {
   font-size: 13px;
-  color:green;
+  color: green;
+  font-weight: 600;
 }
 
 .link:hover {

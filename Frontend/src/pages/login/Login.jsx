@@ -13,6 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordForgotOpen, setIsPasswordForgotOpen] = useState(false);
   const navigate = useNavigate();
   const { toggleLoader } = useLoader();
 
@@ -68,7 +69,10 @@ const Login = () => {
   };
 
   return (
-    <WelcomeLayout>
+    <WelcomeLayout
+      setModal={setIsPasswordForgotOpen}
+      isOpen={isPasswordForgotOpen}
+    >
       <header className={styles.header}>
         <Logo />
       </header>
@@ -115,9 +119,13 @@ const Login = () => {
           iniciar sesión
           <ArrowRight />
         </Button>
-        <a href="/aaaaa" className={styles.link}>
+        <button
+          type="button"
+          className={styles.link}
+          onClick={() => setIsPasswordForgotOpen(true)}
+        >
           ¿olvidaste tu contraseña?
-        </a>
+        </button>
       </form>
       <footer className={styles.footer}>
         Accede como dueño o administrador según tus credenciales

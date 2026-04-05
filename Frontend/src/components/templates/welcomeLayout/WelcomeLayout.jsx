@@ -1,6 +1,7 @@
 import styles from "./WelcomeLayout.module.css";
+import PasswordForgot from "@/components/molecules/passwordForgot/PasswordForgot";
 
-const WelcomeLayout = ({ children, isWelcome }) => {
+const WelcomeLayout = ({ children, isWelcome, setModal, isOpen }) => {
   return (
     <main className={styles.container}>
       <figure aria-hidden="true">
@@ -30,6 +31,10 @@ const WelcomeLayout = ({ children, isWelcome }) => {
 
         <div className={styles.emty}></div>
       </section>
+
+      {isOpen && (
+        <PasswordForgot isOpen={isOpen} onClose={() => setModal(false)} />
+      )}
     </main>
   );
 };
