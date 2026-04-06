@@ -42,6 +42,17 @@ export const generateReportPdf = (reportData) => {
   doc.text("Fecha de generacion:", 14, y);
   doc.setFont("helvetica", "normal");
   doc.text(reportData.generatedAt || "", 55, y);
+  y += 8;
+
+  if (Array.isArray(reportData.summary) && reportData.summary.length > 0) {
+    reportData.summary.forEach((item) => {
+      doc.setFont("helvetica", "bold");
+      doc.text(`${item.label}:`, 14, y);
+      doc.setFont("helvetica", "normal");
+      doc.text(String(item.value ?? ""), 55, y);
+      y += 6;
+    });
+  }
 
   // Estas dos estructuras convierten columnas y filas del JSON en una tabla dinamica.
   const head = [(reportData.columns || []).map((column) => column.header)];
@@ -51,7 +62,7 @@ export const generateReportPdf = (reportData) => {
 
   // AutoTable dibuja la tabla completa y agrega nuevas paginas si hace falta.
   autoTable(doc, {
-    startY: y + 10,
+    startY: y + 4,
     head,
     body,
     theme: "grid",

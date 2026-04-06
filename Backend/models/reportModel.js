@@ -25,3 +25,28 @@ exports.getInventoryReportRows = async ({ fechaInicio }) => {
   const { rows } = await db.query(query, [fechaInicio]);
   return rows;
 };
+
+exports.getPayrollReportRows = async ({ fechaInicio }) => {
+  // Consolida por trabajador las actividades pagadas y el total abonado en el periodo.
+  const query = `
+    SELECT
+      t.id_trabajador,
+      t.nombre_completo,
+      t.numero_documento,
+      COUNT(a.id_registro) AS total_actividades_realizadas,
+      COALESCE(SUM(a.monto), 0) AS pago_total
+    FROM trabajadores t
+    LEFT JOIN actividades a
+      ON a.id_trabajador = t.id_trabajador
+      AND a.id_estado = 2
+      AND a.fecha_inicio >= $1::date
+    GROUP BY
+      t.id_trabajador,
+      t.nombre_completo,
+      t.numero_documento
+    ORDER BY t.id_trabajador
+  `;
+
+  const { rows } = await db.query(query, [fechaInicio]);
+  return rows;
+};

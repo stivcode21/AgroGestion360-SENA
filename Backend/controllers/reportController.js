@@ -1,11 +1,14 @@
-const { getInventoryReportRows } = require("../models/reportModel");
+const {
+  getInventoryReportRows,
+  getPayrollReportRows,
+} = require("../models/reportModel");
 
 const toIsoDate = (date) => date.toISOString().split("T")[0];
 
+// El reporte siempre se calcula tomando los ultimos 6 meses.
 const getDefaultRange = () => {
   const today = new Date();
   const start = new Date(today);
-  // El reporte siempre se calcula tomando los ultimos 6 meses.
   start.setMonth(start.getMonth() - 6);
 
   return {
@@ -26,6 +29,13 @@ const formatReportDateTime = (value = new Date()) => {
 
   return formatter.format(value).replace(",", "");
 };
+
+const formatCopCurrency = (value) =>
+  new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0,
+  }).format(Number(value ?? 0));
 
 //formateamos la fecha de ultimo consumo
 const formatLastConsumption = (value) => {
@@ -78,6 +88,67 @@ exports.getInventoryReport = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al generar reporte de inventario:", error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.getPayrollReport = async (req, res) => {
+  try {
+    const defaultRange = getDefaultRange();
+    const fechaInicio = defaultRange.fechaInicio;
+
+    // El modelo devuelve el consolidado por trabajador para el periodo.
+    const payrollRows = await getPayrollReportRows({
+      fechaInicio,
+    });
+
+    // Sumamos todos los pagos individuales para obtener el total de nomina.
+    const totalNomina = payrollRows.reduce(
+      (acumulador, row) => acumulador + Number(row.pago_total ?? 0),
+      0,
+    );
+
+    // Aqui adaptamos la respuesta al formato que ya espera el generador PDF.
+    const reportData = {
+      title: "Reporte de pagos de nomina",
+      intro:
+        "Este reporte consolida por trabajador las actividades pagadas y el valor total abonado durante los ultimos 6 meses.",
+      generatedAt: formatReportDateTime(),
+      periodLabel: "Ultimos 6 meses",
+      fileName: `reporte-pagos-nomina-${toIsoDate(new Date())}.pdf`,
+      summary: [
+        {
+          label: "Total pagado en nomina",
+          value: formatCopCurrency(totalNomina),
+        },
+      ],
+      columns: [
+        { header: "ID", key: "id_trabajador" },
+        { header: "Nombre", key: "nombre_completo" },
+        { header: "Cedula", key: "numero_documento" },
+        {
+          header: "Actividades realizadas",
+          key: "total_actividades_realizadas",
+        },
+        { header: "Pago total", key: "pago_total" },
+      ],
+      rows: payrollRows.map((row) => ({
+        id_trabajador: Number(row.id_trabajador),
+        nombre_completo: row.nombre_completo,
+        numero_documento: row.numero_documento,
+        total_actividades_realizadas: Number(
+          row.total_actividades_realizadas ?? 0,
+        ),
+        pago_total: formatCopCurrency(row.pago_total),
+      })),
+    };
+
+    return res.status(200).json({
+      message: "Reporte de pagos generado correctamente.",
+      data: reportData,
+    });
+  } catch (error) {
+    console.error("Error al generar reporte de pagos:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
 };

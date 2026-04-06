@@ -66,7 +66,14 @@ const Reportes = () => {
   ];
 
   const handleGenerateReport = async (reportKey) => {
-    if (reportKey !== "inventory") {
+    const reportEndpoints = {
+      inventory: "report/inventory",
+      payroll: "report/payroll",
+    };
+
+    const endpoint = reportEndpoints[reportKey];
+
+    if (!endpoint) {
       toast.error("Este reporte estara disponible proximamente.");
       return;
     }
@@ -75,7 +82,7 @@ const Reportes = () => {
       toggleLoader(true);
 
       // Pide al backend el JSON ya preparado con la data real del reporte.
-      const res = await fetch(buildApiUrl("report/inventory"), {
+      const res = await fetch(buildApiUrl(endpoint), {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
