@@ -11,6 +11,7 @@ const consumptionRoutes = require("./routes/consumptionRoutes");
 const imageRoutes = require("./routes/imageRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 const requestRoutes = require("./routes/requestRoutes");
+const ganaderiaRoutes = require("./routes/ganaderiaRoutes");
 
 const app = express();
 const isProd = process.env.NODE_ENV === "production";
@@ -35,6 +36,7 @@ app.use("/api/consumption", consumptionRoutes);
 app.use("/api/image", imageRoutes);
 app.use("/api/report", reportRoutes);
 app.use("/api/workers", workersRoutes);
+app.use("/api/ganaderia", ganaderiaRoutes);
 
 // Servidor escuchando
 const PORT = process.env.PORT || 3000;

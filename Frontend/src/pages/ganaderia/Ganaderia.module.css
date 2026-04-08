@@ -136,3 +136,13 @@
     padding: 1.2rem;
   }
 }
+
+.activeStatus {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.disabledStatus {
+  background: #fee2e2;
+  color: #991b1b;
+}
