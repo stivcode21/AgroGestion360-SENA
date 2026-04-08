@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   width: 100%;
   color: var(--text-primary, #1f2937);
 }
@@ -17,6 +17,7 @@
   font-size: 1.6rem;
   font-weight: 600;
   letter-spacing: 0.2px;
+  color: var(--verde-primary);
 }
 
 .actions {
@@ -38,6 +39,7 @@
   color: #111827;
   border: none;
   border-radius: 10px;
+  border: 1px solid transparent;
   transition:
     background var(--transition, 0.15s ease),
     color var(--transition, 0.15s ease);
@@ -45,7 +47,8 @@
 
 .action:hover {
   background: var(--surface-secundary);
-  color: #4b5563;
+  border: 1px solid #c2c2c2;
+  color: #303439;
 }
 
 .icon {
@@ -88,12 +91,16 @@
   gap: 6px;
 }
 
-.iconDelete {
+.action:hover .iconDelete {
   color: #dc2626;
 }
 
-.iconEdit {
+.action:hover .iconEdit {
   color: #1d4ed8;
+}
+
+.action:hover .iconFactura {
+  color: #da8700;
 }
 
 .iconSell {
@@ -110,7 +117,7 @@
   font-size: 1.3rem;
   text-align: center;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 14px;
 }
 
 .detailCard {
@@ -204,6 +211,82 @@
   color: #6b7280;
 }
 
+.innerModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1200;
+}
+
+.innerModalCard {
+  width: min(720px, 100%);
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.innerModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.innerModalTitle {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.innerModalDescription {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.innerModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.secondaryButton,
+.primaryButton {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform var(--transition, 0.15s ease),
+    opacity var(--transition, 0.15s ease);
+}
+
+.secondaryButton {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.primaryButton {
+  background: var(--verde-primary);
+  color: #ffffff;
+}
+
+.secondaryButton:hover,
+.primaryButton:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
 @media (width <= 768px) {
   .header {
     flex-direction: column;
@@ -228,5 +311,18 @@
 
   .imageCard {
     width: 120px;
+  }
+
+  .innerModalCard {
+    padding: 18px;
+  }
+
+  .innerModalActions {
+    flex-direction: column-reverse;
+  }
+
+  .secondaryButton,
+  .primaryButton {
+    width: 100%;
   }
 }

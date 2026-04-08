@@ -81,7 +81,7 @@ const ProductDetails = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.productCode}>{selectProduct.id_insumo}</h2>
+      <h2 className={styles.productCode}>ID: {selectProduct.id_insumo}</h2>
 
       <header className={styles.header}>
         <h3 className={styles.sectionTitle}>Detalles de producto</h3>
@@ -92,7 +92,7 @@ const ProductDetails = () => {
             className={styles.action}
             onClick={openDeleteModal}
           >
-            <Trash2 className={styles.icon} />
+            <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
             <span>Eliminar</span>
           </button>
 
@@ -101,7 +101,7 @@ const ProductDetails = () => {
             className={styles.action}
             onClick={() => setIsOpenModal(false)}
           >
-            <Pencil className={styles.icon} />
+            <Pencil className={`${styles.icon} ${styles.iconEdit}`} />
             <span>Editar</span>
           </Link>
         </div>

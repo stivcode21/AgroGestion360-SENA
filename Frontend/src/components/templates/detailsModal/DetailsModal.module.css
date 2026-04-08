@@ -83,7 +83,7 @@
 }
 
 .btn:hover svg {
-  color: #4b5563;
+  color: #fe0e0e;
 }
 
 @media (width<= 768px) {

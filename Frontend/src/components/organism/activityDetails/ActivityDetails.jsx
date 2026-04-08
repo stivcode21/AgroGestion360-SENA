@@ -1,13 +1,16 @@
 import styles from "../productDetails/ProductDetails.module.css";
 import { formatDate } from "@/utils/formatDate";
 import { useModalStore } from "@/store/modalStore";
-import { Banknote, Pencil, Trash2 } from "lucide-react";
+import { Banknote, FileText, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
 import { useDataStore } from "@/store/dataStore";
+import { generateFacturaPdf } from "@/utils/generateActivityPaymentInvoicePdf";
+import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -20,6 +23,12 @@ const ActivityDetails = () => {
   const { setActivities } = useDataStore();
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
+  const [isProofModalOpen, setIsProofModalOpen] = useState(false);
+  const [urlComprobante, setUrlComprobante] = useState("");
+
+  useEffect(() => {
+    setUrlComprobante(selectActivity?.urlcomprobante ?? "");
+  }, [selectActivity]);
 
   // Elimina la actividad seleccionada despues de confirmar en el modal de accion.
   const handleDeleteConfirm = async () => {
@@ -71,6 +80,13 @@ const ActivityDetails = () => {
 
   // generacion de pago de actividad
   const handlePayment = async () => {
+    if (!selectActivity?.id_registro) return;
+
+    if (!urlComprobante) {
+      setIsProofModalOpen(true);
+      return;
+    }
+
     try {
       toggleLoader(true);
 
@@ -82,6 +98,7 @@ const ActivityDetails = () => {
           credentials: "include",
           body: JSON.stringify({
             id_estado: 2,
+            urlcomprobante: urlComprobante,
           }),
         },
       );
@@ -99,14 +116,61 @@ const ActivityDetails = () => {
       setActivities((prev) =>
         prev.map((item) =>
           item.id_registro === selectActivity.id_registro
-            ? { ...item, id_estado: 2, estado: "Completada" }
+            ? {
+                ...item,
+                id_estado: 2,
+                estado: "Completada",
+                urlcomprobante: urlComprobante,
+              }
             : item,
         ),
       );
 
+      setSelectActivity({
+        ...selectActivity,
+        id_estado: 2,
+        estado: "Completada",
+        urlcomprobante: urlComprobante,
+      });
+      setIsProofModalOpen(false);
       setIsOpenModal(false);
     } catch (error) {
       console.error("Error al actualizar credenciales:", error);
+      toast.error("Ha ocurrido un error inesperado.");
+    } finally {
+      toggleLoader(false);
+    }
+  };
+
+  //generar factura de pago de actividad
+  const handleGenerateInvoice = async () => {
+    if (!selectActivity?.id_registro) return;
+
+    try {
+      toggleLoader(true);
+
+      const res = await fetch(
+        buildApiUrl(
+          `report/activity-payment-invoice/${selectActivity.id_registro}`,
+        ),
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "No se pudo generar la factura.");
+        return;
+      }
+
+      generateFacturaPdf(data.data);
+      toast.success("Factura descargada correctamente.");
+    } catch (error) {
+      console.error("Error al generar factura:", error);
       toast.error("Ha ocurrido un error inesperado.");
     } finally {
       toggleLoader(false);
@@ -131,19 +195,74 @@ const ActivityDetails = () => {
     observaciones,
     trabajador,
     url_evidencia,
+    urlcomprobante,
     documento,
     actividad,
   } = selectActivity;
+  const normalizedEstado = estado?.toLowerCase();
+
+  const handleProofConfirm = async () => {
+    if (!urlComprobante) {
+      toast.error("Debes subir el comprobante antes de continuar.");
+      return;
+    }
+
+    await handlePayment();
+  };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.productCode}>{id_registro}</h2>
+      {isProofModalOpen && (
+        <div
+          className={styles.innerModalBackdrop}
+          onClick={() => setIsProofModalOpen(false)}
+        >
+          <div
+            className={styles.innerModalCard}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.innerModalContent}>
+              <h3 className={styles.innerModalTitle}>Sube el comprobante</h3>
+              <p className={styles.innerModalDescription}>
+                Antes de marcar esta actividad como pagada, adjunta la factura o
+                comprobante correspondiente.
+              </p>
+
+              <ImgPicker
+                urlValue={urlComprobante}
+                title="Comprobante de factura"
+                description="Sube una imagen clara del comprobante en PNG o JPG"
+                setUrlState={setUrlComprobante}
+              />
+            </div>
+
+            <div className={styles.innerModalActions}>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() => setIsProofModalOpen(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className={styles.primaryButton}
+                onClick={handleProofConfirm}
+              >
+                Confirmar pago
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <h2 className={styles.productCode}>ID: {id_registro}</h2>
 
       <header className={styles.header}>
         <h3 className={styles.sectionTitle}>Detalles de actividad</h3>
 
         <div className={styles.actions}>
-          {estado !== "completada" && (
+          {normalizedEstado !== "completada" && (
             <button
               type="button"
               onClick={handlePayment}
@@ -158,10 +277,20 @@ const ActivityDetails = () => {
           <button
             type="button"
             className={styles.action}
+            onClick={handleGenerateInvoice}
+            aria-label="Factura"
+          >
+            <FileText className={`${styles.icon} ${styles.iconFactura}`} />
+            <span>Factura</span>
+          </button>
+
+          <button
+            type="button"
+            className={styles.action}
             onClick={openDeleteModal}
             aria-label="Eliminar"
           >
-            <Trash2 className={styles.icon} />
+            <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
             <span>Eliminar</span>
           </button>
 
@@ -170,7 +299,7 @@ const ActivityDetails = () => {
             className={styles.action}
             onClick={() => setIsOpenModal(false)}
           >
-            <Pencil className={styles.icon} />
+            <Pencil className={`${styles.icon} ${styles.iconEdit}`} />
             <span>Editar</span>
           </Link>
         </div>
@@ -234,6 +363,22 @@ const ActivityDetails = () => {
                   <img src={url_evidencia} alt={trabajador} loading="lazy" />
                 ) : (
                   <span className={styles.imageBadge}>Sin imagen</span>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className={`${styles.row} ${styles.imageRow}`}>
+            <span className={styles.label}>Comprobante</span>
+            <div className={styles.imageWrapper}>
+              <div className={styles.imageCard}>
+                {urlcomprobante ? (
+                  <img
+                    src={urlcomprobante}
+                    alt={`Comprobante de ${trabajador}`}
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className={styles.imageBadge}>Sin comprobante</span>
                 )}
               </div>
             </div>
