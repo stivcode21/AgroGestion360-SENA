@@ -35,7 +35,7 @@ exports.registerWorkers = async (req, res) => {
       id_tipo_documento,
       numero_documento,
       celular,
-      id_tipo_trabajador,
+      rol,
       direccion,
       observaciones,
       estado,
@@ -47,13 +47,13 @@ exports.registerWorkers = async (req, res) => {
     if (
       !nombre_completo ||
       !numero_documento ||
+      !String(rol ?? "").trim() ||
       estado === undefined ||
-      isNaN(Number(id_tipo_documento)) ||
-      isNaN(Number(id_tipo_trabajador))
+      isNaN(Number(id_tipo_documento))
     ) {
       return res.status(400).json({
         message:
-          "Datos inválidos: nombre_completo, numero_documento, id_tipo_documento, id_tipo_trabajador y estado son obligatorios y deben ser válidos.",
+          "Datos inválidos: nombre_completo, numero_documento, id_tipo_documento, rol y estado son obligatorios y deben ser válidos.",
       });
     }
 
@@ -65,7 +65,7 @@ exports.registerWorkers = async (req, res) => {
       url_img: url_img || null,
       numero_documento,
       celular: celular || null,
-      id_tipo_trabajador: Number(id_tipo_trabajador),
+      rol: rol.trim(),
       direccion: direccion || null,
       observaciones: observaciones || null,
       estado: estadoParsed,
@@ -125,9 +125,7 @@ exports.editWorkers = async (req, res) => {
         : existing.id_tipo_documento,
       numero_documento: req.body.numero_documento ?? existing.numero_documento,
       celular: req.body.celular ?? existing.celular,
-      id_tipo_trabajador: !isNaN(Number(req.body.id_tipo_trabajador))
-        ? Number(req.body.id_tipo_trabajador)
-        : existing.id_tipo_trabajador,
+      rol: String(req.body.rol ?? "").trim() || existing.rol,
       direccion: req.body.direccion ?? existing.direccion,
       observaciones: req.body.observaciones ?? existing.observaciones,
       estado:

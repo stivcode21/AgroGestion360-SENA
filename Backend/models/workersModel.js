@@ -19,13 +19,10 @@ exports.getWorkersPaginated = async (page) => {
       t.fecha_registro,
       t.estado,
       t.edad,
-      t.id_tipo_trabajador,
+      t.rol,
       t.id_tipo_documento,
-      tt.nombre AS tipo_trabajador,
       td.nombre AS tipo_documento
     FROM trabajadores t
-    JOIN tipo_trabajador tt
-      ON t.id_tipo_trabajador = tt.id_tipo
     JOIN tipo_documento td
       ON t.id_tipo_documento = td.id_tipo
     ORDER BY t.id_trabajador
@@ -57,7 +54,7 @@ exports.registerWorker = async (workerData) => {
     url_img,
     numero_documento,
     celular,
-    id_tipo_trabajador,
+    rol,
     direccion,
     observaciones,
     estado,
@@ -73,7 +70,7 @@ exports.registerWorker = async (workerData) => {
       url_img,
       numero_documento,
       celular,
-      id_tipo_trabajador,
+      rol,
       direccion,
       observaciones,
       estado,
@@ -90,7 +87,7 @@ exports.registerWorker = async (workerData) => {
     url_img || null,
     numero_documento,
     celular || null,
-    Number(id_tipo_trabajador),
+    rol,
     direccion || null,
     observaciones || null,
     estadoParsed,
@@ -120,13 +117,10 @@ exports.getWorkerById = async (id) => {
       t.fecha_registro,
       t.estado,
       t.edad,
-      t.id_tipo_trabajador,
-      tt.nombre AS tipo_trabajador,
+      t.rol,
       t.id_tipo_documento,
       td.nombre AS tipo_documento
     FROM trabajadores t
-    JOIN tipo_trabajador tt
-      ON t.id_tipo_trabajador = tt.id_tipo
     JOIN tipo_documento td
       ON t.id_tipo_documento = td.id_tipo
     WHERE t.id_trabajador = $1
@@ -149,7 +143,7 @@ exports.updateWorker = async (id, data) => {
     id_tipo_documento,
     numero_documento,
     celular,
-    id_tipo_trabajador,
+    rol,
     direccion,
     observaciones,
     estado,
@@ -166,7 +160,7 @@ exports.updateWorker = async (id, data) => {
       id_tipo_documento = $3,
       numero_documento = $4,
       celular = $5,
-      id_tipo_trabajador = $6,
+      rol = $6,
       direccion = $7,
       observaciones = $8,
       estado = $9,
@@ -181,7 +175,7 @@ exports.updateWorker = async (id, data) => {
     Number(id_tipo_documento),
     numero_documento,
     celular || null,
-    Number(id_tipo_trabajador),
+    rol,
     direccion || null,
     observaciones || null,
     estadoParsed,
@@ -224,8 +218,6 @@ exports.filterWorkersPaginated = async (page, tipo, orden, search) => {
 
   let baseQuery = `
     FROM trabajadores t
-    JOIN tipo_trabajador tt
-      ON t.id_tipo_trabajador = tt.id_tipo
     JOIN tipo_documento td
       ON t.id_tipo_documento = td.id_tipo
   `;
@@ -269,9 +261,8 @@ exports.filterWorkersPaginated = async (page, tipo, orden, search) => {
       t.fecha_registro,
       t.estado,
       t.edad,
-      t.id_tipo_trabajador,
+      t.rol,
       t.id_tipo_documento,
-      tt.nombre AS tipo_trabajador,
       td.nombre AS tipo_documento
     ${baseQuery}
     ${orderClause}

@@ -39,15 +39,10 @@ export const workerInputFields = [
     },
   },
   {
-    name: "id_tipo_trabajador",
+    name: "rol",
     label: "Rol *",
-    placeholder: "Selecciona un rol",
-    select: { 
-      options: [
-        { label: "Administrador", value: 2 },
-        { label: "Obrero", value: 1 },
-      ],
-    },
+    placeholder: "Ej. Operario de campo",
+    type: "text",
   },
   {
     name: "celular",
