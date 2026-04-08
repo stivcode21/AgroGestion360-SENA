@@ -9,6 +9,7 @@ exports.getActivitiesPaginated = async (page) => {
     SELECT
       a.id_registro,
       a.url_evidencia,
+      a.urlcomprobante,
       a.fecha_inicio,
       a.fecha_fin,
       a.duracion,
@@ -88,6 +89,7 @@ exports.getActivityById = async (id) => {
     SELECT
       a.id_registro,
       a.url_evidencia,
+      a.urlcomprobante,
       a.fecha_inicio,
       a.fecha_fin,
       a.duracion,
@@ -119,6 +121,7 @@ exports.updateActivity = async (id, data) => {
     monto,
     observaciones,
     url_evidencia,
+    urlcomprobante,
     fecha_inicio,
     fecha_fin,
     duracion,
@@ -133,10 +136,11 @@ exports.updateActivity = async (id, data) => {
       monto = $4,
       observaciones = $5,
       url_evidencia = $6,
-      fecha_inicio = $7,
-      fecha_fin = $8,
-      duracion = $9
-    WHERE id_registro = $10
+      urlcomprobante = $7,
+      fecha_inicio = $8,
+      fecha_fin = $9,
+      duracion = $10
+    WHERE id_registro = $11
     RETURNING *
   `;
 
@@ -147,6 +151,7 @@ exports.updateActivity = async (id, data) => {
     monto,
     observaciones,
     url_evidencia,
+    urlcomprobante ?? null,
     fecha_inicio,
     fecha_fin,
     duracion,
@@ -214,6 +219,7 @@ exports.filterActivitiesPaginatedModel = async (page, tipo, orden, search) => {
     SELECT
       a.id_registro,
       a.url_evidencia,
+      a.urlcomprobante,
       a.fecha_inicio,
       a.fecha_fin,
       a.duracion,

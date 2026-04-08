@@ -6,5 +6,10 @@ const router = express.Router();
 
 router.get("/inventory", verifyToken, report.getInventoryReport);
 router.get("/payroll", verifyToken, report.getPayrollReport);
+router.get(
+  "/activity-payment-invoice/:idActividad",
+  verifyToken,
+  report.getActivityPaymentInvoice,
+);
 
 module.exports = router;
