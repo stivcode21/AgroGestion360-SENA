@@ -26,7 +26,7 @@ const WorkerForm = ({ title }) => {
     id_tipo_documento: "",
     numero_documento: "",
     estado: true,
-    id_tipo_trabajador: "",
+    rol: "",
     celular: "",
     direccion: "",
     observaciones: "",
@@ -53,8 +53,8 @@ const WorkerForm = ({ title }) => {
       newErrors.numero_documento = "Minimo 5 caracteres, solo letras y numeros";
     }
 
-    if (!formData.id_tipo_trabajador) {
-      newErrors.id_tipo_trabajador = "Selecciona un tipo de trabajador.";
+    if (!String(formData.rol ?? "").trim()) {
+      newErrors.rol = "El rol es obligatorio.";
     }
 
     if (!String(formData.celular ?? "").trim()) {
@@ -96,7 +96,7 @@ const WorkerForm = ({ title }) => {
           id_tipo_documento: worker.id_tipo_documento ?? "",
           numero_documento: worker.numero_documento ?? "",
           estado: worker.estado ?? true,
-          id_tipo_trabajador: worker.id_tipo_trabajador ?? "",
+          rol: worker.rol ?? "",
           celular: worker.celular ?? "",
           direccion: worker.direccion ?? "",
           observaciones: worker.observaciones ?? "",
@@ -152,7 +152,7 @@ const WorkerForm = ({ title }) => {
           id_tipo_documento: Number(formData.id_tipo_documento),
           numero_documento: formData.numero_documento.trim(),
           estado: formData.estado,
-          id_tipo_trabajador: Number(formData.id_tipo_trabajador),
+          rol: formData.rol.trim(),
           celular: formData.celular || null,
           direccion: formData.direccion || null,
           observaciones: formData.observaciones || null,

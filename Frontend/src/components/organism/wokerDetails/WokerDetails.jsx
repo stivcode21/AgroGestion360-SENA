@@ -15,10 +15,6 @@ const WorkerDetails = () => {
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
 
-  // Opciones para mostrar nombres en lugar de IDs
-  const workerTypeOptions =
-    workerInputFields.find((field) => field.name === "id_tipo_trabajador")
-      ?.select?.options ?? [];
   const documentTypeOptions =
     workerInputFields.find((field) => field.name === "id_tipo_documento")
       ?.select?.options ?? [];
@@ -80,7 +76,7 @@ const WorkerDetails = () => {
     id_tipo_documento,
     numero_documento,
     estado,
-    id_tipo_trabajador,
+    rol,
     celular,
     direccion,
     observaciones,
@@ -88,16 +84,13 @@ const WorkerDetails = () => {
     id_trabajador,
   } = selectWoker;
 
-  const tipoTrabajadorNombre =
-    workerTypeOptions.find((opt) => opt.value === id_tipo_trabajador)?.label ??
-    id_tipo_trabajador;
   const tipoDocumentoNombre =
     documentTypeOptions.find((opt) => opt.value === id_tipo_documento)?.label ??
     id_tipo_documento;
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.productCode}>{id_trabajador}</h2>
+      <h2 className={styles.productCode}>ID: {id_trabajador}</h2>
       <h3 className={styles.sectionTitle}>Detalles del trabajador</h3>
       <div className={styless.image}>
         {url_img ? (
@@ -113,7 +106,7 @@ const WorkerDetails = () => {
             className={styles.action}
             onClick={openDeleteModal}
           >
-            <Trash2 className={styles.icon} />
+            <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
             <span>Eliminar</span>
           </button>
 
@@ -122,7 +115,7 @@ const WorkerDetails = () => {
             onClick={() => setIsOpenModal(false)}
             className={styles.action}
           >
-            <Pencil className={styles.icon} />
+            <Pencil className={`${styles.icon} ${styles.iconEdit}`} />
             <span>Editar</span>
           </Link>
         </div>
@@ -157,7 +150,7 @@ const WorkerDetails = () => {
 
           <div className={styles.row}>
             <span className={styles.label}>Rol</span>
-            <span className={styles.value}>{tipoTrabajadorNombre}</span>
+            <span className={styles.value}>{rol}</span>
           </div>
 
           <div className={styles.row}>

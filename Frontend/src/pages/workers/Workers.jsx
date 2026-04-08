@@ -201,13 +201,13 @@ const Workers = () => {
                       </div>
                     </div>
 
-                    <span className={tableStyles.value}>
-                      {item.tipo_trabajador}
-                    </span>
+                    <span className={tableStyles.value}>{item.rol}</span>
 
                     <span
                       className={`${styles.statusTag} ${
-                        item.estado ? styles.activeStatus : styles.disabledStatus
+                        item.estado
+                          ? styles.activeStatus
+                          : styles.disabledStatus
                       }`}
                     >
                       {item.estado ? "Activo" : "Inhabilitado"}
