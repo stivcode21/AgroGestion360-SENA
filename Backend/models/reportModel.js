@@ -50,3 +50,24 @@ exports.getPayrollReportRows = async ({ fechaInicio }) => {
   const { rows } = await db.query(query, [fechaInicio]);
   return rows;
 };
+
+exports.getActivityPaymentInvoiceRow = async ({ idActividad }) => {
+  const query = `
+    SELECT
+      a.id_registro,
+      a.actividad,
+      a.monto,
+      t.id_trabajador,
+      t.nombre_completo,
+      t.numero_documento,
+      t.rol
+    FROM actividades a
+    JOIN trabajadores t
+      ON a.id_trabajador = t.id_trabajador
+    WHERE a.id_registro = $1
+    LIMIT 1
+  `;
+
+  const { rows } = await db.query(query, [idActividad]);
+  return rows[0] || null;
+};

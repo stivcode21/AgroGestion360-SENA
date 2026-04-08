@@ -1,6 +1,7 @@
 const {
   getInventoryReportRows,
   getPayrollReportRows,
+  getActivityPaymentInvoiceRow,
 } = require("../models/reportModel");
 
 const toIsoDate = (date) => date.toISOString().split("T")[0];
@@ -149,6 +150,54 @@ exports.getPayrollReport = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al generar reporte de pagos:", error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.getActivityPaymentInvoice = async (req, res) => {
+  try {
+    const idActividad = parseInt(req.params.idActividad, 10);
+
+    if (Number.isNaN(idActividad)) {
+      return res.status(400).json({ message: "ID de actividad invalido." });
+    }
+
+    const invoiceRow = await getActivityPaymentInvoiceRow({ idActividad });
+
+    if (!invoiceRow) {
+      return res
+        .status(404)
+        .json({ message: "No se encontro la actividad para generar la factura." });
+    }
+
+    const invoiceData = {
+      documentType: "activity-payment-invoice",
+      title: "Factura de pago de actividad",
+      generatedAt: formatReportDateTime(),
+      fileName: `factura-pago-actividad-${idActividad}-${toIsoDate(new Date())}.pdf`,
+      worker: {
+        id: Number(invoiceRow.id_trabajador),
+        nombre: invoiceRow.nombre_completo,
+        numeroDocumento: invoiceRow.numero_documento,
+        rol: invoiceRow.rol,
+      },
+      activity: {
+        id: Number(invoiceRow.id_registro),
+        nombre: invoiceRow.actividad,
+        montoPagado: formatCopCurrency(invoiceRow.monto),
+        montoPagadoRaw: Number(invoiceRow.monto ?? 0),
+      },
+      signature: {
+        label: "Firma del trabajador",
+      },
+    };
+
+    return res.status(200).json({
+      message: "Factura de pago generada correctamente.",
+      data: invoiceData,
+    });
+  } catch (error) {
+    console.error("Error al generar factura de pago por actividad:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
 };
