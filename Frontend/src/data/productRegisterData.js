@@ -17,11 +17,7 @@ export const productInputFields = [
     placeholder: "Selecciona un tipo",
     required: true,
     select: {
-      options: [
-        { label: "Herramienta", value: "1" },
-        { label: "Alimento", value: "2" },
-        { label: "Fertilizante", value: "3" },
-      ],
+      endpoint: "product/getTipoInsumo",
     },
   },
   {

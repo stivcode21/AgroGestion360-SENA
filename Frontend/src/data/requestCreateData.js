@@ -18,20 +18,6 @@ export const requestCreateInputFields = [
     type: "number",
   },
   {
-    name: "targetSpecies",
-    label: "Especie destino *",
-    placeholder: "Selecciona una especie",
-    select: {
-      options: [
-        { label: "Cerdos", value: "cerdos" },
-        { label: "Peces", value: "peces" },
-        { label: "Ganado", value: "ganado" },
-        { label: "Gallinas", value: "gallinas" },
-        { label: "Ninguna", value: "ninguna" },
-      ],
-    },
-  },
-  {
     name: "unit",
     label: "Unidad de medida *",
     placeholder: "Selecciona una unidad",
