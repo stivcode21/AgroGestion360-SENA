@@ -93,17 +93,17 @@ export const cattleData = [
 
 export const cattleInputFields = [
   {
-    name: "name",
+    name: "nombre",
     label: "Nombre *",
     placeholder: "Ej. Luna",
   },
   {
-    name: "tag",
+    name: "marcado",
     label: "Identificacion *",
     placeholder: "Ej. V-1023",
   },
   {
-    name: "type",
+    name: "tipo",
     label: "Tipo",
     placeholder: "Selecciona un tipo",
     select: {
@@ -116,23 +116,35 @@ export const cattleInputFields = [
     },
   },
   {
-    name: "breed",
+    name: "raza",
     label: "Raza *",
     placeholder: "Ej. Holstein",
   },
   {
-    name: "age",
-    label: "Edad",
-    placeholder: "Ej. 3 anos",
+    name: "fecha_nacimiento",
+    label: "Fecha de nacimiento",
+    placeholder: "DD-MM-AA",
+    type: "date",
   },
   {
-    name: "weight",
+    name: "peso_inicial",
     label: "Peso (kg) *",
     placeholder: "Ej. 480",
     type: "number",
   },
+   {
+    name: "vendido",
+    label: "Disponibilidad",
+    select: {
+      options: [
+        { label: "Vendido", value: true },
+        { label: "Disponible", value: false },
+      ],
+    },
+  },
+
   {
-    name: "status",
+    name: "estado_salud",
     label: "Estado",
     placeholder: "Selecciona un estado",
     select: {
@@ -143,16 +155,14 @@ export const cattleInputFields = [
       ],
     },
   },
-  {
-    name: "milkLiters",
-    label: "Produccion (L/dia)",
-    placeholder: "Ej. 18",
-    type: "number",
+
+   {
+    name: "origen_ciudad",
+    label: "Ciudad de origen *",
+    placeholder: "Ej. Medellín",
+    type: "text",
   },
-  {
-    name: "lastCheck",
-    label: "Ultimo control",
-    placeholder: "DD-MM-AA",
-  },
+  
+  
 ];
 
