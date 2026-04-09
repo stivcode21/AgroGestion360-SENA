@@ -31,14 +31,13 @@ const Inventario = () => {
   const [tableEndpoint, setTableEndpoint] = useState("product/list");
   const [filterQueryParams, setFilterQueryParams] = useState({});
   const [search, setSearch] = useState("");
+  const [productTypeOptions, setProductTypeOptions] = useState([]);
   const { products, setProducts } = useDataStore();
 
   const { toggleLoader } = useLoader();
-
-  // Opciones para el filtro de tipo de producto, obtenidas del archivo de configuración de campos del formulario.
-  const productTypeOptions =
-    productInputFields.find((field) => field.name === "type")?.select
-      ?.options ?? [];
+  const productTypeEndpoint = productInputFields.find(
+    (field) => field.name === "type",
+  )?.select?.endpoint;
 
   const OpenModal = (product) => {
     setIsOpenModal(true);
@@ -53,6 +52,37 @@ const Inventario = () => {
     : hasActiveFilters
       ? "filter"
       : "default";
+
+  useEffect(() => {
+    if (!productTypeEndpoint) return;
+
+    const getProductTypeOptions = async () => {
+      try {
+        const res = await fetch(buildApiUrl(productTypeEndpoint), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        setProductTypeOptions(
+          (data.data ?? []).map((item) => ({
+            value: String(item.id),
+            label: item.nombre,
+          })),
+        );
+      } catch (error) {
+        console.error("Error al cargar tipos de insumo:", error);
+      }
+    };
+
+    getProductTypeOptions();
+  }, [productTypeEndpoint]);
 
   useEffect(() => {
     // Cuando los filtros traen la data directamente, evitamos una segunda consulta.
