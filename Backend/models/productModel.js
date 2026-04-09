@@ -39,6 +39,19 @@ exports.getProductsPaginated = async (page) => {
   };
 };
 
+exports.getTipoInsumo = async () => {
+  const query = `
+    SELECT
+      id_tipo AS id,
+      nombre
+    FROM tipo_insumo
+    ORDER BY id_tipo
+  `;
+
+  const { rows } = await db.query(query);
+  return rows;
+};
+
 exports.createProduct = async (productData) => {
   const {
     nombre,
