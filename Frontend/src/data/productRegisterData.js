@@ -30,8 +30,17 @@ export const productInputFields = [
   {
     name: "unit",
     label: "Unidad de medida *",
-    placeholder: "Ej. 20L",
+    placeholder: "Selecciona un tipo",
     required: true,
+    select: {
+      options: [
+        { label: "Kg", value: "kg" },
+        { label: "Unidad", value: "unidad" },
+        { label: "Litros", value: "litros" },
+        { label: "Metros", value: "metros" },
+        { label: "Mililitro", value: "mililitro" },
+      ],
+    },
   },
   {
     name: "price",
