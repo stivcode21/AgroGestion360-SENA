@@ -160,8 +160,8 @@ const Reportes = () => {
                     aria-label={`Descargar reporte ${report.title}`}
                     onClick={() => handleGenerateReport(report.key)}
                   >
-                    <Download />
                     <span>Generar</span>
+                    <Download />
                   </button>
                 </div>
               </article>

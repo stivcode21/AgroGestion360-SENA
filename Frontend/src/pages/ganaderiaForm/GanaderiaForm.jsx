@@ -23,7 +23,6 @@ const GanaderiaForm = ({ title }) => {
 
   const [formData, setFormData] = useState({
     nombre: "",
-    marcado: "",
     tipo: "",
     raza: "",
     fecha_nacimiento: "",
@@ -49,12 +48,6 @@ const GanaderiaForm = ({ title }) => {
       newErrors.nombre = "El nombre es obligatorio.";
     } else if (!/^[A-Za-z\s]{2,}$/.test(formData.nombre.trim())) {
       newErrors.nombre = "Solo letras y espacios (min 2 caracteres)";
-    }
-
-    if (!formData.marcado.trim()) {
-      newErrors.marcado = "La identificacion es obligatoria.";
-    } else if (!/^[A-Za-z0-9-]{2,12}$/.test(formData.marcado.trim())) {
-      newErrors.marcado = "Usa letras, numeros o guion (2-12)";
     }
 
     if (!formData.tipo.trim()) {
@@ -113,7 +106,6 @@ const GanaderiaForm = ({ title }) => {
 
         setFormData({
           nombre: cattle.nombre ?? "",
-          marcado: cattle.marcado ?? "",
           tipo: cattle.tipo ?? "",
           raza: cattle.raza ?? "",
           fecha_nacimiento: cattle.fecha_nacimiento ?? "",
@@ -177,7 +169,6 @@ const GanaderiaForm = ({ title }) => {
         credentials: "include",
         body: JSON.stringify({
           nombre: formData.nombre.trim(),
-          marcado: formData.marcado.trim(),
           tipo: formData.tipo,
           raza: formData.raza.trim(),
           fecha_nacimiento: formData.fecha_nacimiento || null,

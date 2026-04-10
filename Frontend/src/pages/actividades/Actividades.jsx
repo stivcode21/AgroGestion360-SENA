@@ -11,10 +11,11 @@ import { useState, useEffect } from "react";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
-import previuIMG from "@/assets/img/previuIMG.webp";
+import previuIMG from "@/assets/img/previuActivity.jpg";
 import FiltersBox from "@/components/molecules/filtersBox/FiltersBox";
 import { activityInputFields } from "@/data/activitiesData";
 import { useDataStore } from "@/store/dataStore";
+import { sidebarData } from "../../data/sidebarData";
 
 const Actividades = () => {
   const { setIsOpenModal, setSelectActivity } = useModalStore();
@@ -127,11 +128,17 @@ const Actividades = () => {
     }
   };
 
+  // datos para la descripcion pagina
+  const info = sidebarData.find((item) => item.title === "Actividades");
+
   return (
     <MainLayout>
       <section className={styles.page}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Actividades</h1>
+          <div>
+            <h1 className={styles.title}>{info?.title}</h1>
+            <p className={styles.description}>{info?.description}</p>
+          </div>
           <Link to="/actividades/registrar">
             <Button type="three">
               <Plus />
@@ -180,7 +187,7 @@ const Actividades = () => {
 
           <div className={styles.listWrapper}>
             <TableLayout
-              headers={["Trabajador", "Actividad", "duracion", "costos", ""]}
+              headers={["Actividad", "Trabajador", "duracion", "costos", ""]}
               columns="2.2fr 1.4fr 1.4fr 0.8fr 0.2fr"
               compactColumns="2fr 1fr 1fr 1.2fr 0.5fr"
               setPage={setPage}
@@ -212,7 +219,9 @@ const Actividades = () => {
                         >
                           {item.estado}
                         </span>
-                        <p className={styles.workerName}>{item.trabajador}</p>
+                        <p className={styles.workerName}>
+                          {item.actividad || "Sin actividad"}
+                        </p>
                         <span className={styles.workerDoc}>
                           ID: {item.id_registro}
                         </span>
@@ -220,7 +229,7 @@ const Actividades = () => {
                     </div>
 
                     <span className={styles.activityName}>
-                      {item.actividad || "Sin actividad"}
+                      {item.trabajador}
                     </span>
 
                     <span className={styles.activityName}>

@@ -98,11 +98,6 @@ export const cattleInputFields = [
     placeholder: "Ej. Luna",
   },
   {
-    name: "marcado",
-    label: "Identificacion *",
-    placeholder: "Ej. V-1023",
-  },
-  {
     name: "tipo",
     label: "Tipo",
     placeholder: "Selecciona un tipo",

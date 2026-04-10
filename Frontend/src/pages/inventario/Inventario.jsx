@@ -13,9 +13,10 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
-import previuIMG from "@/assets/img/previuIMG.webp";
+import previuIMG from "@/assets/img/previuProduct.jpg";
 import { productInputFields } from "@/data/productRegisterData";
 import { useDataStore } from "@/store/dataStore";
+import { sidebarData } from "../../data/sidebarData";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -152,11 +153,17 @@ const Inventario = () => {
     }
   };
 
+  // datos para la descripcion pagina
+  const info = sidebarData.find((item) => item.title === "Inventario");
+
   return (
     <MainLayout>
       <section className={styles.page}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Insumos</h1>
+          <div>
+            <h1 className={styles.title}>{info?.title}</h1>
+            <p className={styles.description}>{info?.description}</p>
+          </div>
           <Link to={`/inventario/registrar`}>
             <Button type="three">
               <Plus />
@@ -229,7 +236,10 @@ const Inventario = () => {
                   <li key={item.id_insumo} className={tableStyles.row}>
                     <div className={tableStyles.itemInfo}>
                       <figure className={tableStyles.thumbnail}>
-                        <img src={item?.url_img || previuIMG} alt={item.nombre} />
+                        <img
+                          src={item?.url_img || previuIMG}
+                          alt={item.nombre}
+                        />
                       </figure>
                       <div>
                         <p className={tableStyles.title}>{item.nombre}</p>

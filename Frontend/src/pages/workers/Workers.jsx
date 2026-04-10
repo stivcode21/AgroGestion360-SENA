@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import previuIMG from "@/assets/img/previuUser.png";
+import { sidebarData } from "../../data/sidebarData";
 
 const Workers = () => {
   const { setIsOpenModal, setSelectWoker } = useModalStore();
@@ -111,11 +112,17 @@ const Workers = () => {
     }
   };
 
+  // datos para la descripcion pagina
+  const info = sidebarData.find((item) => item.title === "Trabajadores");
+
   return (
     <MainLayout>
       <section className={styles.page}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Trabajadores</h1>
+          <div>
+            <h1 className={styles.title}>{info?.title}</h1>
+            <p className={styles.description}>{info?.description}</p>
+          </div>
           <Link to={`/trabajadores/registrar`}>
             <Button type="three">
               <Plus />
