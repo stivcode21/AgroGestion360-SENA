@@ -12,6 +12,7 @@ import { cattleInputFields } from "@/data/cattleData";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
+import { formatDate } from "@/utils/formatDate";
 
 const GanaderiaForm = ({ title }) => {
   const [errors, setErrors] = useState({});
@@ -36,9 +37,10 @@ const GanaderiaForm = ({ title }) => {
 
   const [formDataVacuna, setFormDataVacuna] = useState({
     tipoVacuna: "",
-    dosisAplicada: "",
-    fechaAplicacion: "",
+    dosis: "",
+    fecha_aplicacion: "",
     responsable: "",
+    observaciones2: "",
   });
 
   const validateForm = () => {
@@ -103,6 +105,9 @@ const GanaderiaForm = ({ title }) => {
         }
 
         const cattle = data.data;
+        const vacuna = data.vacuna;
+
+        console.log("Datos vacuna:", vacuna);
 
         setFormData({
           nombre: cattle.nombre ?? "",
@@ -118,10 +123,11 @@ const GanaderiaForm = ({ title }) => {
         });
 
         setFormDataVacuna({
-          tipoVacuna: "",
-          dosisAplicada: "",
-          fechaAplicacion: "",
-          responsable: "",
+          tipoVacuna: vacuna?.tipo_vacuna ?? "",
+          dosis: vacuna?.dosis ?? "",
+          fecha_aplicacion: formatDate(vacuna.fecha_aplicacion),
+          responsable: vacuna?.responsable ?? "",
+          observaciones2: vacuna?.observaciones ?? "",
         });
       } catch (error) {
         console.error("Error en getDetails:", error);
@@ -179,6 +185,12 @@ const GanaderiaForm = ({ title }) => {
           origen_ciudad: formData.origen_ciudad || null,
           fecha_ingreso: null,
           vendido: formData.vendido,
+
+          tipoVacuna: formDataVacuna.tipoVacuna || null,
+          fecha_aplicacion: formDataVacuna.fecha_aplicacion || null,
+          dosis: formDataVacuna.dosis || null,
+          responsable: formDataVacuna.responsable || null,
+          observaciones2: formDataVacuna.observaciones2 || null,
         }),
       });
 
@@ -242,7 +254,7 @@ const GanaderiaForm = ({ title }) => {
                   value={
                     field.name === "vendido"
                       ? String(formData[field.name])
-                      : (formData[field.name] ?? "")
+                      : formData[field.name] ?? ""
                   }
                 />
               ))}

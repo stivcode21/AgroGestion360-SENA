@@ -3,19 +3,19 @@ import styles from "./VacunaForm.module.css";
 
 const vacunaFields = [
   {
-    name: "tipoVacuna",
+    name: "tipoVacuna", 
     label: "Tipo de vacuna",
     placeholder: "Ej. Brucelosis",
     type: "text",
   },
   {
-    name: "dosisAplicada",
+    name: "dosis",
     label: "Dosis aplicada",
     placeholder: "Ej. 5 ml",
     type: "text",
   },
   {
-    name: "fechaAplicacion",
+    name: "fecha_aplicacion",
     label: "Fecha de aplicacion",
     placeholder: "Selecciona una fecha",
     type: "date",
@@ -26,13 +26,22 @@ const vacunaFields = [
     placeholder: "Ej. Juan Perez",
     type: "text",
   },
+  {
+    name: "observaciones2",
+    label: "Observaciones",
+    placeholder: "Ej. se debe vacunar nuevamente en 30-01-2028",
+    type: "text",
+  },
 ];
 
 const VacunaForm = ({ formDataVacuna, setFormDataVacuna }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setFormDataVacuna((prev) => ({ ...prev, [name]: value }));
+    setFormDataVacuna((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (

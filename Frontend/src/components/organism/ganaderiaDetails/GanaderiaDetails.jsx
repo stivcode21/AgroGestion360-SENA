@@ -131,6 +131,7 @@ const GanaderiaDetails = () => {
     observaciones,
     fecha_nacimiento,
     vendido,
+    
   } = selectCattle;
 
   return (
@@ -204,7 +205,9 @@ const GanaderiaDetails = () => {
           </div>
           <div className={styles.row}>
             <span className={styles.label}>vendido</span>
-            <span className={styles.value}>{vendido}</span>
+            <span className={styles.value}>
+              {vendido ? "Vendido" : "Disponible"}
+            </span>
           </div>
 
           <div className={`${styles.row} ${styles.descriptionRow}`}>

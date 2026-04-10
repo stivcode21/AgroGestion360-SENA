@@ -5,6 +5,7 @@ const {
   deleteGanaderia: deleteGanaderiaModel,
   filterGanaderiaPaginatedModel,
   createGanaderia: createGanaderiaModel,
+  getVacunaById,
 } = require("../models/ganaderiaModel");
 
 // LISTAR
@@ -41,8 +42,13 @@ exports.createGanaderia = async (req, res) => {
       peso_inicial,
       observaciones,
       url_img,
-      raza, 
+      raza,
       vendido,
+      tipoVacuna,
+      fecha_aplicacion,
+      dosis,
+      responsable,
+      obsevaciones2,
     } = req.body;
 
     if (!tipo || !peso_inicial || !estado_salud) {
@@ -63,6 +69,11 @@ exports.createGanaderia = async (req, res) => {
       url_img,
       raza,
       vendido,
+      tipoVacuna,
+      fecha_aplicacion,
+      dosis,
+      responsable,
+      obsevaciones2,
     });
 
     return res.status(201).json({
@@ -85,6 +96,7 @@ exports.getGanaderia = async (req, res) => {
     }
 
     const animal = await getGanaderiaById(id);
+    const vacuna = await getVacunaById(id);
 
     if (!animal) {
       return res.status(404).json({ message: "Animal no encontrado." });
@@ -93,6 +105,7 @@ exports.getGanaderia = async (req, res) => {
     return res.status(200).json({
       message: "Animal encontrado.",
       data: animal,
+      vacuna: vacuna ,
     });
   } catch (error) {
     console.error(error);
@@ -165,7 +178,7 @@ exports.filterGanaderiaPaginated = async (req, res) => {
       page,
       tipo,
       estado,
-      search
+      search,
     );
 
     res.json({
