@@ -36,7 +36,6 @@ exports.getGanaderiaPaginated = async (page) => {
   };
 };
 
-// CREAR ✅ (ARREGLADO)
 exports.createGanaderia = async (data) => {
   const {
     tipo,
@@ -51,6 +50,11 @@ exports.createGanaderia = async (data) => {
     url_img,
     raza,
     vendido,
+    tipoVacuna,
+    fecha_aplicacion,
+    dosis,
+    responsable,
+    observaciones2,
   } = data;
 
   const query = `
@@ -87,11 +91,53 @@ exports.createGanaderia = async (data) => {
     vendido ?? false,
   ];
 
-  const { rows } = await db.query(query, values);
-  return rows[0];
+  const queryVacuna = `
+    INSERT INTO vacunas (
+      tipo_vacuna,
+      fecha_aplicacion,
+      dosis,
+      responsable,
+      observaciones,
+      id_animal
+    )
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *
+  `;
+
+  const client = await db.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const res1 = await client.query(query, values);
+
+    const valuesVacuna = [
+      tipoVacuna || null,
+      fecha_aplicacion || null,
+      dosis,
+      responsable,
+      observaciones2,
+      res1.rows[0].id_animal,
+    ];
+
+
+    const res2 = await client.query(queryVacuna, valuesVacuna);
+
+    await client.query("COMMIT");
+
+    return {
+      ganaderia: res1.rows[0],
+      vacuna: res2.rows[0],
+    };
+
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };
 
-// OBTENER POR ID ✅ (ARREGLADO)
 exports.getGanaderiaById = async (id) => {
   const query = `
     SELECT
@@ -116,6 +162,17 @@ exports.getGanaderiaById = async (id) => {
   return rows[0];
 };
 
+exports.getVacunaById = async (id) => {
+  const query = `
+    SELECT * 
+    FROM vacunas v
+    WHERE v.id_animal = $1
+  `;
+
+  const { rows } = await db.query(query, [id]);
+  return rows[0];
+};
+
 // ACTUALIZAR
 exports.updateGanaderia = async (id, data) => {
   const {
@@ -131,6 +188,11 @@ exports.updateGanaderia = async (id, data) => {
     url_img,
     raza,
     vendido,
+    tipoVacuna,
+    fecha_aplicacion,
+    dosis,
+    responsable,
+    observaciones2,
   } = data;
 
   const query = `
@@ -168,9 +230,53 @@ exports.updateGanaderia = async (id, data) => {
     id,
   ];
 
-  const { rows } = await db.query(query, values);
-  return rows[0] || null;
+  const queryVacuna = `
+    UPDATE vacunas
+    SET
+      tipo_vacuna = $1,
+      fecha_aplicacion = $2,
+      dosis = $3,
+      responsable = $4,
+      observaciones = $5
+    WHERE id_animal = $6
+    RETURNING *
+  `;
+
+  const client = await db.connect();
+
+  try {
+    await client.query("BEGIN");
+
+  
+    const res1 = await client.query(query, values);
+
+    
+    const valuesVacuna = [
+      tipoVacuna || null,
+      fecha_aplicacion || null,
+      dosis,
+      responsable,
+      observaciones2 || null,
+      id,
+    ];
+
+    const res2 = await client.query(queryVacuna, valuesVacuna);
+
+    await client.query("COMMIT");
+
+    return {
+      ganaderia: res1.rows[0],
+      vacuna: res2.rows[0],
+    };
+
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };
+
 
 // ELIMINAR
 exports.deleteGanaderia = async (id) => {
