@@ -12,10 +12,11 @@ import WokerDetails from "@/components/organism/wokerDetails/WokerDetails";
 import ActivityDetails from "@/components/organism/activityDetails/ActivityDetails";
 import GanaderiaDetails from "@/components/organism/ganaderiaDetails/GanaderiaDetails";
 import PorciculturaDetails from "@/components/organism/porciculturaDetails/PorciculturaDetails";
+import ImgEnlarge from "@/components/templates/imgEnlarge/ImgEnlarge";
 
 const MainLayout = ({ children }) => {
   const { isCollapsed, isDesktop, setIsDesktop } = useSidebarStore();
-  const { isOpenModal } = useModalStore();
+  const { isOpenModal, isImgEnlargeOpen } = useModalStore();
 
   const location = useLocation();
   // dependinedo la ruta mapeamos componentes de detalle para mostrar en el modal
@@ -46,6 +47,8 @@ const MainLayout = ({ children }) => {
           <ActiveDetailComponent />
         </DetailsModal>
       )}
+
+      {isImgEnlargeOpen && <ImgEnlarge />}
 
       {isDesktop ? <Sidebar /> : <NavbarMobile />}
 

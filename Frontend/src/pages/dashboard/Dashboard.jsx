@@ -5,8 +5,11 @@ import { sidebarData } from "@/data/sidebarData";
 import { useSidebarStore } from "@/store/sidebarStore";
 import { useNavigate } from "react-router-dom";
 import CardStats from "@/components/atoms/cardStats/CardStats";
+import { useEffect, useState } from "react";
 import { DollarSign, Trophy } from "lucide-react";
 import { activitiesData } from "@/data/activitiesData";
+import { buildApiUrl } from "@/utils/apiBase";
+import toast from "react-hot-toast";
 import {
   Bar,
   BarChart,
@@ -22,6 +25,12 @@ const workers = [{}, {}, {}, {}, {}];
 const Dashboard = () => {
   const navigate = useNavigate();
   const { setCurrentSection } = useSidebarStore();
+  const [cardsStats, setCardsStats] = useState({
+    "/inventario": 0,
+    "/trabajadores": 0,
+    "/actividades": 0,
+    "/ganaderia": 0,
+  });
 
   const dayLabels = {
     0: "Dom",
@@ -66,17 +75,49 @@ const Dashboard = () => {
     setCurrentSection(path);
     navigate(path);
   };
+
+  useEffect(() => {
+    const getDashboardCardsStats = async () => {
+      try {
+        const res = await fetch(buildApiUrl("statistics/dashboard-cards"), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        setCardsStats({
+          "/inventario": data.data?.inventario ?? 0,
+          "/trabajadores": data.data?.trabajadores ?? 0,
+          "/actividades": data.data?.actividades ?? 0,
+          "/ganaderia": data.data?.ganaderia ?? 0,
+        });
+      } catch (error) {
+        console.error("Error al obtener estadisticas del dashboard:", error);
+        toast.error("No se pudieron cargar las estadisticas.");
+      }
+    };
+
+    getDashboardCardsStats();
+  }, []);
+
   return (
     <MainLayout>
       <section className={styles.page}>
         <article className={styles.content}>
-          {sidebarData.slice(1, 7).map((item, i) => {
+          {sidebarData.slice(1, 5).map((item, i) => {
             return (
               <Linkcard
                 key={i}
                 icon={item.icon}
                 title={item.title}
                 description={item.description}
+                stats={cardsStats[item.path] ?? 0}
                 onClick={() => handleSection(item.path)}
               />
             );
