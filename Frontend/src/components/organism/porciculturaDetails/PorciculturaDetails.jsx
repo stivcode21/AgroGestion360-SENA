@@ -3,6 +3,7 @@ import styles from "../productDetails/ProductDetails.module.css";
 import { porciculturaData } from "@/data/porciculturaData";
 import { useModalStore } from "@/store/modalStore";
 import { Link } from "react-router-dom";
+import DetailsImage from "@/components/templates/detailsImage/DetailsImage";
 
 const PorciculturaDetails = () => {
   const { selectPig, setIsOpenModal } = useModalStore();
@@ -80,15 +81,10 @@ const PorciculturaDetails = () => {
           </div>
           <div className={`${styles.row} ${styles.imageRow}`}>
             <span className={styles.label}>Foto</span>
-            <div className={styles.imageWrapper}>
-              <div className={styles.imageCard}>
-                {avatar ? (
-                  <img src={avatar} alt={name} loading="lazy" />
-                ) : (
-                  <span className={styles.imageBadge}>Sin imagen</span>
-                )}
-              </div>
-            </div>
+            <DetailsImage
+              imageSrc={avatar}
+              alt={name}
+            />
           </div>
         </div>
       </section>

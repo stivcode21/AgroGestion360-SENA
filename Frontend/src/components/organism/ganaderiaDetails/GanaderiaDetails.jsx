@@ -7,6 +7,7 @@ import { useActionModal } from "@/context/actionModalProvider/ActionModalProvide
 import { Link } from "react-router-dom";
 import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
+import DetailsImage from "@/components/templates/detailsImage/DetailsImage";
 
 const typeLabels = {
   bovino: "Bovino",
@@ -15,9 +16,7 @@ const typeLabels = {
 };
 
 const GanaderiaDetails = () => {
-
-  const { selectCattle, setIsOpenModal, setSelectCattle } =
-    useModalStore();
+  const { selectCattle, setIsOpenModal, setSelectCattle } = useModalStore();
 
   const { setGanaderia } = useDataStore();
   const { toggleLoader } = useLoader();
@@ -35,7 +34,7 @@ const GanaderiaDetails = () => {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-        }
+        },
       );
 
       const data = await res.json();
@@ -46,7 +45,7 @@ const GanaderiaDetails = () => {
       }
 
       setGanaderia((prev) =>
-        prev.filter((item) => item.id_animal !== selectCattle.id_animal)
+        prev.filter((item) => item.id_animal !== selectCattle.id_animal),
       );
 
       toast.success(data.message);
@@ -83,7 +82,7 @@ const GanaderiaDetails = () => {
           body: JSON.stringify({
             estado_salud: "Vendido",
           }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -99,8 +98,8 @@ const GanaderiaDetails = () => {
         prev.map((item) =>
           item.id_animal === selectCattle.id_animal
             ? { ...item, estado_salud: "Vendido" }
-            : item
-        )
+            : item,
+        ),
       );
 
       setIsOpenModal(false);
@@ -112,13 +111,10 @@ const GanaderiaDetails = () => {
     }
   };
 
-
   if (!selectCattle || !selectCattle.id_animal) {
     return (
       <div className={styles.container}>
-        <p className={styles.empty}>
-          No se encontraron datos del animal.
-        </p>
+        <p className={styles.empty}>No se encontraron datos del animal.</p>
       </div>
     );
   }
@@ -131,7 +127,6 @@ const GanaderiaDetails = () => {
     peso_inicial,
     estado_salud,
     origen_ciudad,
-    marcado,
     url_img,
     observaciones,
     fecha_nacimiento,
@@ -146,12 +141,8 @@ const GanaderiaDetails = () => {
         <h3 className={styles.sectionTitle}>Detalles del animal</h3>
 
         <div className={styles.actions}>
-          <button
-            type="button"
-            onClick={handleSell}
-            className={styles.action}
-          >
-            <Banknote className={styles.icon} />
+          <button type="button" onClick={handleSell} className={styles.action}>
+            <Banknote className={`${styles.icon} ${styles.iconPayment}`} />
             <span>Vender</span>
           </button>
 
@@ -160,7 +151,7 @@ const GanaderiaDetails = () => {
             className={styles.action}
             onClick={openDeleteModal}
           >
-            <Trash2 className={styles.icon} />
+            <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
             <span>Eliminar</span>
           </button>
 
@@ -169,7 +160,7 @@ const GanaderiaDetails = () => {
             className={styles.action}
             onClick={() => setIsOpenModal(false)}
           >
-            <Pencil className={styles.icon} />
+            <Pencil className={`${styles.icon} ${styles.iconEdit}`} />
             <span>Editar</span>
           </Link>
         </div>
@@ -184,9 +175,7 @@ const GanaderiaDetails = () => {
 
           <div className={styles.row}>
             <span className={styles.label}>Tipo</span>
-            <span className={styles.value}>
-              {typeLabels[tipo] ?? tipo}
-            </span>
+            <span className={styles.value}>{typeLabels[tipo] ?? tipo}</span>
           </div>
 
           <div className={styles.row}>
@@ -210,21 +199,12 @@ const GanaderiaDetails = () => {
           </div>
 
           <div className={styles.row}>
-            <span className={styles.label}>Identificacion</span>
-            <span className={styles.value}>{marcado}</span>
-          </div>
-
-          <div className={styles.row}>
             <span className={styles.label}>Nacimiento</span>
-            <span className={styles.value}>
-              {fecha_nacimiento}
-            </span>
+            <span className={styles.value}>{fecha_nacimiento}</span>
           </div>
-           <div className={styles.row}>
+          <div className={styles.row}>
             <span className={styles.label}>vendido</span>
-            <span className={styles.value}>
-              {vendido}
-            </span>
+            <span className={styles.value}>{vendido}</span>
           </div>
 
           <div className={`${styles.row} ${styles.descriptionRow}`}>
@@ -236,24 +216,16 @@ const GanaderiaDetails = () => {
 
           <div className={`${styles.row} ${styles.imageRow}`}>
             <span className={styles.label}>Foto</span>
-            <div className={styles.imageWrapper}>
-              <div className={styles.imageCard}>
-                {url_img ? (
-                  <img
-                    src={
-                      url_img.startsWith("http")
-                        ? url_img
-                        : buildApiUrl(url_img)
-                    }
-                    alt={nombre}
-                  />
-                ) : (
-                  <span className={styles.imageBadge}>
-                    Sin imagen
-                  </span>
-                )}
-              </div>
-            </div>
+            <DetailsImage
+              imageSrc={
+                url_img
+                  ? url_img.startsWith("http")
+                    ? url_img
+                    : buildApiUrl(url_img)
+                  : ""
+              }
+              alt={nombre}
+            />
           </div>
         </div>
       </section>

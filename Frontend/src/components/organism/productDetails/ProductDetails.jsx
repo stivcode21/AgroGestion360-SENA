@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 import { useDataStore } from "@/store/dataStore";
+import DetailsImage from "@/components/templates/detailsImage/DetailsImage";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -162,19 +163,10 @@ const ProductDetails = () => {
           </div>
           <div className={`${styles.row} ${styles.imageRow}`}>
             <span className={styles.label}>Imagen</span>
-            <div className={styles.imageWrapper}>
-              <div className={styles.imageCard}>
-                {selectProduct.url_img ? (
-                  <img
-                    src={selectProduct.url_img}
-                    alt={selectProduct.nombre}
-                    loading="lazy"
-                  />
-                ) : (
-                  <span className={styles.imageBadge}>Sin imagen</span>
-                )}
-              </div>
-            </div>
+            <DetailsImage
+              imageSrc={selectProduct.url_img}
+              alt={selectProduct.nombre}
+            />
           </div>
         </div>
       </section>

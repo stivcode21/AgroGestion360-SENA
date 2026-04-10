@@ -103,7 +103,7 @@
   color: #da8700;
 }
 
-.iconSell {
+.action:hover .iconPayment {
   color: #15803d;
 }
 
@@ -168,22 +168,28 @@
 
 .imageWrapper {
   display: flex;
+  width: 100%;
   align-items: center;
   gap: 12px;
   padding: 8px 0;
 }
 
 .imageCard {
-  width: 150px;
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 16 / 10;
   border-radius: 14px;
   border: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: #f8fafc;
+  flex-shrink: 0;
 }
 
 .imageCard img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -310,7 +316,8 @@
   }
 
   .imageCard {
-    width: 120px;
+    width: 100%;
+    max-width: 220px;
   }
 
   .innerModalCard {

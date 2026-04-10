@@ -11,6 +11,8 @@ import toast from "react-hot-toast";
 import { useDataStore } from "@/store/dataStore";
 import { generateFacturaPdf } from "@/utils/generateActivityPaymentInvoicePdf";
 import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
+import previuIMG from "@/assets/img/previuActivity.jpg";
+import DetailsImage from "@/components/templates/detailsImage/DetailsImage";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -269,7 +271,7 @@ const ActivityDetails = () => {
               className={styles.action}
               aria-label="Pagar"
             >
-              <Banknote className={styles.icon} />
+              <Banknote className={`${styles.icon} ${styles.iconPayment}`} />
               <span>Pagar</span>
             </button>
           )}
@@ -357,31 +359,19 @@ const ActivityDetails = () => {
           </div>
           <div className={`${styles.row} ${styles.imageRow}`}>
             <span className={styles.label}>Foto</span>
-            <div className={styles.imageWrapper}>
-              <div className={styles.imageCard}>
-                {url_evidencia ? (
-                  <img src={url_evidencia} alt={trabajador} loading="lazy" />
-                ) : (
-                  <span className={styles.imageBadge}>Sin imagen</span>
-                )}
-              </div>
-            </div>
+            <DetailsImage
+              imageSrc={url_evidencia}
+              emptyLabel="Sin evidencia"
+              alt={trabajador}
+            />
           </div>
           <div className={`${styles.row} ${styles.imageRow}`}>
             <span className={styles.label}>Comprobante</span>
-            <div className={styles.imageWrapper}>
-              <div className={styles.imageCard}>
-                {urlcomprobante ? (
-                  <img
-                    src={urlcomprobante}
-                    alt={`Comprobante de ${trabajador}`}
-                    loading="lazy"
-                  />
-                ) : (
-                  <span className={styles.imageBadge}>Sin comprobante</span>
-                )}
-              </div>
-            </div>
+            <DetailsImage
+              imageSrc={urlcomprobante}
+              alt={`Comprobante de ${trabajador}`}
+              emptyLabel="Sin comprobante"
+            />
           </div>
         </div>
       </section>
