@@ -12,7 +12,6 @@ exports.getGanaderiaPaginated = async (page) => {
       g.fecha_ingreso,
       g.estado_salud,
       g.origen_ciudad,
-      g.marcado,
       TO_CHAR(g.fecha_nacimiento, 'YYYY-MM-DD') AS fecha_nacimiento,
       g.peso_inicial,
       g.nombre,
@@ -43,7 +42,6 @@ exports.createGanaderia = async (data) => {
     fecha_ingreso,
     estado_salud,
     origen_ciudad,
-    marcado,
     fecha_nacimiento,
     peso_inicial,
     observaciones,
@@ -59,7 +57,6 @@ exports.createGanaderia = async (data) => {
       fecha_ingreso,
       estado_salud,
       origen_ciudad,
-      marcado,
       fecha_nacimiento,
       peso_inicial,
       observaciones,
@@ -68,7 +65,7 @@ exports.createGanaderia = async (data) => {
       raza,
       vendido
     )
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
     RETURNING *
   `;
 
@@ -77,7 +74,6 @@ exports.createGanaderia = async (data) => {
     fecha_ingreso || null,
     estado_salud,
     origen_ciudad || null,
-    marcado,
     fecha_nacimiento || null,
     peso_inicial,
     observaciones || null,
@@ -100,7 +96,6 @@ exports.getGanaderiaById = async (id) => {
       g.fecha_ingreso,
       g.estado_salud,
       g.origen_ciudad,
-      g.marcado,
       TO_CHAR(g.fecha_nacimiento, 'YYYY-MM-DD') AS fecha_nacimiento,
       g.peso_inicial,
       g.observaciones,
@@ -123,7 +118,6 @@ exports.updateGanaderia = async (id, data) => {
     fecha_ingreso,
     estado_salud,
     origen_ciudad,
-    marcado,
     fecha_nacimiento,
     peso_inicial,
     observaciones,
@@ -140,15 +134,14 @@ exports.updateGanaderia = async (id, data) => {
       fecha_ingreso = $2,
       estado_salud = $3,
       origen_ciudad = $4,
-      marcado = $5,
-      fecha_nacimiento = $6,
-      peso_inicial = $7,
-      observaciones = $8,
-      nombre = $9,
-      url_img = $10,
-      raza = $11,
-      vendido = $12
-    WHERE id_animal = $13
+      fecha_nacimiento = $5,
+      peso_inicial = $6,
+      observaciones = $7,
+      nombre = $8,
+      url_img = $9,
+      raza = $10,
+      vendido = $11
+    WHERE id_animal = $12
     RETURNING *
   `;
 
@@ -157,7 +150,6 @@ exports.updateGanaderia = async (id, data) => {
     fecha_ingreso || null,
     estado_salud,
     origen_ciudad || null,
-    marcado,
     fecha_nacimiento || null,
     peso_inicial,
     observaciones || null,
@@ -220,7 +212,6 @@ exports.filterGanaderiaPaginatedModel = async (page, tipo, estado, search) => {
       g.fecha_ingreso,
       g.estado_salud,
       g.origen_ciudad,
-      g.marcado,
       TO_CHAR(g.fecha_nacimiento, 'YYYY-MM-DD') AS fecha_nacimiento,
       g.peso_inicial,
       g.observaciones,

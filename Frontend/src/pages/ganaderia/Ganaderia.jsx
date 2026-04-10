@@ -13,7 +13,8 @@ import FiltersBox from "../../components/molecules/filtersBox/FiltersBox";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
-import previuIMG from "@/assets/img/previuUser.png";
+import previuIMG from "@/assets/img/previuVaca.jpg";
+import { sidebarData } from "../../data/sidebarData";
 
 const ganaderiaTypeOptions = [
   { label: "Bovino", value: "bovino" },
@@ -117,11 +118,17 @@ const Ganaderia = () => {
     }
   };
 
+  // datos para la descripcion pagina
+  const info = sidebarData.find((item) => item.title === "Ganaderia");
+
   return (
     <MainLayout>
       <section className={styles.page}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Ganaderia</h1>
+          <div>
+            <h1 className={styles.title}>{info?.title}</h1>
+            <p className={styles.description}>{info?.description}</p>
+          </div>
           <Link to="/ganaderia/registrar">
             <Button type="three">
               <Plus />
@@ -175,12 +182,11 @@ const Ganaderia = () => {
                 "Estado",
                 "Peso",
                 "Origen",
-                "Identificacion",
                 "Disponibilidad",
                 "",
               ]}
-              columns="1.2fr 0.9fr 0.9fr 0.8fr 0.9fr 1fr 0.6fr 0.2fr"
-              compactColumns="2fr 1fr 1fr 1fr 1fr 1fr 1fr  0.2fr"
+              columns="1.2fr 0.9fr 0.9fr 0.8fr 0.9fr 1fr 0.2fr"
+              compactColumns="2fr 1fr 1fr 1fr 1fr 1fr 0.2fr"
               setPage={setPage}
               setData={setGanaderia}
               page={page}
@@ -227,8 +233,6 @@ const Ganaderia = () => {
                     <span className={styles.weight}>
                       {item.origen_ciudad || "Desconocida"}
                     </span>
-
-                    <span className={styles.breed}>{item.marcado}</span>
 
                     <span
                       className={`${styles.statusTag} ${
