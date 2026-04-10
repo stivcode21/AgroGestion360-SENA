@@ -89,7 +89,9 @@
   transform: scaleX(0);
   transform-origin: center; /* se expande hacia los costados */
   opacity: 0;
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  transition:
+    transform 0.1s ease,
+    opacity 0.1s ease;
   z-index: 0;
   pointer-events: none;
 }
@@ -140,8 +142,9 @@
 
 .footer {
   padding-top: 4px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secundary);
+  font-family: "Playwrite IE", cursive;
 }
 
 .decorative {

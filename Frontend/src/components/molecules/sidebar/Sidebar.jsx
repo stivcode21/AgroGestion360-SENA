@@ -111,6 +111,6 @@ const Sidebar = () => {
       {<img src={cowMarcage} alt="decorative" className={styles.decorative} />}
     </section>
   );
-};  
+};
 
 export default Sidebar;

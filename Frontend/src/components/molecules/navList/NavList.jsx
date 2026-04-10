@@ -14,7 +14,7 @@ const NavList = ({ isMobile = false }) => {
 
   return (
     <ul className={styles.list}>
-      {sidebarData.slice(0, 7).map((item, i) => (
+      {sidebarData.slice(0, 6).map((item, i) => (
         <li
           key={item.path || i}
           className={`${styles.item} ${
