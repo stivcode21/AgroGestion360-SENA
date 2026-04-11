@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+  import { useEffect, useState } from "react";
 import { Search, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { buildApiUrl } from "@/utils/apiBase";
 import { consumoInputFields } from "@/data/activitiesData";
 import styles from "./ConsumoForm.module.css";
+import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 
 // Obtener configuraciones de campos desde el arreglo de configuración
 const searchField =
@@ -19,6 +20,7 @@ const ConsumoForm = ({
 }) => {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const { openActionModal } = useActionModal();
 
   // Cargar consumos existentes al entrar en modo edición
   useEffect(() => {
@@ -170,6 +172,25 @@ const ConsumoForm = ({
     (item) => !selectedProductIds.has(Number(item.id_insumo)),
   );
 
+  const handleRemoveConsumption = (idInsumo) => {
+    setConsumptionItems((prev) =>
+      prev.filter(
+        (currentItem) => Number(currentItem.id_insumo) !== Number(idInsumo),
+      ),
+    );
+  };
+
+  const openDeleteConsumptionModal = (item) => {
+    openActionModal({
+      variant: "delete",
+      title: "Quieres eliminar",
+      highlight: item?.nombre || "este consumo",
+      description:
+        "Esta accion eliminara el consumo del formulario. Recuerda guardar para aplicar el cambio definitivamente.",
+      onConfirm: () => handleRemoveConsumption(item.id_insumo),
+    });
+  };
+
   return (
     <section className={styles.container}>
       <header className={styles.header}>
@@ -257,15 +278,7 @@ const ConsumoForm = ({
                   <button
                     type="button"
                     className={styles.removeButton}
-                    onClick={() =>
-                      setConsumptionItems((prev) =>
-                        prev.filter(
-                          (currentItem) =>
-                            Number(currentItem.id_insumo) !==
-                            Number(item.id_insumo),
-                        ),
-                      )
-                    }
+                    onClick={() => openDeleteConsumptionModal(item)}
                     aria-label={`Quitar ${item.nombre}`}
                   >
                     <Trash2 />

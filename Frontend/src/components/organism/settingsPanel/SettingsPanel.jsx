@@ -186,7 +186,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
           }
         >
           <KeyRound size={16} />
-          Gestionar credenciales de acceso
+          Cambiar contraseña
         </button>
       </header>
 
@@ -213,7 +213,7 @@ const SettingsPanel = ({ onOpenCredentials }) => {
                 onChange={handleChange}
                 type={field?.type}
                 value={formData[field.name] ?? ""}
-                disabled={field?.name === "role"}
+                disabled={field?.name === "email" || field?.name === "role"}
               />
             ))}
           </div>

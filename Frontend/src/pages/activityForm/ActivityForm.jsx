@@ -21,7 +21,6 @@ const ActivityForm = ({ title }) => {
   const { toggleLoader } = useLoader();
   const navigate = useNavigate();
   const { user } = useUserStore();
-  const canView = hasRole(user, 1);
 
   const [formData, setFormData] = useState({
     idPerson: "",
@@ -91,7 +90,10 @@ const ActivityForm = ({ title }) => {
 
     if (!normalizedCost) {
       newErrors.cost = "El costo es obligatorio.";
-    } else if (!/^\d{1,8}$/.test(normalizedCost) || Number(normalizedCost) > 10000000) {
+    } else if (
+      !/^\d{1,8}$/.test(normalizedCost) ||
+      Number(normalizedCost) > 10000000
+    ) {
       newErrors.cost = "Solo numeros enteros hasta 10.000.000";
     }
 
@@ -316,7 +318,7 @@ const ActivityForm = ({ title }) => {
                   placeholder={field.placeholder}
                   select={field?.select}
                   error={errors[field.name]}
-                  disabled={field?.select && !canView}
+                  disabled={field?.select && isEditMode}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   required={field?.required}

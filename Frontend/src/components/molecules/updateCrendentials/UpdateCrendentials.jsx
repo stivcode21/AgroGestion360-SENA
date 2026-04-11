@@ -6,7 +6,12 @@ import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import styles from "./UpdateCrendentials.module.css";
 
-const UpdateCrendentials = ({ isOpen, userId, defaultUsername = "", onClose }) => {
+const UpdateCrendentials = ({
+  isOpen,
+  userId,
+  defaultUsername = "",
+  onClose,
+}) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -124,7 +129,7 @@ const UpdateCrendentials = ({ isOpen, userId, defaultUsername = "", onClose }) =
         </header>
 
         <div className={styles.content}>
-          <h3 className={styles.title}>Actualizar credenciales de acceso</h3>
+          <h3 className={styles.title}>Actualizar tu contraseña</h3>
           <p className={styles.userMeta}>
             ID usuario: <span className={styles.userId}>{userId}</span>
           </p>
