@@ -227,7 +227,7 @@ const Ganaderia = () => {
                     <span className={styles.breed}>{item.estado_salud}</span>
 
                     <span className={styles.weight}>
-                      {item.peso_inicial} KG
+                      {item.peso_inicial} Kg
                     </span>
 
                     <span className={styles.weight}>
