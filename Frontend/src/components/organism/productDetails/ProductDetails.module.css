@@ -107,6 +107,10 @@
   color: #15803d;
 }
 
+.action:hover .iconVacuna {
+  color: #da8700;
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -229,7 +233,8 @@
 }
 
 .innerModalCard {
-  width: min(720px, 100%);
+  width: min(520px, 100%);
+  position: relative;
   background: #ffffff;
   border-radius: 20px;
   border: 1px solid var(--color-border);
@@ -238,6 +243,35 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.innerModalCloseButton {
+  position: absolute;
+  right: 24px;
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  display: grid;
+  place-content: center;
+  border-radius: 10px;
+  transition: var(--dynamic-fast-transition);
+}
+
+.innerModalCloseIcon {
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  color: #111827;
+}
+
+.innerModalCloseButton:hover {
+  background: var(--surface-secundary);
+  scale: 1.1;
+}
+
+.innerModalCloseButton:hover svg {
+  color: #fe0e0e;
 }
 
 .innerModalContent {

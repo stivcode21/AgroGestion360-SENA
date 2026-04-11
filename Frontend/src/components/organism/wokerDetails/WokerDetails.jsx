@@ -9,11 +9,15 @@ import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
 import { workerInputFields } from "@/data/workerRegisterData";
 import previuIMG from "@/assets/img/previuUser.png";
+import { hasRole } from "@/utils/auth";
+import { useUserStore } from "@/store/userStore";
 
 const WorkerDetails = () => {
   const { selectWoker, setIsOpenModal, setSelectWoker } = useModalStore();
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
+  const { user } = useUserStore();
+  const canView = hasRole(user, 1);
 
   const documentTypeOptions =
     workerInputFields.find((field) => field.name === "id_tipo_documento")
@@ -101,14 +105,16 @@ const WorkerDetails = () => {
       </div>
       <header className={styles.header}>
         <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.action}
-            onClick={openDeleteModal}
-          >
-            <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
-            <span>Eliminar</span>
-          </button>
+          {canView && (
+            <button
+              type="button"
+              className={styles.action}
+              onClick={openDeleteModal}
+            >
+              <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
+              <span>Eliminar</span>
+            </button>
+          )}
 
           <Link
             to={`/trabajadores/editar/${id_trabajador}`}

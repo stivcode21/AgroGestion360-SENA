@@ -1,7 +1,7 @@
 import styles from "../productDetails/ProductDetails.module.css";
 import { formatDate } from "@/utils/formatDate";
 import { useModalStore } from "@/store/modalStore";
-import { Banknote, FileText, Pencil, Trash2 } from "lucide-react";
+import { Banknote, FileText, Pencil, Trash2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
@@ -11,8 +11,9 @@ import toast from "react-hot-toast";
 import { useDataStore } from "@/store/dataStore";
 import { generateFacturaPdf } from "@/utils/generateActivityPaymentInvoicePdf";
 import ImgPicker from "@/components/atoms/imgPicker/ImgPicker";
-import previuIMG from "@/assets/img/previuActivity.jpg";
 import DetailsImage from "@/components/templates/detailsImage/DetailsImage";
+import { hasRole } from "@/utils/auth";
+import { useUserStore } from "@/store/userStore";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -21,16 +22,31 @@ const currencyFormatter = new Intl.NumberFormat("es-CO", {
 });
 
 const ActivityDetails = () => {
-  const { selectActivity, setIsOpenModal, setSelectActivity } = useModalStore();
+  const {
+    selectActivity,
+    setIsOpenModal,
+    setSelectActivity,
+    setIsInnerDetailModalOpen,
+  } = useModalStore();
   const { setActivities } = useDataStore();
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
+  const { user } = useUserStore();
+  const canView = hasRole(user, 1);
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [urlComprobante, setUrlComprobante] = useState("");
 
   useEffect(() => {
     setUrlComprobante(selectActivity?.urlcomprobante ?? "");
   }, [selectActivity]);
+
+  useEffect(() => {
+    setIsInnerDetailModalOpen(isProofModalOpen);
+
+    return () => {
+      setIsInnerDetailModalOpen(false);
+    };
+  }, [isProofModalOpen, setIsInnerDetailModalOpen]);
 
   // Elimina la actividad seleccionada despues de confirmar en el modal de accion.
   const handleDeleteConfirm = async () => {
@@ -134,6 +150,7 @@ const ActivityDetails = () => {
         estado: "Completada",
         urlcomprobante: urlComprobante,
       });
+      setIsInnerDetailModalOpen(false);
       setIsProofModalOpen(false);
       setIsOpenModal(false);
     } catch (error) {
@@ -214,15 +231,31 @@ const ActivityDetails = () => {
 
   return (
     <div className={styles.container}>
+      {/* subir comprobante de pago */}
       {isProofModalOpen && (
         <div
           className={styles.innerModalBackdrop}
-          onClick={() => setIsProofModalOpen(false)}
+          onClick={() => {
+            setIsInnerDetailModalOpen(false);
+            setIsProofModalOpen(false);
+          }}
         >
           <div
             className={styles.innerModalCard}
             onClick={(e) => e.stopPropagation()}
           >
+            <button
+              type="button"
+              className={styles.innerModalCloseButton}
+              onClick={() => {
+                setIsInnerDetailModalOpen(false);
+                setIsProofModalOpen(false);
+              }}
+              aria-label="Cerrar modal de comprobante"
+            >
+              <X className={styles.innerModalCloseIcon} />
+            </button>
+
             <div className={styles.innerModalContent}>
               <h3 className={styles.innerModalTitle}>Sube el comprobante</h3>
               <p className={styles.innerModalDescription}>
@@ -242,7 +275,10 @@ const ActivityDetails = () => {
               <button
                 type="button"
                 className={styles.secondaryButton}
-                onClick={() => setIsProofModalOpen(false)}
+                onClick={() => {
+                  setIsInnerDetailModalOpen(false);
+                  setIsProofModalOpen(false);
+                }}
               >
                 Cancelar
               </button>
@@ -276,25 +312,29 @@ const ActivityDetails = () => {
             </button>
           )}
 
-          <button
-            type="button"
-            className={styles.action}
-            onClick={handleGenerateInvoice}
-            aria-label="Factura"
-          >
-            <FileText className={`${styles.icon} ${styles.iconFactura}`} />
-            <span>Factura</span>
-          </button>
+          {normalizedEstado !== "completada" && (
+            <button
+              type="button"
+              className={styles.action}
+              onClick={handleGenerateInvoice}
+              aria-label="Factura"
+            >
+              <FileText className={`${styles.icon} ${styles.iconFactura}`} />
+              <span>Factura</span>
+            </button>
+          )}
 
-          <button
-            type="button"
-            className={styles.action}
-            onClick={openDeleteModal}
-            aria-label="Eliminar"
-          >
-            <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
-            <span>Eliminar</span>
-          </button>
+          {canView && (
+            <button
+              type="button"
+              className={styles.action}
+              onClick={openDeleteModal}
+              aria-label="Eliminar"
+            >
+              <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
+              <span>Eliminar</span>
+            </button>
+          )}
 
           <Link
             to={`/actividades/editar/${id_registro}`}

@@ -9,6 +9,8 @@ import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 import { useDataStore } from "@/store/dataStore";
 import DetailsImage from "@/components/templates/detailsImage/DetailsImage";
+import { hasRole } from "@/utils/auth";
+import { useUserStore } from "@/store/userStore";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -21,6 +23,8 @@ const ProductDetails = () => {
   const { setProducts } = useDataStore();
   const { toggleLoader } = useLoader();
   const { openActionModal } = useActionModal();
+  const { user } = useUserStore();
+  const canView = hasRole(user, 1);
 
   const handleDeleteConfirm = async () => {
     if (!selectProduct?.id_insumo) return;
@@ -88,14 +92,16 @@ const ProductDetails = () => {
         <h3 className={styles.sectionTitle}>Detalles de producto</h3>
 
         <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.action}
-            onClick={openDeleteModal}
-          >
-            <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
-            <span>Eliminar</span>
-          </button>
+          {canView && (
+            <button
+              type="button"
+              className={styles.action}
+              onClick={openDeleteModal}
+            >
+              <Trash2 className={`${styles.icon} ${styles.iconDelete}`} />
+              <span>Eliminar</span>
+            </button>
+          )}
 
           <Link
             to={`/inventario/editar/${selectProduct.id_insumo}`}

@@ -3,11 +3,23 @@ import styles from "./DetailsModal.module.css";
 import { useModalStore } from "@/store/modalStore";
 
 const DetailsModal = ({ children }) => {
-  const { setIsOpenModal } = useModalStore();
+  const { setIsOpenModal, isInnerDetailModalOpen, setIsInnerDetailModalOpen } =
+    useModalStore();
+
+  const handleClose = () => {
+    setIsInnerDetailModalOpen(false);
+    setIsOpenModal(false);
+  };
+
   return (
-    <div className={styles.background} onClick={() => setIsOpenModal(false)}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.btn} onClick={() => setIsOpenModal(false)}>
+    <div className={styles.background} onClick={handleClose}>
+      <div
+        className={`${styles.modal} ${
+          isInnerDetailModalOpen ? styles.modalLocked : ""
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className={styles.btn} onClick={handleClose}>
           <X className={styles.close} />
         </button>
         {children}
