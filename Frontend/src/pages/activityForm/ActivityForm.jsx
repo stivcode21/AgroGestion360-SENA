@@ -12,16 +12,13 @@ import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import toast from "react-hot-toast";
 import { buildApiUrl } from "@/utils/apiBase";
 import { formatDate } from "@/utils/formatDate";
-import { useUserStore } from "@/store/userStore";
-import { hasRole } from "@/utils/auth";
 import ConsumoForm from "@/components/organism/consumoForm/ConsumoForm";
+import WorkerSearchField from "@/components/atoms/workerSearchField/WorkerSearchField";
 
 const ActivityForm = ({ title }) => {
   const [errors, setErrors] = useState({});
   const { toggleLoader } = useLoader();
   const navigate = useNavigate();
-  const { user } = useUserStore();
-
   const [formData, setFormData] = useState({
     idPerson: "",
     duration: "",
@@ -33,6 +30,7 @@ const ActivityForm = ({ title }) => {
     description: "",
   });
   const [consumptionItems, setConsumptionItems] = useState([]);
+  const [selectedWorker, setSelectedWorker] = useState(null);
 
   const { id } = useParams();
   const isEditMode = Boolean(id);
@@ -56,9 +54,7 @@ const ActivityForm = ({ title }) => {
     const newErrors = {};
 
     if (!formData.idPerson) {
-      newErrors.idPerson = "El ID del trabajador es obligatorio.";
-    } else if (!/^[A-Za-z0-9\s]{1,}$/.test(formData.idPerson)) {
-      newErrors.idPerson = "Solo numeros (hasta 6 digitos)";
+      newErrors.idPerson = "Debes seleccionar un trabajador.";
     }
 
     if (!formData.duration.trim()) {
@@ -141,6 +137,12 @@ const ActivityForm = ({ title }) => {
           cost: normalizeCostValue(actividades.monto),
           description: actividades.observaciones ?? "",
         });
+        setSelectedWorker({
+          id_trabajador: actividades.id_trabajador,
+          nombre_completo: actividades.trabajador ?? "",
+          numero_documento: actividades.documento ?? "",
+          url_img: actividades.trabajador_img ?? "",
+        });
       } catch (error) {
         console.error("Error en getDetails:", error);
         toast.error("Ha ocurrido un error inesperado.");
@@ -167,6 +169,22 @@ const ActivityForm = ({ title }) => {
     const nextValue = name === "cost" ? value.replace(/[^\d]/g, "") : value;
 
     setFormData((prev) => ({ ...prev, [name]: nextValue }));
+  };
+
+  const handleSelectWorker = (worker) => {
+    if (!worker) {
+      setSelectedWorker(null);
+      setFormData((prev) => ({ ...prev, idPerson: "" }));
+      setErrors((prev) => ({ ...prev, idPerson: "" }));
+      return;
+    }
+
+    setSelectedWorker(worker);
+    setFormData((prev) => ({
+      ...prev,
+      idPerson: String(worker.id_trabajador),
+    }));
+    setErrors((prev) => ({ ...prev, idPerson: "" }));
   };
 
   //envio final del formulario para crear o editar el producto dependiendo del modo
@@ -283,6 +301,10 @@ const ActivityForm = ({ title }) => {
     }
   };
 
+  const visibleActivityFields = activityInputFields.filter(
+    (field) => field.name !== "idPerson",
+  );
+
   return (
     <MainLayout>
       <section className={styles.page}>
@@ -310,7 +332,15 @@ const ActivityForm = ({ title }) => {
             />
 
             <div className={styles.inputsGrid}>
-              {activityInputFields.map((field) => (
+              <WorkerSearchField
+                label="Trabajador *"
+                placeholder="Busca por nombre o documento"
+                selectedWorker={selectedWorker}
+                error={errors.idPerson}
+                onSelectWorker={handleSelectWorker}
+              />
+
+              {visibleActivityFields.map((field) => (
                 <FormInput
                   key={field.name}
                   label={field.label}

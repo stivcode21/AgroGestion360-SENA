@@ -86,7 +86,7 @@ const ProductDetails = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.productCode}>ID: {selectProduct.id_insumo}</h2>
+      <h2 className={styles.productCode}>PRD-{selectProduct.id_insumo}</h2>
 
       <header className={styles.header}>
         <h3 className={styles.sectionTitle}>Detalles de producto</h3>

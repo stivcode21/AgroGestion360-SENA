@@ -200,7 +200,7 @@ const GanaderiaDetails = () => {
         </div>
       )}
 
-      <h2 className={styles.productCode}>{id_animal}</h2>
+      <h2 className={styles.productCode}>ID: {id_animal}</h2>
 
       <header className={styles.header}>
         <h3 className={styles.sectionTitle}>Detalles del animal</h3>
@@ -267,7 +267,7 @@ const GanaderiaDetails = () => {
 
           <div className={styles.row}>
             <span className={styles.label}>Peso</span>
-            <span className={styles.value}>{peso_inicial}</span>
+            <span className={styles.value}>{peso_inicial} Kg</span>
           </div>
 
           <div className={styles.row}>

@@ -5,6 +5,7 @@ import { buildApiUrl } from "@/utils/apiBase";
 import { consumoInputFields } from "@/data/activitiesData";
 import styles from "./ConsumoForm.module.css";
 import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
+import previuIMG from "@/assets/img/previuProduct.jpg";
 
 // Obtener configuraciones de campos desde el arreglo de configuración
 const searchField =
@@ -227,13 +228,24 @@ const ConsumoForm = ({
                   className={styles.resultItem}
                   onClick={() => handleSelectProduct(product)}
                 >
-                  <div>
+                  <img
+                    className={styles.avatar}
+                    src={
+                      product.url_img
+                        ? product.url_img.startsWith("http")
+                          ? product.url_img
+                          : buildApiUrl(product.url_img)
+                        : previuIMG
+                    }
+                    alt={product.nombre}
+                  />
+
+                  <span className={styles.resultText}>
                     <strong>{product.nombre}</strong>
-                    <span>
+                    <small>
                       {product.marca || "Sin marca"} · Stock {product.cantidad}
-                    </span>
-                  </div>
-                  <span className={styles.resultAction}>Agregar</span>
+                    </small>
+                  </span>
                 </button>
               ))
             ) : (
