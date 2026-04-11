@@ -4,11 +4,7 @@ export const requestCreateInputFields = [
     label: "Tipo de insumo *",
     placeholder: "Selecciona un tipo",
     select: {
-      options: [
-        { label: "Fertilizante", value: "1" },
-        { label: "Herramienta", value: "2" },
-        { label: "Alimento", value: "3" },
-      ],
+      endpoint: "product/getTipoInsumo",
     },
   },
   {

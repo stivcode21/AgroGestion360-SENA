@@ -176,7 +176,6 @@ export const activityInputFields = [
       options: [
         { label: "Activa", value: "1" },
         { label: "Completada", value: "2" },
-        { label: "Cancelada", value: "3" },
       ],
     },
   },
