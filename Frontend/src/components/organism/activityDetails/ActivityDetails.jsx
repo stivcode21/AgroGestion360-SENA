@@ -411,6 +411,7 @@ const ActivityDetails = () => {
               imageSrc={urlcomprobante}
               alt={`Comprobante de ${trabajador}`}
               emptyLabel="Sin comprobante"
+              enlargeVariant="invoice"
             />
           </div>
         </div>

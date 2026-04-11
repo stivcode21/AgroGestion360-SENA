@@ -9,9 +9,19 @@ const ImgEnlarge = () => {
     return null;
   }
 
+  const cardClassName = `${styles.card} ${
+    enlargedImage?.variant === "invoice" ? styles.invoiceCard : ""
+  }`;
+  const imageBoxClassName = `${styles.imageBox} ${
+    enlargedImage?.variant === "invoice" ? styles.invoiceImageBox : ""
+  }`;
+  const imageClassName = `${styles.image} ${
+    enlargedImage?.variant === "invoice" ? styles.invoiceImage : ""
+  }`;
+
   return (
     <div className={styles.backdrop} onClick={closeImgEnlarge}>
-      <div className={styles.card} onClick={(event) => event.stopPropagation()}>
+      <div className={cardClassName} onClick={(event) => event.stopPropagation()}>
         <button
           type="button"
           className={styles.closeButton}
@@ -21,11 +31,11 @@ const ImgEnlarge = () => {
           <X />
         </button>
 
-        <div className={styles.imageBox}>
+        <div className={imageBoxClassName}>
           <img
             src={enlargedImage.src}
             alt={enlargedImage.alt || "Imagen ampliada"}
-            className={styles.image}
+            className={imageClassName}
           />
         </div>
       </div>

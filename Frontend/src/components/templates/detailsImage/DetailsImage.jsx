@@ -8,6 +8,7 @@ const DetailsImage = ({
   alt = "Imagen",
   emptyLabel = "Sin imagen",
   variant = "card",
+  enlargeVariant = "default",
 }) => {
   const { openImgEnlarge } = useModalStore();
 
@@ -26,6 +27,7 @@ const DetailsImage = ({
     openImgEnlarge({
       src: imageSrc,
       alt,
+      variant: enlargeVariant,
     });
   };
 
