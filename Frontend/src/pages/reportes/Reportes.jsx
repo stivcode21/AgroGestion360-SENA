@@ -67,16 +67,12 @@ const Reportes = () => {
 
   const handleGenerateReport = async (reportKey) => {
     const reportEndpoints = {
+      sales: "report/cattle-sales",
       inventory: "report/inventory",
       payroll: "report/payroll",
     };
 
     const endpoint = reportEndpoints[reportKey];
-
-    if (!endpoint) {
-      toast.error("Este reporte estara disponible proximamente.");
-      return;
-    }
 
     try {
       toggleLoader(true);

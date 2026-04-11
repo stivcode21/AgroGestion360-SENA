@@ -53,6 +53,26 @@ exports.getPayrollReportRows = async ({ fechaInicio }) => {
   return rows;
 };
 
+exports.getCattleSalesReportRows = async ({ fechaInicio }) => {
+  const query = `
+    SELECT
+      g.id_animal,
+      g.nombre,
+      g.peso_inicial,
+      va.comprador,
+      va.monto_total,
+      va.fecha_venta
+    FROM ventas_animales va
+    JOIN ganaderia g
+      ON va.id_animal = g.id_animal
+    WHERE va.fecha_venta >= $1::date
+    ORDER BY va.fecha_venta DESC, g.id_animal DESC
+  `;
+
+  const { rows } = await db.query(query, [fechaInicio]);
+  return rows;
+};
+
 exports.getActivityPaymentInvoiceRow = async ({ idActividad }) => {
   const query = `
     SELECT

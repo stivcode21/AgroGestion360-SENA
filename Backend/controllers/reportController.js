@@ -1,6 +1,7 @@
 const {
   getInventoryReportRows,
   getPayrollReportRows,
+  getCattleSalesReportRows,
   getActivityPaymentInvoiceRow,
 } = require("../models/reportModel");
 
@@ -152,6 +153,61 @@ exports.getPayrollReport = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al generar reporte de pagos:", error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.getCattleSalesReport = async (req, res) => {
+  try {
+    const defaultRange = getDefaultRange();
+    const fechaInicio = defaultRange.fechaInicio;
+
+    const salesRows = await getCattleSalesReportRows({
+      fechaInicio,
+    });
+
+    const totalVentas = salesRows.reduce(
+      (acumulador, row) => acumulador + Number(row.monto_total ?? 0),
+      0,
+    );
+
+    const reportData = {
+      title: "Reporte de ventas de animales",
+      intro:
+        "Este reporte consolida las ventas de animales registradas durante los ultimos 6 meses, incluyendo comprador, peso y monto total por venta.",
+      generatedAt: formatReportDateTime(),
+      periodLabel: "Ultimos 6 meses",
+      fileName: `reporte-ventas-animales-${toIsoDate(new Date())}.pdf`,
+      summary: [
+        {
+          label: "Total vendido",
+          value: formatCopCurrency(totalVentas),
+        },
+      ],
+      columns: [
+        { header: "ID animal", key: "id_animal" },
+        { header: "Nombre", key: "nombre" },
+        { header: "Peso", key: "peso_inicial" },
+        { header: "Comprador", key: "comprador" },
+        { header: "Monto total", key: "monto_total" },
+        { header: "Fecha de venta", key: "fecha_venta" },
+      ],
+      rows: salesRows.map((row) => ({
+        id_animal: Number(row.id_animal),
+        nombre: row.nombre || "Sin nombre",
+        peso_inicial: `${Number(row.peso_inicial ?? 0)} KG`,
+        comprador: row.comprador || "Sin comprador",
+        monto_total: formatCopCurrency(row.monto_total),
+        fecha_venta: formatLastConsumption(row.fecha_venta),
+      })),
+    };
+
+    return res.status(200).json({
+      message: "Reporte de ventas generado correctamente.",
+      data: reportData,
+    });
+  } catch (error) {
+    console.error("Error al generar reporte de ventas de animales:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
 };
