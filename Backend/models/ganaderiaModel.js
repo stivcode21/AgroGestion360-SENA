@@ -1,5 +1,49 @@
 const db = require("../config/db");
 
+const insertVaccinations = async (client, idAnimal, vacunas = []) => {
+  const insertedVaccinations = [];
+
+  for (const vacuna of vacunas) {
+    if (
+      !String(vacuna?.tipoVacuna ?? "").trim() ||
+      !String(vacuna?.dosis ?? "").trim() ||
+      !String(vacuna?.responsable ?? "").trim()
+    ) {
+      const error = new Error("INVALID_VACCINATION_DATA");
+      throw error;
+    }
+
+    const values = [
+      vacuna.tipoVacuna || null,
+      vacuna.fecha_aplicacion || null,
+      vacuna.dosis || null,
+      vacuna.responsable || null,
+      vacuna.observaciones2 || null,
+      idAnimal,
+    ];
+
+    const result = await client.query(
+      `
+        INSERT INTO vacunas (
+          tipo_vacuna,
+          fecha_aplicacion,
+          dosis,
+          responsable,
+          observaciones,
+          id_animal
+        )
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *
+      `,
+      values,
+    );
+
+    insertedVaccinations.push(result.rows[0]);
+  }
+
+  return insertedVaccinations;
+};
+
 // PAGINADO
 exports.getGanaderiaPaginated = async (page) => {
   const limit = 10;
@@ -48,11 +92,7 @@ exports.createGanaderia = async (data) => {
     url_img,
     raza,
     vendido,
-    tipoVacuna,
-    fecha_aplicacion,
-    dosis,
-    responsable,
-    observaciones2,
+    vacunas = [],
   } = data;
 
   const query = `
@@ -87,45 +127,24 @@ exports.createGanaderia = async (data) => {
     vendido ?? false,
   ];
 
-  const queryVacuna = `
-    INSERT INTO vacunas (
-      tipo_vacuna,
-      fecha_aplicacion,
-      dosis,
-      responsable,
-      observaciones,
-      id_animal
-    )
-    VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING *
-  `;
-
   const client = await db.connect();
 
   try {
     await client.query("BEGIN");
 
     const res1 = await client.query(query, values);
-
-    const valuesVacuna = [
-      tipoVacuna || null,
-      fecha_aplicacion || null,
-      dosis,
-      responsable,
-      observaciones2,
+    const insertedVaccinations = await insertVaccinations(
+      client,
       res1.rows[0].id_animal,
-    ];
-
-
-    const res2 = await client.query(queryVacuna, valuesVacuna);
+      vacunas,
+    );
 
     await client.query("COMMIT");
 
     return {
       ganaderia: res1.rows[0],
-      vacuna: res2.rows[0],
+      vacunas: insertedVaccinations,
     };
-
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;
@@ -157,15 +176,16 @@ exports.getGanaderiaById = async (id) => {
   return rows[0];
 };
 
-exports.getVacunaById = async (id) => {
+exports.getVacunasByAnimalId = async (id) => {
   const query = `
-    SELECT * 
+    SELECT *
     FROM vacunas v
     WHERE v.id_animal = $1
+    ORDER BY v.fecha_aplicacion DESC NULLS LAST
   `;
 
   const { rows } = await db.query(query, [id]);
-  return rows[0];
+  return rows;
 };
 
 // ACTUALIZAR
@@ -182,11 +202,7 @@ exports.updateGanaderia = async (id, data) => {
     url_img,
     raza,
     vendido,
-    tipoVacuna,
-    fecha_aplicacion,
-    dosis,
-    responsable,
-    observaciones2,
+    vacunas = [],
   } = data;
 
   const query = `
@@ -222,45 +238,28 @@ exports.updateGanaderia = async (id, data) => {
     id,
   ];
 
-  const queryVacuna = `
-    UPDATE vacunas
-    SET
-      tipo_vacuna = $1,
-      fecha_aplicacion = $2,
-      dosis = $3,
-      responsable = $4,
-      observaciones = $5
-    WHERE id_animal = $6
-    RETURNING *
-  `;
-
   const client = await db.connect();
 
   try {
     await client.query("BEGIN");
 
-  
     const res1 = await client.query(query, values);
+    await client.query(
+      `
+        DELETE FROM vacunas
+        WHERE id_animal = $1
+      `,
+      [id],
+    );
 
-    
-    const valuesVacuna = [
-      tipoVacuna || null,
-      fecha_aplicacion || null,
-      dosis,
-      responsable,
-      observaciones2 || null,
-      id,
-    ];
-
-    const res2 = await client.query(queryVacuna, valuesVacuna);
+    const insertedVaccinations = await insertVaccinations(client, id, vacunas);
 
     await client.query("COMMIT");
 
     return {
       ganaderia: res1.rows[0],
-      vacuna: res2.rows[0],
+      vacunas: insertedVaccinations,
     };
-
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;
@@ -268,7 +267,6 @@ exports.updateGanaderia = async (id, data) => {
     client.release();
   }
 };
-
 
 // ELIMINAR
 exports.deleteGanaderia = async (id) => {
@@ -283,7 +281,7 @@ exports.deleteGanaderia = async (id) => {
 };
 
 // FILTRO (OPCIONAL mejorar también)
-exports.filterGanaderiaPaginatedModel = async (page, tipo, estado, search) => {
+exports.filterGanaderiaPaginated = async (page, tipo, estado, search) => {
   const limit = 10;
   const offset = (page - 1) * limit;
 
@@ -293,8 +291,9 @@ exports.filterGanaderiaPaginatedModel = async (page, tipo, estado, search) => {
   const condiciones = [];
 
   if (tipo) {
-    values.push(tipo);
-    condiciones.push(`g.tipo = $${values.length}`);
+    const vendido = tipo === "true";
+    values.push(vendido);
+    condiciones.push(`g.vendido = $${values.length}`);
   }
 
   if (estado) {
@@ -304,7 +303,9 @@ exports.filterGanaderiaPaginatedModel = async (page, tipo, estado, search) => {
 
   if (search?.trim()) {
     values.push(`%${search.trim()}%`);
-    condiciones.push(`g.nombre ILIKE $${values.length}`);
+    condiciones.push(
+      `g.nombre ILIKE $${values.length} OR g.estado_salud ILIKE $${values.length} OR g.raza ILIKE $${values.length}`,
+    );
   }
 
   if (condiciones.length > 0) {
@@ -343,4 +344,68 @@ exports.filterGanaderiaPaginatedModel = async (page, tipo, estado, search) => {
     total: parseInt(total.rows[0].total, 10),
     limit,
   };
+};
+
+exports.sellGanaderia = async ({
+  id_animal,
+  comprador,
+  monto_total,
+  observaciones,
+}) => {
+  const client = await db.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const animalResult = await client.query(
+      `
+        SELECT id_animal, vendido
+        FROM ganaderia
+        WHERE id_animal = $1
+        FOR UPDATE
+      `,
+      [id_animal],
+    );
+
+    const animal = animalResult.rows[0];
+
+    if (!animal) {
+      throw new Error("ANIMAL_NOT_FOUND");
+    }
+
+    if (animal.vendido) {
+      throw new Error("ANIMAL_ALREADY_SOLD");
+    }
+
+    const saleResult = await client.query(
+      `
+        INSERT INTO ventas_animales (
+          id_animal,
+          comprador,
+          monto_total,
+          observaciones
+        )
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+      `,
+      [id_animal, comprador, monto_total, observaciones ?? null],
+    );
+
+    await client.query(
+      `
+        UPDATE ganaderia
+        SET vendido = true
+        WHERE id_animal = $1
+      `,
+      [id_animal],
+    );
+
+    await client.query("COMMIT");
+    return saleResult.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };

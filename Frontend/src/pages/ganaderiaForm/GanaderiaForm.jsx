@@ -1,7 +1,7 @@
 import MainLayout from "@/components/templates/mainLayout/MainLayout";
 import styles from "./GanaderiaForm.module.css";
 import Button from "@/components/templates/button/Button";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Plus, Save, Syringe, Trash2 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FormInput from "@/components/molecules/formInput/FormInput";
@@ -13,10 +13,12 @@ import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
 import { formatDate } from "@/utils/formatDate";
+import { useActionModal } from "@/context/actionModalProvider/ActionModalProvider";
 
 const GanaderiaForm = ({ title }) => {
   const [errors, setErrors] = useState({});
   const { toggleLoader } = useLoader();
+  const { openActionModal } = useActionModal();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -34,14 +36,8 @@ const GanaderiaForm = ({ title }) => {
     origen_ciudad: "",
     vendido: false,
   });
-
-  const [formDataVacuna, setFormDataVacuna] = useState({
-    tipoVacuna: "",
-    dosis: "",
-    fecha_aplicacion: "",
-    responsable: "",
-    observaciones2: "",
-  });
+  const [vaccinations, setVaccinations] = useState([]);
+  const [isVaccinationModalOpen, setIsVaccinationModalOpen] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -105,10 +101,6 @@ const GanaderiaForm = ({ title }) => {
         }
 
         const cattle = data.data;
-        const vacuna = data.vacuna;
-
-        console.log("Datos vacuna:", vacuna);
-
         setFormData({
           nombre: cattle.nombre ?? "",
           tipo: cattle.tipo ?? "",
@@ -121,14 +113,18 @@ const GanaderiaForm = ({ title }) => {
           origen_ciudad: cattle.origen_ciudad ?? "",
           vendido: cattle.vendido,
         });
-
-        setFormDataVacuna({
-          tipoVacuna: vacuna?.tipo_vacuna ?? "",
-          dosis: vacuna?.dosis ?? "",
-          fecha_aplicacion: formatDate(vacuna.fecha_aplicacion),
-          responsable: vacuna?.responsable ?? "",
-          observaciones2: vacuna?.observaciones ?? "",
-        });
+        setVaccinations(
+          (data.vacunas ?? []).map((vacuna) => ({
+            localId:
+              globalThis.crypto?.randomUUID?.() ??
+              `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            tipoVacuna: vacuna?.tipo_vacuna ?? "",
+            dosis: vacuna?.dosis ?? "",
+            fecha_aplicacion: formatDate(vacuna.fecha_aplicacion),
+            responsable: vacuna?.responsable ?? "",
+            observaciones2: vacuna?.observaciones ?? "",
+          })),
+        );
       } catch (error) {
         console.error("Error en getDetails:", error);
         toast.error("Ha ocurrido un error inesperado.");
@@ -153,6 +149,28 @@ const GanaderiaForm = ({ title }) => {
       ...prev,
       [name]: name === "vendido" ? value === "true" : value,
     }));
+  };
+
+  const handleAddVaccination = (vaccination) => {
+    setVaccinations((prev) => [...prev, vaccination]);
+    setIsVaccinationModalOpen(false);
+  };
+
+  const handleRemoveVaccination = (localId) => {
+    setVaccinations((prev) =>
+      prev.filter((vaccination) => vaccination.localId !== localId),
+    );
+  };
+
+  const openDeleteVaccinationModal = (vaccination) => {
+    openActionModal({
+      variant: "delete",
+      title: "Quieres eliminar",
+      highlight: vaccination?.tipoVacuna || "esta vacunacion",
+      description:
+        "Esta accion eliminara la vacunacion del formulario. Recuerda guardar para aplicar el cambio definitivamente.",
+      onConfirm: () => handleRemoveVaccination(vaccination.localId),
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -185,12 +203,9 @@ const GanaderiaForm = ({ title }) => {
           origen_ciudad: formData.origen_ciudad || null,
           fecha_ingreso: null,
           vendido: formData.vendido,
-
-          tipoVacuna: formDataVacuna.tipoVacuna || null,
-          fecha_aplicacion: formDataVacuna.fecha_aplicacion || null,
-          dosis: formDataVacuna.dosis || null,
-          responsable: formDataVacuna.responsable || null,
-          observaciones2: formDataVacuna.observaciones2 || null,
+          vacunas: vaccinations.map(
+            ({ localId, ...vaccination }) => vaccination,
+          ),
         }),
       });
 
@@ -214,6 +229,23 @@ const GanaderiaForm = ({ title }) => {
   return (
     <MainLayout>
       <section className={styles.page}>
+        {isVaccinationModalOpen && (
+          <div
+            className={styles.innerModalBackdrop}
+            onClick={() => setIsVaccinationModalOpen(false)}
+          >
+            <div
+              className={styles.innerModalCard}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <VacunaForm
+                onAddVaccination={handleAddVaccination}
+                onCancel={() => setIsVaccinationModalOpen(false)}
+              />
+            </div>
+          </div>
+        )}
+
         <button className={styles.titleGroup}>
           <Link to="/ganaderia" className={styles.back}>
             <ArrowLeft />
@@ -251,10 +283,11 @@ const GanaderiaForm = ({ title }) => {
                   onChange={handleChange}
                   required={field?.required}
                   type={field?.type}
+                  disabled={field.name === "vendido" && isEditMode}
                   value={
                     field.name === "vendido"
                       ? String(formData[field.name])
-                      : formData[field.name] ?? ""
+                      : (formData[field.name] ?? "")
                   }
                 />
               ))}
@@ -267,12 +300,85 @@ const GanaderiaForm = ({ title }) => {
                 style={{ gridColumn: "1 / -1" }}
                 value={formData.observaciones}
               />
-
-              <VacunaForm
-                formDataVacuna={formDataVacuna}
-                setFormDataVacuna={setFormDataVacuna}
-              />
             </div>
+
+            <section className={styles.vaccinationSection}>
+              <header className={styles.vaccinationHeader}>
+                <div>
+                  <h3 className={styles.vaccinationTitle}>
+                    Registro de vacunacion <span>(Opcional)</span>
+                  </h3>
+                  <p className={styles.vaccinationDescription}>
+                    Agrega una o varias vacunaciones para asociarlas al animal
+                    al guardar el formulario.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  className={styles.addVaccinationButton}
+                  onClick={() => setIsVaccinationModalOpen(true)}
+                >
+                  <Plus />
+                  Agregar vacunacion
+                </button>
+              </header>
+
+              <div className={styles.vaccinationList}>
+                {vaccinations.length === 0 ? (
+                  <p className={styles.emptyVaccinations}>
+                    Aun no has agregado vacunaciones.
+                  </p>
+                ) : (
+                  vaccinations.map((vaccination) => (
+                    <article
+                      key={vaccination.localId}
+                      className={styles.vaccinationCard}
+                    >
+                      <div className={styles.vaccinationInfo}>
+                        <h4 className={styles.vaccinationName}>
+                          <Syringe className={styles.vaccinationIcon} />
+                          {vaccination.tipoVacuna || "Vacunacion sin nombre"}
+                          {" -> "}{" "}
+                          <span className={styles.vaccinationDosis}>
+                            {vaccination.dosis || "Sin dosis"}
+                          </span>
+                        </h4>
+                        <p className={styles.vaccinationMeta}>
+                          <span className={styles.vaccinationLabel}>
+                            Fecha:
+                          </span>{" "}
+                          {vaccination.fecha_aplicacion || "Sin fecha"}
+                        </p>
+                        <p className={styles.vaccinationMeta}>
+                          <span className={styles.vaccinationLabel}>
+                            Responsable:
+                          </span>{" "}
+                          {vaccination.responsable || "No especificado"}
+                        </p>
+                        {vaccination.observaciones2 ? (
+                          <p className={styles.vaccinationObservation}>
+                            <span className={styles.vaccinationLabel}>
+                              Observaciones:
+                            </span>{" "}
+                            {vaccination.observaciones2}
+                          </p>
+                        ) : null}
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.deleteVaccinationButton}
+                        onClick={() => openDeleteVaccinationModal(vaccination)}
+                        aria-label={`Eliminar vacunacion ${vaccination.tipoVacuna}`}
+                      >
+                        <Trash2 />
+                      </button>
+                    </article>
+                  ))
+                )}
+              </div>
+            </section>
 
             <div className={styles.footerActions}>
               <Button type="three" buttonType="submit">

@@ -2,10 +2,11 @@ const {
   getGanaderiaPaginated,
   getGanaderiaById,
   updateGanaderia,
-  deleteGanaderia: deleteGanaderiaModel,
-  filterGanaderiaPaginatedModel,
-  createGanaderia: createGanaderiaModel,
-  getVacunaById,
+  deleteGanaderia,
+  filterGanaderiaPaginated,
+  createGanaderia,
+  getVacunasByAnimalId,
+  sellGanaderia,
 } = require("../models/ganaderiaModel");
 
 // LISTAR
@@ -44,11 +45,7 @@ exports.createGanaderia = async (req, res) => {
       url_img,
       raza,
       vendido,
-      tipoVacuna,
-      fecha_aplicacion,
-      dosis,
-      responsable,
-      obsevaciones2,
+      vacunas,
     } = req.body;
 
     if (!tipo || !peso_inicial || !estado_salud) {
@@ -57,7 +54,7 @@ exports.createGanaderia = async (req, res) => {
       });
     }
 
-    const newGanado = await createGanaderiaModel({
+    const newGanado = await createGanaderia({
       nombre,
       tipo,
       fecha_ingreso,
@@ -69,11 +66,7 @@ exports.createGanaderia = async (req, res) => {
       url_img,
       raza,
       vendido,
-      tipoVacuna,
-      fecha_aplicacion,
-      dosis,
-      responsable,
-      obsevaciones2,
+      vacunas: Array.isArray(vacunas) ? vacunas : [],
     });
 
     return res.status(201).json({
@@ -96,7 +89,7 @@ exports.getGanaderia = async (req, res) => {
     }
 
     const animal = await getGanaderiaById(id);
-    const vacuna = await getVacunaById(id);
+    const vacunas = await getVacunasByAnimalId(id);
 
     if (!animal) {
       return res.status(404).json({ message: "Animal no encontrado." });
@@ -105,9 +98,42 @@ exports.getGanaderia = async (req, res) => {
     return res.status(200).json({
       message: "Animal encontrado.",
       data: animal,
-      vacuna: vacuna ,
+      vacunas,
     });
   } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.listVacunasByAnimal = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ message: "ID inválido." });
+    }
+
+    const animal = await getGanaderiaById(id);
+
+    if (!animal) {
+      return res.status(404).json({ message: "Animal no encontrado." });
+    }
+
+    const vacunas = await getVacunasByAnimalId(id);
+
+    return res.status(200).json({
+      message: "Vacunaciones encontradas.",
+      data: vacunas,
+    });
+  } catch (error) {
+    if (error.message === "INVALID_VACCINATION_DATA") {
+      return res.status(400).json({
+        message:
+          "Cada vacunacion debe incluir tipo, dosis y responsable.",
+      });
+    }
+
     console.error(error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
@@ -131,6 +157,7 @@ exports.editGanaderia = async (req, res) => {
     const updated = await updateGanaderia(id, {
       ...existing,
       ...req.body,
+      vacunas: Array.isArray(req.body.vacunas) ? req.body.vacunas : [],
     });
 
     return res.status(200).json({
@@ -138,6 +165,13 @@ exports.editGanaderia = async (req, res) => {
       data: updated,
     });
   } catch (error) {
+    if (error.message === "INVALID_VACCINATION_DATA") {
+      return res.status(400).json({
+        message:
+          "Cada vacunacion debe incluir tipo, dosis y responsable.",
+      });
+    }
+
     console.error(error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
@@ -152,7 +186,7 @@ exports.deleteGanaderia = async (req, res) => {
       return res.status(400).json({ message: "ID inválido." });
     }
 
-    const deleted = await deleteGanaderiaModel(id);
+    const deleted = await deleteGanaderia(id);
 
     if (!deleted) {
       return res.status(404).json({ message: "Animal no encontrado." });
@@ -174,7 +208,7 @@ exports.filterGanaderiaPaginated = async (req, res) => {
     const page = parseInt(req.params.page, 10) || 1;
     const { tipo, estado, search } = req.query;
 
-    const result = await filterGanaderiaPaginatedModel(
+    const result = await filterGanaderiaPaginated(
       page,
       tipo,
       estado,
@@ -191,5 +225,45 @@ exports.filterGanaderiaPaginated = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.sellGanaderia = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { comprador, monto_total, observaciones } = req.body;
+
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ message: "ID inválido." });
+    }
+
+    if (!String(comprador ?? "").trim() || !String(monto_total ?? "").trim()) {
+      return res.status(400).json({
+        message: "comprador y monto_total son obligatorios.",
+      });
+    }
+
+    const sale = await sellGanaderia({
+      id_animal: id,
+      comprador: String(comprador).trim(),
+      monto_total: Number(monto_total),
+      observaciones: String(observaciones ?? "").trim() || null,
+    });
+
+    return res.status(201).json({
+      message: "Venta registrada correctamente.",
+      data: sale,
+    });
+  } catch (error) {
+    if (error.message === "ANIMAL_NOT_FOUND") {
+      return res.status(404).json({ message: "Animal no encontrado." });
+    }
+
+    if (error.message === "ANIMAL_ALREADY_SOLD") {
+      return res.status(409).json({ message: "Este animal ya fue vendido." });
+    }
+
+    console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor." });
   }
 };
