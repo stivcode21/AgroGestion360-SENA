@@ -68,6 +68,7 @@ exports.getInventoryReport = async (req, res) => {
       fileName: `reporte-inventario-${toIsoDate(new Date())}.pdf`,
       columns: [
         { header: "Codigo", key: "codigo" },
+        { header: "Nombre", key: "nombre" },
         { header: "Categoria", key: "categoria" },
         { header: "Stock actual", key: "stock_actual" },
         { header: "Consumido", key: "total_consumido" },
@@ -76,6 +77,7 @@ exports.getInventoryReport = async (req, res) => {
       rows: inventoryRows.map((row) => ({
         // Cada fila se adapta al formato exacto que espera la plantilla PDF.
         codigo: `PRD-${row.id_insumo}`,
+        nombre: row.nombre,
         categoria: row.categoria,
         stock_actual: Number(row.stock_actual ?? 0),
         total_consumido: Number(row.total_consumido ?? 0),

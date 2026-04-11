@@ -157,6 +157,7 @@ const Workers = () => {
               <FiltersBox
                 endpoint="workers/filter"
                 defaultEndpoint="workers/list"
+                titleType="Estado"
                 setData={setworkers}
                 setPage={setPage}
                 setEndpoint={setTableEndpoint}

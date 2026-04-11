@@ -5,6 +5,7 @@ exports.getInventoryReportRows = async ({ fechaInicio }) => {
   const query = `
     SELECT
       i.id_insumo,
+      i.nombre,
       t.nombre AS categoria,
       i.cantidad AS stock_actual,
       COALESCE(SUM(c.cantidad), 0) AS total_consumido,
@@ -17,6 +18,7 @@ exports.getInventoryReportRows = async ({ fechaInicio }) => {
       AND c.fecha_registro >= $1::date
     GROUP BY
       i.id_insumo,
+      i.nombre,
       t.nombre,
       i.cantidad
     ORDER BY i.id_insumo

@@ -233,7 +233,7 @@ exports.filterWorkersPaginated = async (page, tipo, orden, search) => {
   if (search && typeof search === "string" && search.trim()) {
     values.push(`%${search.trim()}%`);
     condiciones.push(
-      `(t.nombre_completo ILIKE $${values.length} OR t.numero_documento ILIKE $${values.length})`,
+      `(t.nombre_completo ILIKE $${values.length} OR t.numero_documento ILIKE $${values.length}  OR t.rol ILIKE $${values.length})`,
     );
   }
 
