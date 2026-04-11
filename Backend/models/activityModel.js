@@ -96,6 +96,8 @@ exports.getActivityById = async (id) => {
       a.actividad,
       a.id_trabajador,
       t.nombre_completo AS trabajador,
+      t.numero_documento AS documento,
+      t.url_img AS trabajador_img,
       a.id_estado,
       e.nombre AS estado,
       a.monto,

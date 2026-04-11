@@ -206,11 +206,12 @@ exports.deleteGanaderia = async (req, res) => {
 exports.filterGanaderiaPaginated = async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
-    const { tipo, estado, search } = req.query;
+    const { tipo, orden, estado, search } = req.query;
 
     const result = await filterGanaderiaPaginated(
       page,
       tipo,
+      orden,
       estado,
       search,
     );

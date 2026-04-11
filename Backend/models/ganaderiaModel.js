@@ -281,7 +281,7 @@ exports.deleteGanaderia = async (id) => {
 };
 
 // FILTRO (OPCIONAL mejorar también)
-exports.filterGanaderiaPaginated = async (page, tipo, estado, search) => {
+exports.filterGanaderiaPaginated = async (page, tipo, orden, estado, search) => {
   const limit = 10;
   const offset = (page - 1) * limit;
 
@@ -312,6 +312,16 @@ exports.filterGanaderiaPaginated = async (page, tipo, estado, search) => {
     baseQuery += ` WHERE ` + condiciones.join(" AND ");
   }
 
+  let orderClause = ` ORDER BY g.id_animal DESC`;
+
+  if (orden === "recientes") {
+    orderClause = ` ORDER BY g.fecha_ingreso DESC NULLS LAST, g.id_animal DESC`;
+  }
+
+  if (orden === "az") {
+    orderClause = ` ORDER BY g.nombre ASC, g.id_animal ASC`;
+  }
+
   const query = `
     SELECT
       g.id_animal,
@@ -327,7 +337,7 @@ exports.filterGanaderiaPaginated = async (page, tipo, estado, search) => {
       g.raza,
       g.vendido
     ${baseQuery}
-    ORDER BY g.id_animal DESC
+    ${orderClause}
     LIMIT $${values.length + 1} OFFSET $${values.length + 2}
   `;
 
