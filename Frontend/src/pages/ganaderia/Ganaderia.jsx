@@ -16,10 +16,9 @@ import { buildApiUrl } from "@/utils/apiBase";
 import previuIMG from "@/assets/img/previuVaca.jpg";
 import { sidebarData } from "../../data/sidebarData";
 
-const ganaderiaTypeOptions = [
-  { label: "Bovino", value: "bovino" },
-  { label: "Porcino", value: "porcino" },
-  { label: "Caprino", value: "caprino" },
+const ganaderiaAvailabilityOptions = [
+  { label: "Disponible", value: "false" },
+  { label: "Vendido", value: "true" },
 ];
 
 const Ganaderia = () => {
@@ -163,12 +162,13 @@ const Ganaderia = () => {
               <FiltersBox
                 endpoint="ganaderia/filter"
                 defaultEndpoint="ganaderia/list"
+                titleType="Disponibilidad"
                 setData={setGanaderia}
                 setPage={setPage}
                 setEndpoint={setTableEndpoint}
                 setQueryParams={setFilterQueryParams}
                 setTotalPages={setTotalPages}
-                typeOptions={ganaderiaTypeOptions}
+                typeOptions={ganaderiaAvailabilityOptions}
                 setSearch={setSearch}
               />
             )}
@@ -185,8 +185,8 @@ const Ganaderia = () => {
                 "Disponibilidad",
                 "",
               ]}
-              columns="1.2fr 0.4fr 0.9fr 0.8fr 0.9fr 1fr 0.6fr 0.2fr"
-              compactColumns="2fr 1fr 1fr 1fr 1fr 1fr 1fr  0.2fr"
+              columns="1.2fr 0.7fr 0.9fr 0.8fr 0.9fr 1fr 0.2fr"
+              compactColumns="2fr 1fr 1fr 1fr 1fr 1fr 0.2fr"
               setPage={setPage}
               setData={setGanaderia}
               page={page}
