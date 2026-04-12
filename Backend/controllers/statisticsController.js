@@ -1,4 +1,7 @@
-const { getDashboardCardsStats } = require("../models/statisticsModel");
+const {
+  getDashboardCardsStats,
+  getDashboardOverviewStats,
+} = require("../models/statisticsModel");
 
 exports.getDashboardCardsStats = async (_req, res) => {
   try {
@@ -10,6 +13,20 @@ exports.getDashboardCardsStats = async (_req, res) => {
     });
   } catch (error) {
     console.error("Error al obtener estadisticas del dashboard:", error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.getDashboardOverviewStats = async (_req, res) => {
+  try {
+    const stats = await getDashboardOverviewStats();
+
+    return res.status(200).json({
+      message: "Resumen del dashboard obtenido correctamente.",
+      data: stats,
+    });
+  } catch (error) {
+    console.error("Error al obtener resumen del dashboard:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
 };
