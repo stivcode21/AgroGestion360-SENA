@@ -94,6 +94,7 @@
 .listWrapper {
   width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   border: 1px solid var(--color-border);
   border-radius: 10px;
   background: var(--surface-primary);

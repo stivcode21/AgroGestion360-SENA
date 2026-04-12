@@ -348,7 +348,7 @@ const ActivityForm = ({ title }) => {
                   placeholder={field.placeholder}
                   select={field?.select}
                   error={errors[field.name]}
-                  disabled={field?.select && isEditMode}
+                  disabled={field?.select}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   required={field?.required}

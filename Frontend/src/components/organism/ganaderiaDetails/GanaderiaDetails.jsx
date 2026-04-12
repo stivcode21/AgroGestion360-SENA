@@ -237,14 +237,16 @@ const GanaderiaDetails = () => {
             </button>
           )}
 
-          <Link
-            to={`/ganaderia/editar/${id_animal}`}
-            className={styles.action}
-            onClick={() => setIsOpenModal(false)}
-          >
-            <Pencil className={`${styles.icon} ${styles.iconEdit}`} />
-            <span>Editar</span>
-          </Link>
+          {!vendido && (
+            <Link
+              to={`/ganaderia/editar/${id_animal}`}
+              className={styles.action}
+              onClick={() => setIsOpenModal(false)}
+            >
+              <Pencil className={`${styles.icon} ${styles.iconEdit}`} />
+              <span>Editar</span>
+            </Link>
+          )}
         </div>
       </header>
 
