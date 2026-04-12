@@ -1,4 +1,10 @@
-import { CircleCheckBig, Clock3, CircleX } from "lucide-react";
+import {
+  CheckCheck,
+  CircleCheckBig,
+  Clock3,
+  CircleX,
+  TriangleAlert,
+} from "lucide-react";
 import { formatDate } from "@/utils/formatDate";
 import styles from "./CardNotification.module.css";
 
@@ -24,12 +30,21 @@ const statusConfig = {
     badgeClass: styles.badgeRejected,
     color: styles.iconRejected,
   },
+  "stock-alert": {
+    label: "Alerta",
+    Icon: TriangleAlert,
+    cardClass: styles.stockAlert,
+    badgeClass: styles.badgeStockAlert,
+    color: styles.iconStockAlert,
+  },
 };
 
 const CardNotification = ({ item, onClick }) => {
-  const current = statusConfig[item.status] || statusConfig.pendiente;
+  const current =
+    statusConfig[item.type === "stock-alert" ? "stock-alert" : item.status] ||
+    statusConfig.pendiente;
   const StatusIcon = current.Icon;
-  const handleOpenDetails = () => onClick?.(item.id_solicitud);
+  const handleOpenDetails = () => onClick?.(item);
 
   return (
     <article
@@ -49,11 +64,11 @@ const CardNotification = ({ item, onClick }) => {
       </span>
 
       <section className={styles.content}>
-        <h4 className={styles.title}>{item.titulo}</h4>
-        <p className={styles.message}>{item.motivo}</p>
+        <h4 className={styles.title}>{item.titulo || item.title}</h4>
+        <p className={styles.message}>{item.motivo || item.message}</p>
         <footer className={styles.footer}>
           <span className={styles.time}>
-            {formatDate(item.fecha_registro) || ""}
+            {formatDate(item.fecha_registro || item.createdAt) || ""}
           </span>
           <span className={`${styles.badge} ${current.badgeClass}`}>
             {current.label}
@@ -61,7 +76,13 @@ const CardNotification = ({ item, onClick }) => {
         </footer>
       </section>
 
-      {!item.read ? <div className={styles.circle}></div> : null}
+      {!item.read ? (
+        <div className={styles.circle}></div>
+      ) : (
+        <span className={styles.readIconWrap} aria-label="Notificacion leida">
+          <CheckCheck size={15} className={styles.readIcon} />
+        </span>
+      )}
     </article>
   );
 };
