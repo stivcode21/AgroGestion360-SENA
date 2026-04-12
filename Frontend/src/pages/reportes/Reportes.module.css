@@ -128,11 +128,7 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(230, 233, 237, 1) 100%
-  );
+  background: white;  
   border: 1px solid #ccc;
   display: grid;
   place-items: center;
