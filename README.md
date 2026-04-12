@@ -1,14 +1,24 @@
 # AgroGestion360
 
-AgroGestion360 es una aplicacion web para apoyar la gestion operativa de una finca. El proyecto centraliza procesos como inventario, administracion, actividades y otros modulos del entorno agropecuario en una sola interfaz.
+AgroGestion360 es una aplicacion web para la gestion operativa de una finca. La plataforma centraliza inventario, trabajadores, actividades, ganaderia, notificaciones, reportes y configuracion de usuarios dentro de un solo sistema.
 
-## Que incluye hoy
-- Inicio de sesion con cookie de sesion y validacion de acceso.
-- Modulo de inventario con listado, filtros, creacion, edicion y eliminacion.
-- Modulo de configuracion con perfil de usuario y gestion de administradores.
-- Base visual para dashboard, reportes, trabajadores, actividades, ganaderia y porcicultura.
+## Estado del proyecto
 
-## Como esta organizado
+Esta version corresponde a una primera entrega estable del sistema. Ya cuenta con flujo funcional de autenticacion, CRUD principales, reportes PDF, estadisticas reales en dashboard y una base de datos semilla lista para arrancar el proyecto.
+
+## Modulos disponibles
+
+- `Dashboard`: resumen general, cards principales, top trabajadores y estadisticas operativas.
+- `Inventario`: registro, edicion, filtros, detalles, reportes y alertas de stock bajo.
+- `Trabajadores`: gestion completa del personal.
+- `Actividades`: registro, edicion, consumo de insumos, pagos y comprobantes.
+- `Ganaderia`: registro de animales, vacunaciones, historial de vacunas y venta de ganado.
+- `Reportes`: inventario, nomina por actividades, ventas de animales y factura de pago por actividad.
+- `Configuracion`: perfil del usuario autenticado y administracion de usuarios del sistema.
+- `Porcicultura`: estructura reservada para futuras etapas.
+
+## Estructura general
+
 ```txt
 AgroGestion360-SENA/
 ├─ Backend/
@@ -18,63 +28,124 @@ AgroGestion360-SENA/
 └─ README.md
 ```
 
-- `Backend/`: API en `Express`, autenticacion, rutas y acceso a PostgreSQL.
-- `Frontend/`: SPA en `React` + `Vite`.
-- `db/`: script base de la base de datos.
-- `doc/`: documentacion tecnica separada para backend y frontend.
+- `Backend/`: API en Express y acceso a PostgreSQL.
+- `Frontend/`: SPA en React + Vite.
+- `db/`: base SQL del proyecto lista para recrear el entorno.
+- `doc/`: documentacion tecnica del frontend y backend.
 
-## Stack principal
-- Frontend: React, Vite, React Router, Zustand, react-hot-toast.
-- Backend: Node.js, Express, pg, jsonwebtoken, cookie-parser.
-- Base de datos: PostgreSQL.
+## Requisitos
 
-## Primeros pasos
+- `Node.js` 18 o superior
+- `PostgreSQL` 14 o superior
+- Cuenta de `Cloudinary` para carga de imagenes
+- Cuenta `Gmail` con contraseña de aplicacion para recuperacion de contraseña
 
-### 1. Backend
+## Base de datos
+
+El archivo principal es [agroGestion.sql](db/agroGestion.sql).
+
+Ese script:
+
+- recrea la base desde cero
+- crea las tablas que hoy usa el backend
+- conserva `porcicultura` para futuras fases
+- inserta catalogos base
+- crea usuarios iniciales
+- deja datos minimos para probar inventario, notificaciones, actividades, reportes y ganaderia
+
+## Usuarios base
+
+El SQL crea estos accesos iniciales:
+
+- `superadmin@gmail.com` / `12345678`
+- `admin@demo.com` / `12345678`
+
+## Variables de entorno
+
+### Backend
+
+Consulta la guia completa en [doc/backend.md](doc/backend.md). Las variables esperadas son:
+
+- `PORT`
+- `DB_HOST`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_NAME`
+- `DB_PORT`
+- `DB_SSL`
+- `JWT_SECRET`
+- `NODE_ENV`
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+- `CLOUDINARY_FOLDER`
+- `EMAIL_USER`
+- `EMAIL_APP_PASSWORD`
+
+Tambien se incluye un ejemplo sugerido en `Backend/.env.example`.
+
+### Frontend
+
+La variable principal es:
+
+- `VITE_API_BASE_URL`
+
+Tambien se incluye un ejemplo sugerido en `Frontend/.env.example`.
+
+## Como arrancar el proyecto
+
+### 1. Crear la base de datos
+
+1. Crea una base vacia en PostgreSQL.
+2. Ejecuta el script [agroGestion.sql](db/agroGestion.sql).
+
+### 2. Configurar backend
+
 ```bash
 cd Backend
 npm install
+```
+
+Crea un archivo `.env` basado en `Backend/.env.example`.
+
+Inicia la API:
+
+```bash
 node index.js
 ```
 
-### 2. Frontend
+### 3. Configurar frontend
+
 ```bash
 cd Frontend
 npm install
+```
+
+Crea un archivo `.env` basado en `Frontend/.env.example`.
+
+Inicia la aplicacion:
+
+```bash
 npm run dev
 ```
 
-Variable importante del frontend:
+## Flujo general del sistema
 
-```env
-VITE_API_BASE_URL=http://localhost:3001/api
-```
-
-Si no se define, el frontend usa esa misma URL por defecto.
-
-## Flujo general de la aplicacion
-1. El usuario inicia sesion desde el frontend.
+1. El usuario inicia sesion.
 2. El backend valida credenciales y guarda un JWT en cookie.
-3. El frontend verifica esa sesion con `auth/verify`.
-4. Los modulos consumen la API para listar, crear, editar o eliminar datos.
-5. El backend consulta PostgreSQL desde los modelos y responde en JSON.
+3. El frontend verifica esa cookie para proteger rutas.
+4. Cada modulo consume la API correspondiente.
+5. Los modelos del backend consultan PostgreSQL.
+6. El dashboard, reportes y notificaciones se alimentan con datos reales del sistema.
 
-## Modulos principales
-- `Inventario`: modulo mas avanzado actualmente.
-- `Configuracion`: perfil del usuario y administradores.
-- `Dashboard`
-- `Reportes`
-- `Trabajadores`
-- `Actividades`
-- `Ganaderia`
-- `Porcicultura`
+## Documentacion tecnica
 
-## Documentacion adicional
 - [Guia de backend](doc/backend.md)
 - [Guia de frontend](doc/frontend.md)
 
-## Puntos importantes para nuevos desarrolladores
-- La autenticacion actual depende de cookie, no de `localStorage`.
-- El frontend centraliza las URLs en `Frontend/src/utils/apiBase.js`.
-- La comunicacion con base de datos esta concentrada en `Backend/models/`.
-- El script SQL base del proyecto esta en `db/agroGestion.sql`.
+## Notas importantes
+
+- La autenticacion usa cookie HTTP, no `localStorage`.
+- El frontend centraliza la URL de la API en `Frontend/src/utils/apiBase.js`.
+- Las alertas de stock bajo se persisten localmente en el navegador.
+- El modulo de porcicultura aun no esta conectado a un backend funcional, pero su tabla base se conserva en la DB.
