@@ -11,6 +11,7 @@ router.get("/getproduct/:id", verifyToken, products.getProduct);
 router.get("/list/:page", verifyToken, products.listProducts);
 
 router.get("/getTipoInsumo", verifyToken, products.getTipoInsumo);
+router.get("/stock-alerts", verifyToken, products.getStockAlerts);
 
 router.post("/register", verifyToken, products.postProduct);
 

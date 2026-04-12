@@ -52,6 +52,21 @@ exports.getTipoInsumo = async () => {
   return rows;
 };
 
+exports.getStockAlerts = async () => {
+  const query = `
+    SELECT
+      id_insumo,
+      nombre,
+      cantidad
+    FROM inventario
+    WHERE cantidad <= 3
+    ORDER BY cantidad ASC, id_insumo ASC
+  `;
+
+  const { rows } = await db.query(query);
+  return rows;
+};
+
 exports.createProduct = async (productData) => {
   const {
     nombre,

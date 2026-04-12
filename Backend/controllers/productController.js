@@ -6,6 +6,7 @@ const {
   deleteProductModel,
   filterProductsPaginatedModel,
   getTipoInsumo,
+  getStockAlerts,
 } = require("../models/productModel");
 
 exports.listProducts = async (req, res) => {
@@ -38,6 +39,20 @@ exports.getTipoInsumo = async (_req, res) => {
     });
   } catch (error) {
     console.error("Error al obtener tipos de insumo:", error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
+
+exports.getStockAlerts = async (_req, res) => {
+  try {
+    const alerts = await getStockAlerts();
+
+    return res.status(200).json({
+      message: "Alertas de stock obtenidas correctamente.",
+      data: alerts,
+    });
+  } catch (error) {
+    console.error("Error al obtener alertas de stock:", error);
     return res.status(500).json({ message: "Error interno del servidor." });
   }
 };
