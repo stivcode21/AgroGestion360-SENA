@@ -8,6 +8,7 @@ import {
   ChartNoAxesCombined,
   ChartPie,
   LayoutListIcon,
+  Bell,
   MessageCircleQuestionMark,
   Users,
 } from "lucide-react";
@@ -16,7 +17,6 @@ import template from "@/assets/icons/template.svg";
 import tree from "@/assets/icons/tree.svg";
 
 import cow from "@/assets/icons/cow.svg";
-import pig from "@/assets/icons/pig.svg";
 import notes from "@/assets/icons/notes.svg";
 
 export const options = [
@@ -40,53 +40,60 @@ export const options = [
 export const aboutInfo = [
   {
     svg: panels,
-    title: "Control total y centralizado",
-    shortDescription: "Gestiona toda tu finca desde un solo lugar",
+    title: "Operacion centralizada",
+    shortDescription:
+      "AgroGestion360 concentra inventario, trabajadores, actividades, ganaderia y reportes en una sola plataforma.",
   },
   {
     svg: template,
-    title: "Gestión inteligente y segura",
+    title: "Gestion segura por roles",
     shortDescription:
-      "Roles de usuarios, permisos un manejo eficiente del equipo",
+      "El sistema diferencia accesos entre dueño y administrador para proteger acciones sensibles y organizar mejor el trabajo.",
   },
   {
     svg: tree,
-    title: "Evolución e innovación segura",
+    title: "Version estable y escalable",
     shortDescription:
-      "versión 1.0 en constante mejora y expansión de funciones",
+      "La version 1.0 deja una base funcional lista para crecer con nuevos modulos y mejoras del entorno agropecuario.",
   },
 ];
 
 export const featureInfo = [
   {
     svg: <ChartNoAxesCombined />,
-    title: "Informes y analisis",
-    description: "Gestiona toda tu finca desde un solo lugar",
+    title: "Dashboard y estadisticas",
+    description:
+      "Muestra resumenes reales del sistema con cards, top trabajadores y actividad operativa semanal.",
   },
   {
     svg: <LayoutListIcon />,
     title: "Inventario de insumos",
-    description: "Visualización de reporte y descarga de reportes",
+    description:
+      "Permite registrar, editar, filtrar, visualizar detalles y recibir alertas por stock bajo.",
   },
   {
     svg: <Users />,
     title: "Trabajadores",
-    description: "Registro de pagos, control y gestión de trabajadores",
+    description:
+      "Gestiona el personal, su informacion base, su estado y su relacion con las actividades registradas.",
   },
   {
     svg: cow,
     title: "Ganaderia",
-    description: "Registro de nacimientos, vacunacion, ventas, compras etc.",
-  },
-  {
-    svg: pig,
-    title: "Porcicultura",
-    description: "Registro de nacimientos, vacunacion, ventas, compras etc.",
+    description:
+      "Administra animales, vacunaciones, ventas, historial sanitario y seguimiento detallado por registro.",
   },
   {
     svg: notes,
-    title: "Mantenimiento",
-    description: "Control de gastos y registro de mantenimiento",
+    title: "Actividades y reportes",
+    description:
+      "Controla actividades, consumos de insumo, pagos, facturas y generacion de reportes PDF del sistema.",
+  },
+  {
+    svg: <Bell />,
+    title: "Notificaciones",
+    description:
+      "Integra solicitudes internas y alertas de stock bajo para mantener visible lo que requiere atencion inmediata.",
   },
 ];
 
@@ -94,42 +101,36 @@ export const faq = [
   {
     title: "¿Qué es Agrogestión360?",
     description:
-      "Es una plataforma digital diseñada para ayudar a los productores a gestionar de forma organizada y sencilla las diferentes actividades de su finca: ganadería, porcicultura, piscicultura, inventarios, personal, ingresos y ventas, todo en un mismo lugar.",
+      "Es una aplicacion web enfocada en la gestion operativa de fincas. Integra inventario, trabajadores, actividades, ganaderia, reportes y notificaciones desde un mismo entorno.",
   },
   {
     title: "¿Qué puedo hacer con Agrogestión360?",
     description:
-      "Puedes registrar y controlar tu ganado, cerdos o peces, llevar inventarios de insumos, organizar la información de tus trabajadores, gestionar ventas, ingresos y recibir notificaciones importantes sobre las actividades de tu finca.",
+      "Puedes administrar insumos, registrar trabajadores, crear actividades, asociar consumos, gestionar ganado, registrar ventas de animales, controlar vacunaciones y generar reportes PDF.",
+  },
+  {
+    title: "¿Qué notificaciones maneja el sistema?",
+    description:
+      "Actualmente muestra solicitudes internas y alertas de stock bajo en inventario para ayudarte a reaccionar a tiempo frente a compras necesarias.",
+  },
+  {
+    title: "¿Cómo se controlan los permisos dentro de la aplicacion?",
+    description:
+      "AgroGestion360 usa roles para mostrar o restringir acciones sensibles. Por ejemplo, algunas eliminaciones o vistas administrativas solo estan disponibles para el dueño del sistema.",
+  },
+  {
+    title: "¿Qué reportes genera Agrogestión360?",
+    description:
+      "La version actual genera reportes de inventario, nomina por actividades y ventas de animales, ademas de facturas PDF para pagos de actividades.",
   },
   {
     title: "¿Necesito internet para usar Agrogestión360?",
     description:
-      "Actualmente se requiere conexión a internet para ingresar al sistema y sincronizar los datos. Sin embargo, estamos trabajando en funciones offline.",
+      "Si. La aplicacion depende de una API y de una base de datos PostgreSQL, por lo que necesita conexion para consultar y guardar informacion.",
   },
   {
-    title: "¿En qué dispositivos funciona Agrogestión360?",
+    title: "¿En qué estado se encuentra el proyecto?",
     description:
-      "Funciona en computadores, tablets y celulares con conexión a internet, lo que te permite consultar la información de tu finca desde cualquier lugar.",
-  },
-  {
-    title: "¿Necesito conocimientos técnicos para usar la aplicación?",
-    description:
-      "No. Agrogestión360 está diseñada para ser práctica y fácil de usar. Además, ofrecemos soporte y guías para que saques el máximo provecho de la plataforma.",
-  },
-  {
-    title: "¿Tendrán nuevas funciones en el futuro?",
-    description:
-      "Sí. Esta es la versión 1.0, pero el proyecto seguirá creciendo con actualizaciones, mejoras y nuevas herramientas pensadas en las necesidades de los productores.",
-  },
-  {
-    title:
-      "¿Puedo usar la aplicación si tengo poco conocimiento de tecnología?",
-    description:
-      "Claro que sí. La plataforma está diseñada para ser intuitiva y contamos con tutoriales y asistencia personalizada.",
-  },
-  {
-    title: "¿Cómo puedo obtener soporte si tengo un problema?",
-    description:
-      "Puedes comunicarte con nuestro equipo de soporte a través del chat integrado, correo electrónico o WhatsApp.",
+      "AgroGestion360 se encuentra en una primera version estable, con una base funcional completa para la operacion actual del sistema.",
   },
 ];

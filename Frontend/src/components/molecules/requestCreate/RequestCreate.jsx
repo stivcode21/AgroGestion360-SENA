@@ -6,13 +6,13 @@ import styles from "./RequestCreate.module.css";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
+import { useDataStore } from "@/store/dataStore";
 
 const initialFormData = {
   title: "",
   reason: "",
   requestType: "",
   quantity: "",
-  targetSpecies: "",
   unit: "",
   provider: "",
   expirationDate: "",
@@ -23,6 +23,7 @@ const RequestCreate = ({ onCancel }) => {
 
   const [errors, setErrors] = useState({});
   const { toggleLoader } = useLoader();
+  const { setNotifications } = useDataStore();
 
   const validateForm = () => {
     const newErrors = {};
@@ -47,16 +48,6 @@ const RequestCreate = ({ onCancel }) => {
       newErrors.quantity = "La cantidad es obligatoria.";
     } else if (!/^(?:[1-9]\d{0,3})$/.test(formData.quantity.trim())) {
       newErrors.quantity = "Ingresa una cantidad valida";
-    }
-
-    if (!formData.targetSpecies.trim()) {
-      newErrors.targetSpecies = "Selecciona una especie.";
-    } else if (
-      !/^(cerdos|peces|ganado|gallinas|ninguna)$/.test(
-        formData.targetSpecies.trim(),
-      )
-    ) {
-      newErrors.targetSpecies = "Selecciona una especie valida";
     }
 
     if (!formData.unit.trim()) {
@@ -119,7 +110,6 @@ const RequestCreate = ({ onCancel }) => {
         motivo: formData.reason.trim(),
         id_tipo_insumo: Number(formData.requestType.trim()),
         cantidad: Number(formData.quantity.trim()),
-        especie_destino: formData.targetSpecies.trim() || null,
         unidad_medida: formData.unit.trim() || null,
         proveedor: formData.provider.trim() || null,
         fecha_vencimiento: formData.expirationDate.trim() || null,
@@ -140,6 +130,7 @@ const RequestCreate = ({ onCancel }) => {
       }
 
       toast.success(data.message);
+      setNotifications((prev) => [data.data, ...prev]);
       setFormData(initialFormData);
       setErrors({});
       onCancel?.();

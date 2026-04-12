@@ -32,6 +32,7 @@ const formatReportDateTime = (value = new Date()) => {
   return formatter.format(value).replace(",", "");
 };
 
+// formateamos a pesos colombianos
 const formatCopCurrency = (value) =>
   new Intl.NumberFormat("es-CO", {
     style: "currency",

@@ -17,6 +17,10 @@ import previuIMG from "@/assets/img/previuProduct.jpg";
 import { productInputFields } from "@/data/productRegisterData";
 import { useDataStore } from "@/store/dataStore";
 import { sidebarData } from "../../data/sidebarData";
+import {
+  getStockAlertsStorage,
+  setStockAlertsStorage,
+} from "@/utils/stockAlertsStorage";
 
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
@@ -84,6 +88,53 @@ const Inventario = () => {
 
     getProductTypeOptions();
   }, [productTypeEndpoint]);
+
+  //al montarse hace una consulta para sincronizar las alertas de stock del backend con el localStorage
+  useEffect(() => {
+    const syncStockAlerts = async () => {
+      try {
+        const res = await fetch(buildApiUrl("product/stock-alerts"), {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message ?? "No se pudieron cargar las alertas.");
+          return;
+        }
+
+        const savedAlerts = getStockAlertsStorage();
+
+        const nextAlerts = (data.data ?? []).map((product) => {
+          //valida si ya existe el producto en las alertas guardadas para mantener su estado de leida o no leida
+          const existingAlert = savedAlerts.find(
+            (item) => Number(item.productId) === Number(product.id_insumo),
+          );
+
+          return {
+            id: `stock-${product.id_insumo}`,
+            type: "stock-alert",
+            productId: Number(product.id_insumo),
+            titulo: "Stock bajo en inventario",
+            motivo: `El producto PRD-${product.id_insumo} · ${product.nombre} tiene solo ${product.cantidad} unidades disponibles. Debe realizarse su compra.`,
+            stock: Number(product.cantidad ?? 0),
+            route: "/inventario",
+            read: existingAlert?.read ?? false,
+            createdAt: existingAlert?.createdAt ?? new Date().toISOString(),
+          };
+        });
+
+        //actualiza el localStorage con las alertas sincronizadas
+        setStockAlertsStorage(nextAlerts);
+      } catch (error) {
+        console.error("Error al sincronizar alertas de stock:", error);
+      }
+    };
+
+    syncStockAlerts();
+  }, []);
 
   useEffect(() => {
     // Cuando los filtros traen la data directamente, evitamos una segunda consulta.

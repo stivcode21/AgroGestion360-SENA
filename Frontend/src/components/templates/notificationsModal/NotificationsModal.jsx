@@ -9,17 +9,29 @@ import { buildApiUrl } from "@/utils/apiBase";
 import toast from "react-hot-toast";
 import styles from "./NotificationsModal.module.css";
 import { useDataStore } from "@/store/dataStore";
+import { useNavigate } from "react-router-dom";
+import {
+  getStockAlertsStorage,
+  setStockAlertsStorage,
+} from "@/utils/stockAlertsStorage";
 
 const NotificationsModal = ({ isOpen, onClose }) => {
   const [stateContent, setStateContent] = useState("notifications");
   const [currentDetailsId, setCurrentDetailsId] = useState(null);
+  const [stockAlerts, setStockAlerts] = useState([]);
   const { user } = useUserStore();
   const { notifications, setNotifications } = useDataStore();
   const canManageRequests = hasRole(user, 1);
+  const navigate = useNavigate();
 
-  const unreadCount = notifications.filter((item) => !item.read).length;
-  const hasNotifications = notifications.length > 0;
-  const selectedNotification = notifications.find(
+  const requestNotifications = notifications.map((item) => ({
+    ...item,
+    type: "request",
+  }));
+  const allNotifications = [...stockAlerts, ...requestNotifications];
+  const unreadCount = allNotifications.filter((item) => !item.read).length;
+  const hasNotifications = allNotifications.length > 0;
+  const selectedNotification = requestNotifications.find(
     (item) => String(item.id_solicitud) === String(currentDetailsId),
   );
 
@@ -28,20 +40,41 @@ const NotificationsModal = ({ isOpen, onClose }) => {
   const isNotificationsView = stateContent === "notifications";
 
   //se ejecuta al hacer click en una notificaion
-  const handleOpenDetails = async (id) => {
+  const persistStockAlerts = (nextAlerts) => {
+    setStockAlerts(nextAlerts);
+    setStockAlertsStorage(nextAlerts);
+  };
+
+  //se ejecuta al hacer click en una notificaion
+  const handleOpenDetails = async (notification) => {
+    //si es alerta de stock, marcar como leida y redirigir a inventario
+    if (notification.type === "stock-alert") {
+      const nextAlerts = stockAlerts.map((item) =>
+        item.id === notification.id ? { ...item, read: true } : item,
+      );
+
+      persistStockAlerts(nextAlerts);
+      onClose();
+      navigate(notification.route || "/inventario");
+      return;
+    }
+
     const currentNotification = notifications.find(
-      (item) => Number(item.id_solicitud) === Number(id),
+      (item) => Number(item.id_solicitud) === Number(notification.id_solicitud),
     );
 
-    //solo si es dueño cambia el estado a leida
+    //si es request solo si es dueño cambia el estado a leida
     if (canManageRequests && currentNotification && !currentNotification.read) {
       try {
-        const res = await fetch(buildApiUrl(`request/edit/${id}`), {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ read: true }),
-        });
+        const res = await fetch(
+          buildApiUrl(`request/edit/${notification.id_solicitud}`),
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ read: true }),
+          },
+        );
 
         const data = await res.json();
 
@@ -50,7 +83,7 @@ const NotificationsModal = ({ isOpen, onClose }) => {
         } else if (data?.data) {
           setNotifications((prev) =>
             prev.map((item) =>
-              Number(item.id_solicitud) === Number(id)
+              Number(item.id_solicitud) === Number(notification.id_solicitud)
                 ? { ...item, ...data.data }
                 : item,
             ),
@@ -62,12 +95,16 @@ const NotificationsModal = ({ isOpen, onClose }) => {
       }
     }
 
-    setCurrentDetailsId(id);
+    setCurrentDetailsId(notification.id_solicitud);
     setStateContent("details");
   };
 
   // Volver a la vista de notificaciones al cerrar el modal
   useEffect(() => {
+    if (isOpen) {
+      setStockAlerts(getStockAlertsStorage());
+    }
+
     if (!isOpen) {
       setStateContent("notifications");
       setCurrentDetailsId(null);
@@ -129,9 +166,9 @@ const NotificationsModal = ({ isOpen, onClose }) => {
               }}
             />
           ) : hasNotifications ? (
-            notifications.map((item) => (
+            allNotifications.map((item) => (
               <CardNotification
-                key={item.id_solicitud}
+                key={item.id || item.id_solicitud}
                 item={item}
                 onClick={handleOpenDetails}
               />

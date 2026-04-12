@@ -5,24 +5,19 @@ export const AboutUs = () => {
   return (
     <section className={styles.about_container}>
       <p className={styles.about_text}>
-        Agrogestión360 nace como un proyecto creado con la visión de hacer más
-        fácil y organizado el manejo de una finca. Es un sistema que permite a
-        los dueños tener control total de sus actividades en un solo lugar:
-        ganadería, porcicultura, piscicultura, inventarios, trabajadores,
-        ingresos y ventas. También ofrece notificaciones y distintos niveles de
-        acceso para administradores y empleados, lo que lo hace práctico y
-        seguro. Esta es la versión 1.0, que ya cumple con lo esencial, pero la
-        idea es que siga creciendo, mejorando y sumando nuevas funciones con el
-        tiempo. Agrogestión360 no es solo un sistema, es el inicio de una
-        herramienta pensada para evolucionar junto al campo.
+        AgroGestion360 nace con la idea de organizar la operacion diaria de una
+        finca en un solo sistema. Hoy permite gestionar inventario,
+        trabajadores, actividades, ganaderia, notificaciones y reportes desde
+        una misma plataforma, reduciendo procesos manuales y mejorando el
+        seguimiento de la informacion importante.
       </p>
       <br />
       <p className={styles.about_text}>
-        Nuestro objetivo es brindar una herramienta confiable que apoye a los
-        productores en la toma de decisiones, optimice su tiempo y facilite el
-        crecimiento de sus fincas. Creemos en la innovación al servicio del
-        campo y en construir soluciones que aporten valor real a quienes día a
-        día trabajan por alimentar al mundo.
+        El sistema diferencia accesos entre dueño y administrador, incorpora
+        estadisticas reales en el dashboard, alertas de stock bajo, historial
+        operativo y generacion de reportes PDF. Esta primera version estable
+        esta pensada para ofrecer una base funcional, clara y confiable para la
+        gestion agropecuaria actual.
       </p>
 
       <article className={styles.about_flexbox}>

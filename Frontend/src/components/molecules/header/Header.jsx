@@ -13,19 +13,34 @@ import previuIMG from "@/assets/img/previuUser.png";
 import toast from "react-hot-toast";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { useDataStore } from "@/store/dataStore";
+import {
+  getStockAlertsStorage,
+  subscribeToStockAlerts,
+} from "@/utils/stockAlertsStorage";
 
 const Header = () => {
   const { currentSection, isCollapsed, isDesktop } = useSidebarStore();
   const currentPage = sidebarData.find((item) => item.path === currentSection);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [stockAlerts, setStockAlerts] = useState([]);
   const { notifications, setNotifications } = useDataStore();
-  const unreadCount = notifications.filter((item) => !item.read).length;
+  const unreadCount =
+    notifications.filter((item) => !item.read).length +
+    stockAlerts.filter((item) => !item.read).length;
   const { user, setUser } = useUserStore();
   const { toggleLoader } = useLoader();
 
   const toggleNotifications = () => {
     setIsNotificationsOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    setStockAlerts(getStockAlertsStorage());
+
+    return subscribeToStockAlerts(() => {
+      setStockAlerts(getStockAlertsStorage());
+    });
+  }, []);
 
   useEffect(() => {
     const getUser = async () => {
