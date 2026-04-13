@@ -137,7 +137,11 @@ const Reportes = () => {
 
           <div className={styles.reportsGrid}>
             {reports.map((report) => (
-              <article key={report.title} className={styles.reportItem}>
+              <article
+                key={report.title}
+                className={styles.reportItem}
+                onClick={() => handleGenerateReport(report.key)}
+              >
                 <div className={styles.reportIcon}>{report.icon}</div>
                 <div className={styles.reportContent}>
                   <div className={styles.reportHeader}>

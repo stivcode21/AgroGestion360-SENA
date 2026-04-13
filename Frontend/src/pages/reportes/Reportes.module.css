@@ -117,18 +117,29 @@
   padding: 0.9rem;
   border: 1px solid var(--color-border, #e4e7eb);
   border-radius: 12px;
+  cursor: pointer;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 1) 20%,
     rgba(230, 233, 237, 1) 100%
   );
+  transition:
+    transform var(--dynamic-medium-transition),
+    box-shadow var(--dynamic-medium-transition),
+    border-color var(--dynamic-medium-transition);
+}
+
+.reportItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+  border-color: #cdd5df;
 }
 
 .reportIcon {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: white;  
+  background: white;
   border: 1px solid #ccc;
   display: grid;
   place-items: center;
@@ -175,13 +186,14 @@
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-secundary);
+  color: #000;
 }
 
 .reportDescription {
   margin: 0;
+  font-weight: 400;
   font-size: 0.9rem;
-  color: #4b5563;
+  color: #2f363e;
 }
 
 .reportActions {
@@ -191,49 +203,41 @@
 }
 
 .reportActionButton {
-  border: none;
-  background: transparent;
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
   cursor: pointer;
-  padding: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
+  color: #ffffff;
   font: inherit;
+  transition:
+    transform var(--dynamic-fast-transition),
+    box-shadow var(--dynamic-medium-transition),
+    background var(--dynamic-medium-transition);
 }
 
 .reportActionButton svg {
-  width: 16px;
-  height: 16px;
-  color: #2e2e30;
+  width: 18px;
+  height: 18px;
+  color: #ffffff;
   flex-shrink: 0;
 }
 
 .reportActionButton span {
-  color: var(--verde-primary);
+  color: #ffffff;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   line-height: 1;
 }
 
-.reportActionButton svg {
-  width: 34px;
-  height: 34px;
-  padding: 9px;
-  border-radius: 10px;
-  border: 1px solid #57575c;
-  background: #ffffff;
-  box-sizing: border-box;
-  transition:
-    background var(--transition, 0.15s ease),
-    border-color var(--transition, 0.15s ease);
-}
-
-.reportActionButton:hover svg {
-  background: var(--color-hover, #f5f6f8);
-}
-
-.reportActionButton:hover span {
-  color: #166534;
+.reportItem:hover .reportActionButton,
+.reportActionButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(21, 128, 61, 0.22);
+  background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
 }
 
 @media (max-width: 1000px) {
