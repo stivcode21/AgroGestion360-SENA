@@ -72,7 +72,23 @@ exports.postProduct = async (req, res) => {
       observaciones,
     } = req.body;
 
-    if (!nombre || !cantidad || !precio_unitario) {
+    if (
+      typeof nombre !== "string" ||
+      typeof marca !== "string" ||
+      typeof proveedor !== "string"
+    ) {
+      return res.status(400).json({
+        message: "tipo de dato no es correcto.",
+      });
+    }
+
+    if (typeof cantidad !== "number" || typeof precio_unitario !== "number") {
+      return res.status(400).json({
+        message: "cantidad y precio unitario debe ser un número",
+      });
+    }
+
+    if (!nombre || !id_tipo || !cantidad || !precio_unitario) {
       return res.status(400).json({
         message:
           "id_tipo, nombre, cantidad y precio_unitario son obligatorios.",
@@ -184,7 +200,12 @@ exports.filterProductsPaginated = async (req, res) => {
     const page = parseInt(req.params.page, 10) || 1;
     const { tipo, orden, search } = req.query;
 
-    const result = await filterProductsPaginatedModel(page, tipo, orden, search);
+    const result = await filterProductsPaginatedModel(
+      page,
+      tipo,
+      orden,
+      search,
+    );
 
     res.json({
       page,
