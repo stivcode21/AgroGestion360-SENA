@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --verbose --detectOpenHandles"
   },
   "devDependencies": {
     "jest": "^30.3.0",
