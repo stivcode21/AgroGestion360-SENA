@@ -1,4 +1,4 @@
-  # AgroGestion360
+# AgroGestion360
 
 AgroGestion360 es una aplicacion web para la gestion operativa de una finca. La plataforma centraliza inventario, trabajadores, actividades, ganaderia, notificaciones, reportes y configuracion de usuarios dentro de un solo sistema.
 
