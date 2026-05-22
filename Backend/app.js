@@ -21,9 +21,7 @@ const isProd = process.env.NODE_ENV === "production";
 app.set("trust proxy", 1);
 
 // Middleware global
-if (!isProd) {
-  app.use(cors(corsOptions)); // Permite peticiones desde el frontend solo en local
-}
+app.use(cors(corsOptions));
 
 app.use(express.json()); // Permite recibir JSON en el body
 app.use(cookieParser());
