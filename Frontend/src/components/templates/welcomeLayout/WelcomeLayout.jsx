@@ -6,12 +6,12 @@ const WelcomeLayout = ({ children, isWelcome, setModal, isOpen }) => {
     <main className={styles.container}>
       <figure aria-hidden="true">
         <img
-          src="/public/shappe.png"
+          src="/shappe.png"
           className={`${styles.shappe} ${!isWelcome && styles.shappeReverse}`}
           alt=""
         />
         <img
-          src="/public/marca-agua.png"
+          src="/marca-agua.png"
           className={`${
             isWelcome ? styles.marcaAgua : styles.marcaAguaReverse
           }`}
