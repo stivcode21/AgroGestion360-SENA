@@ -9,6 +9,19 @@ const {
 } = require("../models/adminModel");
 const transporter = require("../config/email");
 
+const getAuthCookieOptions = (req) => {
+  const isHttps =
+    process.env.NODE_ENV === "production" ||
+    req.secure ||
+    req.get("x-forwarded-proto") === "https";
+
+  return {
+    httpOnly: true,
+    secure: isHttps,
+    sameSite: isHttps ? "none" : "lax",
+  };
+};
+
 exports.loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -46,13 +59,9 @@ exports.loginController = async (req, res) => {
       { expiresIn: "2h" },
     );
 
-    const isProd = process.env.NODE_ENV === "production";
-
     // Configurar cookie
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: "lax",
+      ...getAuthCookieOptions(req),
       maxAge: 2 * 60 * 60 * 1000, // 2 horas
     });
 
@@ -207,12 +216,8 @@ exports.createAdminController = async (req, res) => {
 };
 
 exports.logoutController = (req, res) => {
-  const isProd = process.env.NODE_ENV === "production";
-
   res.clearCookie("token", {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: "lax",
+    ...getAuthCookieOptions(req),
     path: "/",
   });
   return res.status(200).json({ message: "Sesion cerrada correctamente." });
