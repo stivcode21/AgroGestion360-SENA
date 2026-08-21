@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoader } from "@/context/loaderProvider/LoaderProvider";
 import { buildApiUrl } from "@/utils/apiBase";
+import { demoCredentials } from "@/data/demoCredentials";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -35,6 +36,12 @@ const Login = () => {
     }
 
     return true;
+  };
+
+  const handleUseDemoCredentials = () => {
+    setEmail(demoCredentials.email);
+    setPassword(demoCredentials.password);
+    toast.success("Credenciales demo cargadas.");
   };
 
   const handleSubmit = async (e) => {
@@ -72,6 +79,8 @@ const Login = () => {
     <WelcomeLayout
       setModal={setIsPasswordForgotOpen}
       isOpen={isPasswordForgotOpen}
+      onUseDemoCredentials={handleUseDemoCredentials}
+      demoActionLabel="usar demo"
     >
       <header className={styles.header}>
         <Logo />

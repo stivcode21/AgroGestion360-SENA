@@ -45,6 +45,14 @@
   opacity: 15%;
 }
 
+.floatingLoginInfo {
+  position: absolute;
+  left: clamp(18px, 4vw, 64px);
+  top: clamp(110px, 18vh, 170px);
+  z-index: 8;
+  animation: slideInRight 0.7s ease-out forwards;
+}
+
 .flexbox {
   height: 100%;
   width: 100%;
@@ -96,6 +104,10 @@
 @media (width <= 768px) {
   .shappe {
     padding-right: 0;
+  }
+
+  .floatingLoginInfo {
+    display: none;
   }
 }
 

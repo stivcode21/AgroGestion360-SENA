@@ -8,14 +8,14 @@ const Logo = ({ size, collapsed }) => {
       {collapsed ? (
         <img
           src="/logoSmall.svg"
-          alt="Parkify Logo"
+          alt="AgroGestion360"
           className={`${styles.logo} ${small && styles.logoSmall}`}
         />
       ) : (
         <>
           <img
             src="/logo.svg"
-            alt="Parkify Logo"
+            alt="AgroGestion360"
             className={`${styles.logo} ${small && styles.logoSmall2}`}
           />
           <h1 className={`${styles.title} ${small && styles.titleSmall}`}>
